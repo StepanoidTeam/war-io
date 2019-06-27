@@ -26,6 +26,7 @@ function loadBunch({ imageName, from, to }) {
           y: row,
           sourcePoint: { x: col, y: row },
           debug: `${index}\n${col}:${row}`,
+          debug: `${index}`,
           ...imgSetConfig,
         })
       );
@@ -37,5 +38,24 @@ function loadBunch({ imageName, from, to }) {
 
 export const winterTileSet = {
   all: loadBunch({ imageName: IMAGESETS.WINTER, from: 16, to: 378 }),
-  // wallHuman: loadBunch({ imageName: IMAGESETS.WINTER, from: 16, to: 33 }),
+  wallHuman: loadBunch({ imageName: IMAGESETS.WINTER, from: 16, to: 33 }),
+  wallHumanDamaged: loadBunch({
+    imageName: IMAGESETS.WINTER,
+    from: 52,
+    to: 69,
+  }),
+  wallOrc: loadBunch({ imageName: IMAGESETS.WINTER, from: 34, to: 51 }),
+  trees: loadBunch({ imageName: IMAGESETS.WINTER, from: 102, to: 136 }),
+  ice: loadBunch({ imageName: IMAGESETS.WINTER, from: 175, to: 198 }),
+  iceSpecial: loadBunch({ imageName: IMAGESETS.WINTER, from: 331, to: 348 }),
+  snow: loadBunch({ imageName: IMAGESETS.WINTER, from: 231, to: 258 }),
+  water: loadBunch({ imageName: IMAGESETS.WINTER, from: 291, to: 330 }),
+};
+
+export const springTileSet = {
+  all: loadBunch({ imageName: IMAGESETS.SPRING, from: 16, to: 371 }),
+};
+
+export const desertTileSet = {
+  all: loadBunch({ imageName: IMAGESETS.DESERT, from: 16, to: 372 }),
 };

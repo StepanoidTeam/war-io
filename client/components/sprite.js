@@ -7,11 +7,6 @@ export class Sprite extends Point {
     super({ x, y });
 
     this.img = image;
-    //this.init(image);
-  }
-
-  async init(image) {
-    //this.img = (await IMAGE_LIB).get(image);
   }
 
   move({ x, y }) {

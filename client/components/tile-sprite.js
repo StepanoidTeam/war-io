@@ -1,8 +1,16 @@
 import { Sprite, cellSizePx } from "./sprite.js";
 
 export class TileSprite extends Sprite {
-  constructor({ x, y, image, sourcePoint, sourceSize, sourceOffset, debug }) {
-    super({ x, y, image });
+  constructor({
+    x,
+    y,
+    imageName,
+    sourcePoint,
+    sourceSize,
+    sourceOffset,
+    debug,
+  }) {
+    super({ x, y, imageName });
 
     this.sourcePoint = sourcePoint;
     this.sourceSize = sourceSize;
@@ -29,9 +37,9 @@ export class TileSprite extends Sprite {
 
     if (this.debug) {
       //return;
-      const fontSize = 13;
+      const fontSize = 12;
       ctx.font = `${fontSize}px Arial`;
-      ctx.fillStyle = "#ffffff55";
+      ctx.fillStyle = "#ffffff";
 
       //multi-line support
       this.debug.split("\n").forEach((part, i) => {

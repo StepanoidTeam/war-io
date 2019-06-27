@@ -1,12 +1,22 @@
 import { Point } from "./point.js";
+import { getImage } from "../helpers/get-image.js";
 
 export const cellSizePx = 32;
 
+const imageLib = new Map();
+
 export class Sprite extends Point {
-  constructor({ x, y, image }) {
+  constructor({ x, y, imageName }) {
     super({ x, y });
 
-    this.img = image;
+    this.init({ imageName });
+  }
+
+  async init({ imageName }) {
+    if (!imageLib.has(imageName)) {
+      imageLib.set(imageName, await getImage(imageName));
+    }
+    this.img = imageLib.get(imageName);
   }
 
   move({ x, y }) {

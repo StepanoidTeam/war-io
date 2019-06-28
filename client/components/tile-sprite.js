@@ -49,6 +49,15 @@ export class TileSprite extends Sprite {
           this.y * cellSizePx + fontSize * (i + 1)
         );
       });
+
+      ctx.strokeStyle = (this.x + this.y) % 2 === 0 ? "red" : "yellow";
+
+      ctx.strokeRect(
+        this.x * cellSizePx,
+        this.y * cellSizePx,
+        cellSizePx - 1,
+        cellSizePx - 1
+      );
     }
   }
 }

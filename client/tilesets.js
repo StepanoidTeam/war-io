@@ -7,13 +7,19 @@ const IMAGESETS = {
   //todo: SHROOMS? find that sprite
 };
 
-function loadBunch({ imageName, from, to }) {
-  //tileset size
-  const cols = 19;
-  const rows = 20;
-  const imgSetConfig = { sourceSize: 32, sourceOffset: 1 };
-
+function loadBunch({
+  imageName,
+  from,
+  to,
+  imgSetConfig = {
+    sourceSize: 32,
+    sourceOffset: 1,
+    cols: 19,
+    rows: 20,
+  },
+}) {
   const sprites = [];
+  const { cols, rows, sourceSize, sourceOffset } = imgSetConfig;
 
   for (let row = 0, index = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++, index++) {
@@ -58,4 +64,18 @@ export const springTileSet = {
 
 export const desertTileSet = {
   all: loadBunch({ imageName: IMAGESETS.DESERT, from: 16, to: 372 }),
+};
+
+export const testTileSet = {
+  all: loadBunch({
+    imageName: "test.jpg",
+    from: 95,
+    to: 300,
+    imgSetConfig: {
+      sourceSize: 32,
+      sourceOffset: 0,
+      cols: 19,
+      rows: 20,
+    },
+  }),
 };

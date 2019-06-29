@@ -1,4 +1,4 @@
-import { cellSizePx, debug, defaultTile } from "../config.js";
+import { cellSizePx, debug, editor } from "../config.js";
 import { winterTileSet } from "../tilesets.js";
 import { debugTile } from "./tile.js";
 
@@ -6,7 +6,7 @@ export class MapCell {
   constructor(props) {
     this.props = props;
 
-    this.setTile(defaultTile);
+    this.setTile(editor.defaultTile);
   }
 
   setTile(tileCode) {

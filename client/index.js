@@ -1,6 +1,6 @@
 import { ctx } from "./context.js";
 import { GameMap } from "./components/game-map.js";
-import { debug, brushes } from "./config.js";
+import { debug, editor } from "./config.js";
 
 const canvasCleaner = {
   draw(ctx) {
@@ -22,6 +22,7 @@ const canvasCleaner = {
 
 //dat-gui
 const gui = new dat.GUI();
-gui.add(debug, "brush", brushes);
+gui.add(editor, "brush", editor.brushes);
+gui.add(editor, "brushSize", [1, 2, 3]);
 gui.add(debug, "enabled");
 gui.addColor(debug, "cellColor");

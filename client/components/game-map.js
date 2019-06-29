@@ -1,8 +1,6 @@
 import { cellSizePx, editor } from "../config.js";
 import { ctx } from "../context.js";
 import { MapCell } from "./map-cell.js";
-import { winterTileSet } from "../tilesets.js";
-import { getRandomItem } from "../helpers/random.js";
 
 // brush/layer dependency order
 const brushChains = {
@@ -17,11 +15,16 @@ const brushChains = {
     editor.brushes.snow,
     editor.brushes.forest,
   ],
-  // [editor.brushes.rocks]: [editor.brushes.ice],
+
   [editor.brushes.ice]: [
-    // editor.brushes.water, //2
-    // editor.brushes.snow, //these two are same prior, how to handle that?
+    //editor.brushes.snow, //these two are same prior, how to handle that?
+    //editor.brushes.water, //2
     editor.brushes.ice,
+  ],
+  [editor.brushes.rocks]: [
+    editor.brushes.snow, // snow&ice good for all except water?
+    editor.brushes.ice, //these two are same prior, how to handle that?
+    editor.brushes.rocks,
   ],
 };
 
@@ -59,7 +62,7 @@ export class GameMap {
       for (let col = 0; col < cols; col++, index++) {
         //
         this.cells.push(
-          new MapCell({ col, row, tile: getRandomItem(winterTileSet.snowDay) })
+          new MapCell({ col, row, tileCode: editor.defaultTileCode })
         );
       }
     }

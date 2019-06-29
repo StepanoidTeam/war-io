@@ -1,10 +1,12 @@
 import { getImage } from "../helpers/get-image.js";
 
 const imageLib = new Map();
-
 const debugImg = new Image();
 debugImg.src =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAQklEQVRYR+3XsQ0AIAwDwfdoLA5slkgsEYr3Araucwo2sJjJSUEFMtH/uh2ggAIKKKCAAgoooIACCiigwA8Ck/f8Nr0lfWALag98AAAAAElFTkSuQmCC";
+
+imageLib.set("debug", debugImg);
+
 /**
  * image, or image part (with size) to draw on canvas
  */
@@ -34,4 +36,4 @@ export class Tile {
   };
 }
 
-export const debugTile = new Tile({ size: 32 });
+export const debugTile = new Tile({ size: 32, imageName: "debug" });

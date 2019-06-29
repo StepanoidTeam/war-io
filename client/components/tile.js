@@ -37,3 +37,8 @@ export class Tile {
 }
 
 export const debugTile = new Tile({ size: 32, imageName: "debug" });
+
+export const crossTile = new Tile({
+  size: 32,
+  imageName: "x_startpoint.png",
+});

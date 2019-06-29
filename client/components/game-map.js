@@ -58,16 +58,48 @@ export class GameMap {
     return this.cells[index];
   }
 
-  eachSibling(col, row, size = 1, callback) {
+  eachSibling(col, row, brushSize = 1, callback) {
     //neighbour cells
-    for (let rowShift = -size; rowShift <= size; rowShift++) {
-      for (let colShift = -size; colShift <= size; colShift++) {
+    for (let rowShift = -brushSize; rowShift <= brushSize; rowShift++) {
+      for (let colShift = -brushSize; colShift <= brushSize; colShift++) {
         const cell = this.getCell(col + colShift, row + rowShift);
         if (!cell) continue;
 
-        callback(cell, colShift, rowShift);
+        callback(cell, colShift, rowShift, brushSize);
       }
     }
+  }
+  //todo: concat with above?
+  brushSiblings(
+    cell,
+    sibShiftCol = 0,
+    sibShiftRow = 0,
+    brushSize = 0,
+    currentBrush,
+    baseBrush
+  ) {
+    const code = cell.tileCode.split("");
+
+    for (let tileRow = 0; tileRow <= 1; tileRow++) {
+      for (let tileCol = 0; tileCol <= 1; tileCol++) {
+        //todo: how to simplify these conditions?
+        //bokovushki
+        if (sibShiftCol === -brushSize && tileCol === 0) continue;
+        if (sibShiftCol === +brushSize && tileCol === 1) continue; //sx=2(t),1
+        if (sibShiftRow === -brushSize && tileRow === 0) continue;
+        if (sibShiftRow === +brushSize && tileRow === 1) continue;
+
+        const index = tileCol + tileRow * 2;
+        //do not overlap basic brush
+        if (code[index] === baseBrush) continue;
+
+        code[index] = currentBrush;
+      }
+    }
+
+    const tileCode = code.join("");
+
+    cell.setTile(tileCode);
   }
 
   click = event => {
@@ -76,30 +108,19 @@ export class GameMap {
     const col = Math.floor(layerX / cellSizePx);
     const row = Math.floor(layerY / cellSizePx);
 
-    this.eachSibling(
-      col,
-      row,
-      editor.brushSize,
-      (cell, sibShiftCol = 0, sibShiftRow = 0) => {
-        const code = cell.tileCode.split("");
+    //todo: spread ice first size+1
+    if (
+      editor.brush === editor.brushes.water ||
+      editor.brush === editor.brushes.snow
+    ) {
+      this.eachSibling(col, row, editor.brushSize + 1, (...args) =>
+        this.brushSiblings(...args, editor.brushes.ice, editor.brush)
+      );
+    }
 
-        for (let tileRow = 0; tileRow <= 1; tileRow++) {
-          for (let tileCol = 0; tileCol <= 1; tileCol++) {
-            //todo: how to simplify these conditions?
-            if (sibShiftCol === -editor.brushSize && tileCol === 0) continue;
-            if (sibShiftCol === +editor.brushSize && tileCol === 1) continue; //sx=2(t),1
-            if (sibShiftRow === -editor.brushSize && tileRow === 0) continue;
-            if (sibShiftRow === +editor.brushSize && tileRow === 1) continue;
-
-            const index = tileCol + tileRow * 2;
-            code[index] = editor.brush;
-          }
-        }
-
-        const tileCode = code.join("");
-
-        cell.setTile(tileCode);
-      }
+    //todo: apply selected brush
+    this.eachSibling(col, row, editor.brushSize, (...args) =>
+      this.brushSiblings(...args, editor.brush)
     );
 
     //select cell

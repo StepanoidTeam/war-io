@@ -1,6 +1,7 @@
 import { cellSizePx, debug, editor } from "../config.js";
 import { winterTileSet } from "../tilesets.js";
 import { debugTile } from "./tile.js";
+import { getRandomItem } from "../helpers/random.js";
 
 export class MapCell {
   constructor(props) {
@@ -12,9 +13,9 @@ export class MapCell {
   setTile(tileCode) {
     this.tileCode = tileCode;
 
-    const tileFn = winterTileSet.snowIce[this.tileCode] || (() => debugTile);
-
-    this.props.tile = tileFn();
+    this.props.tile = getRandomItem(
+      winterTileSet.snowIce[this.tileCode] || [debugTile]
+    );
   }
 
   draw(ctx) {

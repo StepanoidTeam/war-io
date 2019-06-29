@@ -1,5 +1,4 @@
 import { Tile } from "./components/tile.js";
-import { getRandomItem } from "./helpers/random.js";
 
 const IMAGESETS = {
   WINTER: "winter.png",
@@ -39,10 +38,6 @@ function loadTiles({ imageName, from, to, imgSetConfig = imgSetConfig1 }) {
 }
 
 function winter(from, to) {
-  return () => getRandomItem(win(from, to));
-}
-
-function win(from, to) {
   return loadTiles({ imageName: IMAGESETS.WINTER, from, to });
 }
 
@@ -75,15 +70,32 @@ export const winterTileSet = {
     ["wwii"]: winter(203, 205),
     ["iiwi"]: winter(206, 207),
     ["wiwi"]: winter(208, 210),
-    ["iwwi"]: () => getRandomItem([...win(211, 211), ...win(229, 229)]), //podstava
+    ["iwwi"]: [...winter(211, 211), ...winter(229, 229)], //podstava
     ["wwwi"]: winter(212, 213),
-    ["iiiw"]: () => getRandomItem([...win(214, 215)]),
-    ["wiiw"]: () => getRandomItem([...win(216, 216), ...win(230, 230)]),
+    ["iiiw"]: [...winter(214, 215)],
+    ["wiiw"]: [...winter(216, 216), ...winter(230, 230)],
     ["iwiw"]: winter(217, 219),
     ["wwiw"]: winter(220, 221),
     ["iiww"]: winter(222, 224),
     ["wiww"]: winter(225, 226),
     ["iwww"]: winter(227, 228),
+
+    ["ffff"]: winter(135, 136), //forest
+    //transitions
+    ["fsss"]: winter(110, 0, 133),
+    ["sfss"]: winter(201, 202),
+    ["ffss"]: winter(203, 205),
+    ["ssfs"]: winter(206, 207),
+    ["fsfs"]: winter(208, 210),
+    ["sffs"]: [...winter(211, 211), ...winter(229, 229)], //podstava
+    ["fffs"]: winter(212, 213),
+    ["sssf"]: [...winter(214, 215)],
+    ["fssf"]: [...winter(216, 216), ...winter(230, 230)],
+    ["sfsf"]: winter(217, 219),
+    ["ffsf"]: winter(220, 221),
+    ["ssff"]: winter(222, 224),
+    ["fsff"]: winter(225, 226),
+    ["sfff"]: winter(227, 228),
   },
 
   wall: loadTiles({ imageName: IMAGESETS.WINTER, from: 33, to: 33 }),

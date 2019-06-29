@@ -2,8 +2,8 @@ import { getImage } from "../helpers/get-image.js";
 
 const imageLib = new Map();
 
-const defaultImg = new Image();
-defaultImg.src =
+const debugImg = new Image();
+debugImg.src =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAQklEQVRYR+3XsQ0AIAwDwfdoLA5slkgsEYr3Araucwo2sJjJSUEFMtH/uh2ggAIKKKCAAgoooIACCiigwA8Ck/f8Nr0lfWALag98AAAAAElFTkSuQmCC";
 /**
  * image, or image part (with size) to draw on canvas
@@ -24,7 +24,7 @@ export class Tile {
   }
 
   [Symbol.iterator] = function*() {
-    yield this.img || defaultImg;
+    yield this.img || debugImg;
     yield this.x;
     yield this.y;
     if (this.size) {
@@ -33,3 +33,5 @@ export class Tile {
     }
   };
 }
+
+export const debugTile = new Tile({ size: 32 });

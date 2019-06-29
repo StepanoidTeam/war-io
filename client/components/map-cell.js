@@ -7,14 +7,14 @@ export class MapCell {
   constructor(props) {
     this.props = props;
 
-    this.setTile(editor.defaultTile);
+    this.setTile(props.tileCode);
   }
 
   setTile(tileCode) {
-    this.tileCode = tileCode;
+    this.props.tileCode = tileCode;
 
     this.props.tile = getRandomItem(
-      winterTileSet.snowIce[this.tileCode] || [debugTile]
+      winterTileSet[this.props.tileCode] || [debugTile]
     );
   }
 

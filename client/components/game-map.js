@@ -1,4 +1,4 @@
-import { cellSizePx } from "../config.js";
+import { cellSizePx, debug } from "../config.js";
 import { ctx } from "../context.js";
 import { MapCell } from "./map-cell.js";
 import { winterTileSet } from "../tilesets.js";
@@ -76,15 +76,8 @@ export class GameMap {
   click = event => {
     const { layerX, layerY } = event;
 
-    const get = (col, row) => {
-      return;
-    };
-
     const col = Math.floor(layerX / cellSizePx);
     const row = Math.floor(layerY / cellSizePx);
-    const currentCell = this.getCell(col, row);
-
-    //currentCell.setTile(0b1111);
 
     this.eachSibling(col, row, (cell, sibCol = 0, sibRow = 0) => {
       const code = cell.tileCode
@@ -102,7 +95,7 @@ export class GameMap {
           if (sibRow === -1 && tileRow === 0) continue;
 
           const index = tileCol + tileRow * 2;
-          code[index] = 1;
+          code[index] = debug.brush;
         }
       }
 

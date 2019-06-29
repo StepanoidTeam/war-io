@@ -13,13 +13,8 @@ import { debug } from "./config.js";
   });
 })();
 
-//10147 - ranee
-//10132 - 2300
-
-//controls init
-
 const gui = new dat.GUI();
 
+gui.add(debug, "brush", { snow: 1, ice: 0 });
 gui.add(debug, "enabled");
-
 gui.addColor(debug, "cellColor");

@@ -76,7 +76,7 @@ export class GameMap {
     sibShiftRow = 0,
     brushSize = 0,
     currentBrush,
-    baseBrush
+    baseBrushes = []
   ) {
     const code = cell.tileCode.split("");
 
@@ -91,7 +91,7 @@ export class GameMap {
 
         const index = tileCol + tileRow * 2;
         //do not overlap basic brush
-        if (code[index] === baseBrush) continue;
+        if (baseBrushes.includes(code[index])) continue;
 
         code[index] = currentBrush;
       }
@@ -100,7 +100,7 @@ export class GameMap {
     const tileCode = code.join("");
 
     //do not change same tile
-    if (cell.tileCode === tileCode) return;
+    //if (cell.tileCode === tileCode) return;
 
     cell.setTile(tileCode);
   }
@@ -111,20 +111,31 @@ export class GameMap {
     const col = Math.floor(layerX / cellSizePx);
     const row = Math.floor(layerY / cellSizePx);
 
-    //todo: spread ice first size+1
-    if (
-      editor.brush === editor.brushes.water ||
-      editor.brush === editor.brushes.snow
-    ) {
+    const deps = {
+      [editor.brushes.water]: editor.brushes.ice,
+      [editor.brushes.snow]: editor.brushes.ice, // editor.brushes.forest],
+      [editor.brushes.forest]: editor.brushes.snow,
+      // [editor.brushes.rocks]: [editor.brushes.ice],
+      // [editor.brushes.ice]: [
+      //   editor.brushes.snow,
+      //   editor.brushes.water,
+      //   editor.brushes.rocks,
+      // ],
+    };
+    //todo: use better naming
+    const depBrush = deps[editor.brush];
+    if (depBrush) {
       this.eachSibling(col, row, editor.brushSize + 1, (...args) =>
-        this.brushSiblings(...args, editor.brushes.ice, editor.brush)
+        this.brushSiblings(...args, depBrush, [editor.brush, depBrush])
       );
     }
 
+    //setTimeout(() => {
     //todo: apply selected brush
     this.eachSibling(col, row, editor.brushSize, (...args) =>
       this.brushSiblings(...args, editor.brush)
     );
+    // }, 1000);
 
     //select cell
 

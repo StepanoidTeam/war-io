@@ -59,6 +59,12 @@ function winter(...ranges) {
 export const winterTileSet = {
   all: loadTiles({ imageName: IMAGESETS.WINTER, from: 16, to: 378 }),
 
+  /**
+   * regex:
+   * ("\w*)(f)(\w*")
+   * $1z$3
+   */
+
   snowIce: {
     ["ssss"]: winter([349, 351]), //snow
     ["iiii"]: winter([331, 334]), //ice
@@ -96,7 +102,7 @@ export const winterTileSet = {
     ["iwww"]: winter([227, 228]),
 
     ["ffff"]: winter(136), //forest
-    //transitions - not sure about those
+    //transitions - todo: not sure about those, recheck
     ["fsss"]: winter(110, 133),
     ["sfss"]: winter(102, 127),
     ["ffss"]: winter(124, 134),
@@ -111,6 +117,23 @@ export const winterTileSet = {
     ["ssff"]: winter(106, 130),
     ["fsff"]: winter(125),
     ["sfff"]: winter(105),
+
+    ["rrrr"]: winter(160, [172, 174]), //rocks
+    //transitions - todo: not sure about those, recheck
+    ["riii"]: winter(145, 168),
+    ["irii"]: winter(137, 162),
+    ["rrii"]: winter(159, 171),
+    ["iiri"]: winter(142, 166),
+    ["riri"]: winter(151, 167),
+    ["irri"]: winter(170), // /
+    ["rrri"]: winter(146, 149),
+    ["iiir"]: winter(139, 164),
+    ["riir"]: winter(169), // \
+    ["irir"]: winter(138, 163),
+    ["rrir"]: winter(147, 148),
+    ["iirr"]: winter(141, 165),
+    ["rirr"]: winter(143),
+    ["irrr"]: winter(140),
   },
 
   wall: loadTiles({ imageName: IMAGESETS.WINTER, from: 33, to: 33 }),

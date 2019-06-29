@@ -7,7 +7,7 @@ export const debug = {
 
 export const editor = {
   brushes: { ice: "i", snow: "s", water: "w", forest: "f", rocks: "r" },
-  defaultTile: "ssss",
+  defaultTileCode: "ssss",
   brush: "f",
   brushSize: 1,
 };

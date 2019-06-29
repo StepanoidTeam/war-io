@@ -39,31 +39,51 @@ function loadTiles({ imageName, from, to, imgSetConfig = imgSetConfig1 }) {
 }
 
 function winter(from, to) {
-  return () =>
-    getRandomItem(loadTiles({ imageName: IMAGESETS.WINTER, from, to }));
+  return () => getRandomItem(win(from, to));
+}
+
+function win(from, to) {
+  return loadTiles({ imageName: IMAGESETS.WINTER, from, to });
 }
 
 export const winterTileSet = {
   all: loadTiles({ imageName: IMAGESETS.WINTER, from: 16, to: 378 }),
 
   snowIce: {
-    [0b1111]: winter(349, 351), //snow
-    [0b0000]: winter(331, 334), //ice
+    ["ssss"]: winter(349, 351), //snow
+    ["iiii"]: winter(331, 334), //ice
     //transitions
-    [0b0111]: winter(259, 260),
-    [0b1011]: winter(261, 262),
-    [0b0011]: winter(263, 265),
-    [0b1101]: winter(266, 267),
-    [0b0101]: winter(268, 270),
-    [0b1001]: winter(271, 272),
-    [0b0001]: winter(273, 274),
-    [0b1110]: winter(275, 276),
-    [0b0110]: winter(277, 278),
-    [0b1010]: winter(279, 281),
-    [0b0010]: winter(282, 283),
-    [0b1100]: winter(284, 286),
-    [0b0100]: winter(287, 288),
-    [0b1000]: winter(289, 290),
+    ["isss"]: winter(259, 260),
+    ["siss"]: winter(261, 262),
+    ["iiss"]: winter(263, 265),
+    ["ssis"]: winter(266, 267),
+    ["isis"]: winter(268, 270),
+    ["siis"]: winter(271, 272),
+    ["iiis"]: winter(273, 274),
+    ["sssi"]: winter(275, 276),
+    ["issi"]: winter(277, 278),
+    ["sisi"]: winter(279, 281),
+    ["iisi"]: winter(282, 283),
+    ["ssii"]: winter(284, 286),
+    ["isii"]: winter(287, 288),
+    ["siii"]: winter(289, 290),
+
+    ["wwww"]: winter(319, 321), //water
+    //transitions
+    ["wiii"]: winter(199, 200),
+    ["iwii"]: winter(201, 202),
+    ["wwii"]: winter(203, 205),
+    ["iiwi"]: winter(206, 207),
+    ["wiwi"]: winter(208, 210),
+    ["iwwi"]: () => getRandomItem([...win(211, 211), ...win(229, 229)]), //podstava
+    ["wwwi"]: winter(212, 213),
+    ["iiiw"]: () => getRandomItem([...win(214, 215)]),
+    ["wiiw"]: () => getRandomItem([...win(216, 216), ...win(230, 230)]),
+    ["iwiw"]: winter(217, 219),
+    ["wwiw"]: winter(220, 221),
+    ["iiww"]: winter(222, 224),
+    ["wiww"]: winter(225, 226),
+    ["iwww"]: winter(227, 228),
   },
 
   wall: loadTiles({ imageName: IMAGESETS.WINTER, from: 33, to: 33 }),

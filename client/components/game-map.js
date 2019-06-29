@@ -80,11 +80,7 @@ export class GameMap {
     const row = Math.floor(layerY / cellSizePx);
 
     this.eachSibling(col, row, (cell, sibCol = 0, sibRow = 0) => {
-      const code = cell.tileCode
-        .toString(2)
-        .padStart(4, 0)
-        .split("")
-        .map(c => +c);
+      const code = cell.tileCode.split("");
 
       for (let tileRow = 0; tileRow <= 1; tileRow++) {
         for (let tileCol = 0; tileCol <= 1; tileCol++) {
@@ -99,9 +95,9 @@ export class GameMap {
         }
       }
 
-      const codeBinary = +`0b${code.join("")}`;
+      const tileCode = code.join("");
 
-      cell.setTile(codeBinary);
+      cell.setTile(tileCode);
     });
 
     //select cell

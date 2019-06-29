@@ -1,17 +1,20 @@
-import { cellSizePx, debug } from "../config.js";
+import { cellSizePx, debug, defaultTile } from "../config.js";
 import { winterTileSet } from "../tilesets.js";
+import { debugTile } from "./tile.js";
 
 export class MapCell {
   constructor(props) {
     this.props = props;
 
-    this.setTile(0b0000);
+    this.setTile(defaultTile);
   }
 
-  setTile(tileCode = 0b0000) {
+  setTile(tileCode) {
     this.tileCode = tileCode;
 
-    this.props.tile = winterTileSet.snowIce[this.tileCode]();
+    const tileFn = winterTileSet.snowIce[this.tileCode] || (() => debugTile);
+
+    this.props.tile = tileFn();
   }
 
   draw(ctx) {
@@ -29,22 +32,30 @@ export class MapCell {
     if (debug.enabled) {
       ctx.strokeStyle = `rgba(${debug.cellColor})`;
       ctx.strokeRect(...cellProps);
+
+      const fontSize = 14;
+      ctx.font = `${fontSize}px Courier New`;
+      ctx.fillStyle = "#ffffff";
+
+      ctx.fillText(
+        this.tileCode.slice(0, 2),
+        col * cellSizePx,
+        row * cellSizePx + fontSize * 1
+      );
+      ctx.fillText(
+        this.tileCode.slice(2, 4),
+        col * cellSizePx,
+        row * cellSizePx + fontSize * 2
+      );
+
+      //multi-line support
+      // this.debug.split("\n").forEach((part, i) => {
+      //   ctx.fillText(
+      //     part,
+      //     this.x * cellSizePx,
+      //     this.y * cellSizePx + fontSize * (i + 1)
+      //   );
+      // });
     }
-
-    // if (this.debug) {
-    //   //return;
-    //   const fontSize = 12;
-    //   ctx.font = `${fontSize}px Arial`;
-    //   ctx.fillStyle = "#ffffff";
-
-    //   //multi-line support
-    //   this.debug.split("\n").forEach((part, i) => {
-    //     ctx.fillText(
-    //       part,
-    //       this.x * cellSizePx,
-    //       this.y * cellSizePx + fontSize * (i + 1)
-    //     );
-    //   });
-    // }
   }
 }

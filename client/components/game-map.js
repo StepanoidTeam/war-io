@@ -5,25 +5,27 @@ import { MapCell } from "./map-cell.js";
 // brush/layer dependency order
 const brushChains = {
   [editor.brushes.water]: [
-    editor.brushes.snow,
-    editor.brushes.ice,
+    editor.brushes.snow, // only forest
+    editor.brushes.ice, // water drops on snow/rocks/.. -> put ice
     editor.brushes.water,
   ],
-  [editor.brushes.snow]: [editor.brushes.ice, editor.brushes.snow],
-  [editor.brushes.forest]: [
-    editor.brushes.ice,
+  [editor.brushes.snow]: [
+    editor.brushes.ice, // if snow drops on water/rocks -> put ice
     editor.brushes.snow,
+  ],
+  [editor.brushes.forest]: [
+    editor.brushes.ice, // if snow drops on rocks/water -> put ice
+    editor.brushes.snow, //?
     editor.brushes.forest,
   ],
 
   [editor.brushes.ice]: [
-    //editor.brushes.snow, //these two are same prior, how to handle that?
-    //editor.brushes.water, //2
+    editor.brushes.snow, //if ice drops on forest -> put snow
     editor.brushes.ice,
   ],
   [editor.brushes.rocks]: [
-    editor.brushes.snow, // snow&ice good for all except water?
-    editor.brushes.ice, //these two are same prior, how to handle that?
+    editor.brushes.snow, // if ice drops on forest -> put snow
+    editor.brushes.ice, //?
     editor.brushes.rocks,
   ],
 };

@@ -37,65 +37,80 @@ function loadTiles({ imageName, from, to, imgSetConfig = imgSetConfig1 }) {
   return tiles;
 }
 
-function winter(from, to) {
-  return loadTiles({ imageName: IMAGESETS.WINTER, from, to });
+//todo: simplify this and above
+function winter(...ranges) {
+  return ranges
+    .map(index => {
+      if (Array.isArray(index)) {
+        const [from, to] = index;
+
+        return loadTiles({ imageName: IMAGESETS.WINTER, from, to });
+      } else if (Number.isInteger(index)) {
+        return loadTiles({
+          imageName: IMAGESETS.WINTER,
+          from: index,
+          to: index,
+        });
+      }
+    })
+    .flat();
 }
 
 export const winterTileSet = {
   all: loadTiles({ imageName: IMAGESETS.WINTER, from: 16, to: 378 }),
 
   snowIce: {
-    ["ssss"]: winter(349, 351), //snow
-    ["iiii"]: winter(331, 334), //ice
+    ["ssss"]: winter([349, 351]), //snow
+    ["iiii"]: winter([331, 334]), //ice
     //transitions
-    ["isss"]: winter(259, 260),
-    ["siss"]: winter(261, 262),
-    ["iiss"]: winter(263, 265),
-    ["ssis"]: winter(266, 267),
-    ["isis"]: winter(268, 270),
-    ["siis"]: winter(271, 272),
-    ["iiis"]: winter(273, 274),
-    ["sssi"]: winter(275, 276),
-    ["issi"]: winter(277, 278),
-    ["sisi"]: winter(279, 281),
-    ["iisi"]: winter(282, 283),
-    ["ssii"]: winter(284, 286),
-    ["isii"]: winter(287, 288),
-    ["siii"]: winter(289, 290),
+    ["isss"]: winter([259, 260]),
+    ["siss"]: winter([261, 262]),
+    ["iiss"]: winter([263, 265]),
+    ["ssis"]: winter([266, 267]),
+    ["isis"]: winter([268, 270]),
+    ["siis"]: winter([271, 272]),
+    ["iiis"]: winter([273, 274]),
+    ["sssi"]: winter([275, 276]),
+    ["issi"]: winter([277, 278]),
+    ["sisi"]: winter([279, 281]),
+    ["iisi"]: winter([282, 283]),
+    ["ssii"]: winter([284, 286]),
+    ["isii"]: winter([287, 288]),
+    ["siii"]: winter([289, 290]),
 
-    ["wwww"]: winter(319, 321), //water
+    ["wwww"]: winter([319, 321]), //water
     //transitions
-    ["wiii"]: winter(199, 200),
-    ["iwii"]: winter(201, 202),
-    ["wwii"]: winter(203, 205),
-    ["iiwi"]: winter(206, 207),
-    ["wiwi"]: winter(208, 210),
-    ["iwwi"]: [...winter(211, 211), ...winter(229, 229)], //podstava
-    ["wwwi"]: winter(212, 213),
-    ["iiiw"]: [...winter(214, 215)],
-    ["wiiw"]: [...winter(216, 216), ...winter(230, 230)],
-    ["iwiw"]: winter(217, 219),
-    ["wwiw"]: winter(220, 221),
-    ["iiww"]: winter(222, 224),
-    ["wiww"]: winter(225, 226),
-    ["iwww"]: winter(227, 228),
+    ["wiii"]: winter([199, 200]),
+    ["iwii"]: winter([201, 202]),
+    ["wwii"]: winter([203, 205]),
+    ["iiwi"]: winter([206, 207]),
+    ["wiwi"]: winter([208, 210]),
+    ["iwwi"]: winter(211, 229), //todo: redraw basic tileset
+    ["wwwi"]: winter([212, 213]),
+    ["iiiw"]: winter([214, 215]),
+    ["wiiw"]: winter(216, 230), //todo: redraw basic tileset
+    ["iwiw"]: winter([217, 219]),
+    ["wwiw"]: winter([220, 221]),
+    ["iiww"]: winter([222, 224]),
+    ["wiww"]: winter([225, 226]),
+    ["iwww"]: winter([227, 228]),
 
-    ["ffff"]: winter(135, 136), //forest
-    //transitions
-    ["fsss"]: winter(110, 0, 133),
-    ["sfss"]: winter(201, 202),
-    ["ffss"]: winter(203, 205),
-    ["ssfs"]: winter(206, 207),
-    ["fsfs"]: winter(208, 210),
-    ["sffs"]: [...winter(211, 211), ...winter(229, 229)], //podstava
-    ["fffs"]: winter(212, 213),
-    ["sssf"]: [...winter(214, 215)],
-    ["fssf"]: [...winter(216, 216), ...winter(230, 230)],
-    ["sfsf"]: winter(217, 219),
-    ["ffsf"]: winter(220, 221),
-    ["ssff"]: winter(222, 224),
-    ["fsff"]: winter(225, 226),
-    ["sfff"]: winter(227, 228),
+    ["ffff"]: winter(136), //forest
+    //transitions - not sure about those
+    ["fsss"]: winter(110, 133),
+    ["sfss"]: winter(102, 127),
+    ["ffss"]: winter(124, 134),
+    ["ssfs"]: winter(107, 131),
+    ["fsfs"]: winter(109, 132),
+    ["sffs"]: winter(114), //podstava
+    ["fffs"]: winter(111),
+    ["sssf"]: winter(104, 129),
+    ["fssf"]: winter([112, 113]),
+    ["sfsf"]: winter(115, 128),
+    ["ffsf"]: winter(112, 113, 120),
+    ["ssff"]: winter(106, 130),
+    ["fsff"]: winter(125),
+    ["sfff"]: winter(105),
   },
 
   wall: loadTiles({ imageName: IMAGESETS.WINTER, from: 33, to: 33 }),
@@ -143,10 +158,3 @@ export const testTileSet = {
     },
   }),
 };
-
-export const crossTile = new Tile({
-  x: 0,
-  y: 0,
-  size: 32,
-  imageName: "x_startpoint.png",
-});

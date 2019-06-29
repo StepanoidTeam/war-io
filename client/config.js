@@ -6,8 +6,8 @@ export const debug = {
 };
 
 export const editor = {
-  brushes: { ice: "i", snow: "s", water: "w" },
+  brushes: { ice: "i", snow: "s", water: "w", forest: "f", rocks: "r" },
   defaultTile: "ssss",
-  brush: "i",
+  brush: "f",
   brushSize: 1,
 };

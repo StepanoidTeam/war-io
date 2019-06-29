@@ -25,4 +25,4 @@ const gui = new dat.GUI();
 gui.add(editor, "brush", editor.brushes);
 gui.add(editor, "brushSize", 1, 3).step(1);
 gui.add(debug, "enabled");
-gui.addColor(debug, "cellColor");
+//gui.addColor(debug, "cellColor");

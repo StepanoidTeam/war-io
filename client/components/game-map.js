@@ -1,4 +1,4 @@
-import { cellSizePx, debug } from "../config.js";
+import { cellSizePx, editor } from "../config.js";
 import { ctx } from "../context.js";
 import { MapCell } from "./map-cell.js";
 import { winterTileSet } from "../tilesets.js";
@@ -58,13 +58,10 @@ export class GameMap {
     return this.cells[index];
   }
 
-  eachSibling(col, row, callback) {
+  eachSibling(col, row, size = 1, callback) {
     //neighbour cells
-    for (let rowShift = -1; rowShift <= 1; rowShift++) {
-      for (let colShift = -1; colShift <= 1; colShift++) {
-        //skip center
-        //if (rowShift === 0 && colShift === 0) continue;
-
+    for (let rowShift = -size; rowShift <= size; rowShift++) {
+      for (let colShift = -size; colShift <= size; colShift++) {
         const cell = this.getCell(col + colShift, row + rowShift);
         if (!cell) continue;
 
@@ -79,26 +76,31 @@ export class GameMap {
     const col = Math.floor(layerX / cellSizePx);
     const row = Math.floor(layerY / cellSizePx);
 
-    this.eachSibling(col, row, (cell, sibCol = 0, sibRow = 0) => {
-      const code = cell.tileCode.split("");
+    this.eachSibling(
+      col,
+      row,
+      editor.brushSize,
+      (cell, sibShiftCol = 0, sibShiftRow = 0) => {
+        const code = cell.tileCode.split("");
 
-      for (let tileRow = 0; tileRow <= 1; tileRow++) {
-        for (let tileCol = 0; tileCol <= 1; tileCol++) {
-          //todo: how to simplify these conditions?
-          if (sibCol === 1 && tileCol === 1) continue;
-          if (sibCol === -1 && tileCol === 0) continue;
-          if (sibRow === 1 && tileRow === 1) continue;
-          if (sibRow === -1 && tileRow === 0) continue;
+        for (let tileRow = 0; tileRow <= 1; tileRow++) {
+          for (let tileCol = 0; tileCol <= 1; tileCol++) {
+            //todo: how to simplify these conditions?
+            if (sibShiftCol === -editor.brushSize && tileCol === 0) continue;
+            if (sibShiftCol === +editor.brushSize && tileCol === 1) continue; //sx=2(t),1
+            if (sibShiftRow === -editor.brushSize && tileRow === 0) continue;
+            if (sibShiftRow === +editor.brushSize && tileRow === 1) continue;
 
-          const index = tileCol + tileRow * 2;
-          code[index] = debug.brush;
+            const index = tileCol + tileRow * 2;
+            code[index] = editor.brush;
+          }
         }
+
+        const tileCode = code.join("");
+
+        cell.setTile(tileCode);
       }
-
-      const tileCode = code.join("");
-
-      cell.setTile(tileCode);
-    });
+    );
 
     //select cell
 

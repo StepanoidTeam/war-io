@@ -99,6 +99,9 @@ export class GameMap {
 
     const tileCode = code.join("");
 
+    //do not change same tile
+    if (cell.tileCode === tileCode) return;
+
     cell.setTile(tileCode);
   }
 

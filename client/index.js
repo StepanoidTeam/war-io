@@ -1,29 +1,25 @@
-import { Sprite } from "./components/sprite.js";
 import { ctx } from "./context.js";
-import {
-  winterTileSet,
-  desertTileSet,
-  springTileSet,
-  testTileSet,
-} from "./tilesets.js";
+
+import { GameMap } from "./components/game-map.js";
+import { Tile } from "./components/tile.js";
+import { debug } from "./config.js";
 
 (async () => {
-  const cross = "x_startpoint.png";
-
-  const sprites = [
-    new Sprite({ x: 0, y: 0, imageName: cross }),
-    new Sprite({ x: 1, y: 1, imageName: cross }),
-
-    ...winterTileSet.all,
-    //...desertTileSet.all,
-    //...springTileSet.all,
-    //...testTileSet.all,
-  ];
+  const drawables = [new GameMap({ size: { rows: 20, cols: 20 } })];
 
   requestAnimationFrame(function render() {
-    sprites.forEach(s => s.draw(ctx));
+    drawables.forEach(s => s.draw(ctx));
     requestAnimationFrame(render);
   });
-
-  console.log(sprites[1]);
 })();
+
+//10147 - ranee
+//10132 - 2300
+
+//controls init
+
+const gui = new dat.GUI();
+
+gui.add(debug, "enabled");
+
+gui.addColor(debug, "cellColor");

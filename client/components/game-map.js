@@ -102,7 +102,7 @@ export class GameMap {
     currentBrush,
     brushesToSkip = []
   ) {
-    const code = cell.tileCode.split("");
+    const code = cell.props.tileCode.split("");
 
     for (let tileRow = 0; tileRow <= 1; tileRow++) {
       for (let tileCol = 0; tileCol <= 1; tileCol++) {
@@ -124,7 +124,7 @@ export class GameMap {
     const tileCode = code.join("");
 
     //do not change same tile
-    //if (cell.tileCode === tileCode) return;
+    //if (cell.props.tileCode === tileCode) return;
 
     cell.setTile(tileCode);
   }

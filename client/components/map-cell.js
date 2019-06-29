@@ -39,12 +39,12 @@ export class MapCell {
       ctx.fillStyle = "#ffffff";
 
       ctx.fillText(
-        this.tileCode.slice(0, 2),
+        this.props.tileCode.slice(0, 2),
         col * cellSizePx,
         row * cellSizePx + fontSize * 1
       );
       ctx.fillText(
-        this.tileCode.slice(2, 4),
+        this.props.tileCode.slice(2, 4),
         col * cellSizePx,
         row * cellSizePx + fontSize * 2
       );

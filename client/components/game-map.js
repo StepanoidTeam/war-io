@@ -255,10 +255,15 @@ export class GameMap {
   click = (col, row) => {
     //const brushChain = brushChains[editor.brush];
 
-    const selectedCell = this.cells[row][col];
+    const selectedCells = [];
+    for (let brushRow = 0; brushRow < editor.brushSize; brushRow++) {
+      for (let brushCol = 0; brushCol < editor.brushSize; brushCol++) {
+        selectedCells.push(this.getCell(col + brushCol, row + brushRow));
+      }
+    }
 
-    const affectedCells = this.paintCells([selectedCell], editor.brush, []);
-
+    const affectedCells = this.paintCells(selectedCells, editor.brush, []);
+    console.log(affectedCells.length);
     //todo:
     //clear marked as repaint
 

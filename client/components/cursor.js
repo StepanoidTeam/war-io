@@ -15,15 +15,8 @@ export const cursor = {
       ...this.tile,
       this.x * cellSizePx,
       this.y * cellSizePx,
-      cellSizePx,
-      cellSizePx
-    );
-    ctx.drawImage(
-      ...debugTile,
-      this.x * cellSizePx - cellSizePx / 2,
-      this.y * cellSizePx - cellSizePx / 2,
-      cellSizePx * 2,
-      cellSizePx * 2
+      cellSizePx * editor.brushSize,
+      cellSizePx * editor.brushSize
     );
   },
 };

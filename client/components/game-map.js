@@ -1,31 +1,32 @@
 import { cellSizePx, editor } from "../config.js";
 import { ctx } from "../context.js";
 import { MapCell } from "./map-cell.js";
+import { cursor } from "./cursor.js";
 
 // brush/layer dependency order
 const brushChains = {
   [editor.brushes.water]: [
-    editor.brushes.snow, // only forest
-    editor.brushes.ice, // water drops on snow/rocks/.. -> put ice
+    //editor.brushes.snow, // only forest
+    //editor.brushes.ice, // water drops on snow/rocks/.. -> put ice
     editor.brushes.water,
   ],
   [editor.brushes.snow]: [
-    editor.brushes.ice, // if snow drops on water/rocks -> put ice
+    //editor.brushes.ice, // if snow drops on water/rocks -> put ice
     editor.brushes.snow,
   ],
   [editor.brushes.forest]: [
-    editor.brushes.ice, // if snow drops on rocks/water -> put ice
-    editor.brushes.snow, //?
+    //editor.brushes.ice, // if snow drops on rocks/water -> put ice
+    //editor.brushes.snow, //?
     editor.brushes.forest,
   ],
 
   [editor.brushes.ice]: [
-    editor.brushes.snow, //if ice drops on forest -> put snow
+    //editor.brushes.snow, //if ice drops on forest -> put snow
     editor.brushes.ice,
   ],
   [editor.brushes.rocks]: [
-    editor.brushes.snow, // if ice drops on forest -> put snow
-    editor.brushes.ice, //?
+    //editor.brushes.snow, // if ice drops on forest -> put snow
+    //editor.brushes.ice, //?
     editor.brushes.rocks,
   ],
 };
@@ -50,11 +51,23 @@ export class GameMap {
     });
 
     ctx.canvas.addEventListener("mousemove", event => {
-      if (this.isDrawing) this.click(event);
+      const { layerX, layerY } = event;
+
+      const col = Math.floor(layerX / cellSizePx);
+      const row = Math.floor(layerY / cellSizePx);
+
+      if (this.isDrawing) this.click(col, row);
+
+      cursor.move(col, row);
     });
 
     ctx.canvas.addEventListener("click", event => {
-      this.click(event);
+      const { layerX, layerY } = event;
+
+      const col = Math.floor(layerX / cellSizePx);
+      const row = Math.floor(layerY / cellSizePx);
+
+      this.click(col, row);
     });
 
     const { rows, cols } = this.size;
@@ -131,12 +144,7 @@ export class GameMap {
     cell.setTile(tileCode);
   }
 
-  click = event => {
-    const { layerX, layerY } = event;
-
-    const col = Math.floor(layerX / cellSizePx);
-    const row = Math.floor(layerY / cellSizePx);
-
+  click = (col, row) => {
     const brushChain = brushChains[editor.brush];
 
     brushChain.forEach((brush, index, { length }) => {

@@ -1,6 +1,6 @@
 import { ctx } from "./context.js";
 import { GameMap } from "./components/game-map.js";
-import { debug, editor } from "./config.js";
+import { debug, editor, cellSizePx } from "./config.js";
 import { cursor } from "./components/cursor.js";
 
 const canvasCleaner = {
@@ -10,11 +10,39 @@ const canvasCleaner = {
 };
 
 (async () => {
-  const drawables = [
-    canvasCleaner,
-    new GameMap({ size: { rows: 20, cols: 20 } }),
-    cursor,
-  ];
+  const gameMap = new GameMap({ size: { rows: 20, cols: 20 } });
+
+  let isDrawing = false;
+  //todo: hanlde events better
+  ctx.canvas.addEventListener("mousedown", () => {
+    isDrawing = true;
+  });
+
+  ctx.canvas.addEventListener("mouseup", () => {
+    isDrawing = false;
+  });
+
+  ctx.canvas.addEventListener("mousemove", event => {
+    const { layerX, layerY } = event;
+
+    const col = Math.floor(layerX / cellSizePx);
+    const row = Math.floor(layerY / cellSizePx);
+
+    if (isDrawing) gameMap.click(col, row);
+
+    cursor.move(col, row);
+  });
+
+  ctx.canvas.addEventListener("click", event => {
+    const { layerX, layerY } = event;
+
+    const col = Math.floor(layerX / cellSizePx);
+    const row = Math.floor(layerY / cellSizePx);
+
+    gameMap.click(col, row);
+  });
+
+  const drawables = [canvasCleaner, gameMap, cursor];
 
   requestAnimationFrame(function render() {
     drawables.forEach(s => s.draw(ctx));

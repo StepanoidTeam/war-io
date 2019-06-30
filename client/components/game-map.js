@@ -1,7 +1,6 @@
-import { cellSizePx, editor } from "../config.js";
-import { ctx } from "../context.js";
+import { editor } from "../config.js";
+
 import { MapCell } from "./map-cell.js";
-import { cursor } from "./cursor.js";
 
 // brush/layer dependency order
 const brushChains = {
@@ -39,36 +38,6 @@ export class GameMap {
   }
 
   init() {
-    let isDrawing = false;
-    //todo: hanlde events better - move to index?
-    ctx.canvas.addEventListener("mousedown", () => {
-      isDrawing = true;
-    });
-
-    ctx.canvas.addEventListener("mouseup", () => {
-      isDrawing = false;
-    });
-
-    ctx.canvas.addEventListener("mousemove", event => {
-      const { layerX, layerY } = event;
-
-      const col = Math.floor(layerX / cellSizePx);
-      const row = Math.floor(layerY / cellSizePx);
-
-      if (isDrawing) this.click(col, row);
-
-      cursor.move(col, row);
-    });
-
-    ctx.canvas.addEventListener("click", event => {
-      const { layerX, layerY } = event;
-
-      const col = Math.floor(layerX / cellSizePx);
-      const row = Math.floor(layerY / cellSizePx);
-
-      this.click(col, row);
-    });
-
     //init map with default tile cells
     const { rows, cols } = this.size;
     this.cells = [];

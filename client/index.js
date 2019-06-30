@@ -1,6 +1,7 @@
 import { ctx } from "./context.js";
 import { GameMap } from "./components/game-map.js";
 import { debug, editor } from "./config.js";
+import { cursor } from "./components/cursor.js";
 
 const canvasCleaner = {
   draw(ctx) {
@@ -12,6 +13,7 @@ const canvasCleaner = {
   const drawables = [
     canvasCleaner,
     new GameMap({ size: { rows: 20, cols: 20 } }),
+    cursor,
   ];
 
   requestAnimationFrame(function render() {

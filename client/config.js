@@ -10,4 +10,5 @@ export const editor = {
   defaultTileCode: "ssss",
   brush: "f",
   brushSize: 1,
+  cursorColor: "greenyellow",
 };

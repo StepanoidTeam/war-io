@@ -38,16 +38,15 @@ export class GameMap {
     this.init();
   }
 
-  isDrawing = false;
-
   init() {
-    //todo: hanlde events better
+    let isDrawing = false;
+    //todo: hanlde events better - move to index?
     ctx.canvas.addEventListener("mousedown", () => {
-      this.isDrawing = true;
+      isDrawing = true;
     });
 
     ctx.canvas.addEventListener("mouseup", () => {
-      this.isDrawing = false;
+      isDrawing = false;
     });
 
     ctx.canvas.addEventListener("mousemove", event => {
@@ -56,7 +55,7 @@ export class GameMap {
       const col = Math.floor(layerX / cellSizePx);
       const row = Math.floor(layerY / cellSizePx);
 
-      if (this.isDrawing) this.click(col, row);
+      if (isDrawing) this.click(col, row);
 
       cursor.move(col, row);
     });
@@ -70,12 +69,12 @@ export class GameMap {
       this.click(col, row);
     });
 
+    //init map with default tile cells
     const { rows, cols } = this.size;
     this.cells = [];
 
     for (let row = 0, index = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++, index++) {
-        //
         this.cells.push(
           new MapCell({ col, row, tileCode: editor.defaultTileCode })
         );
@@ -154,6 +153,18 @@ export class GameMap {
         this.paintCell(...args, brush, brushChain.slice(index))
       );
     });
+    //todo: steps:
+    //1. paint clicked cell parts with brush 1
+    //2. get affected neigbour cell parts inlc. diags - shifted cells?
+    //3. paint those with brush 1
+    //4. get affected neighbour cell parts incl. diags - shifted cells?
+    //5. if they do not meet new brush - replace them with brush 2
+    //6.
+
+    //new approach:
+    //1. put 1x1 2x2 3x3 shifted cells (not mapcells)
+    //2. get replaced cell neighbours - check whether they ok to be near brush 1
+    //3. if not - replace them with brush 2, goto step2
 
     //console.log(col, row, index);
   };

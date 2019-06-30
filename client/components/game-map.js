@@ -169,7 +169,7 @@ export class GameMap {
     }
   }
   //todo: concat with above?
-  paintCell(
+  paintCells(
     cell,
     sibShiftCol = 0,
     sibShiftRow = 0,
@@ -204,42 +204,63 @@ export class GameMap {
     cell.setTile(tileCode);
   }
 
-  //todo: mb this could be calculated once on init, and saved as prop
   getNeighborCells({ x, y }) {
-    const result = [];
+    const nCells = [];
+
     for (let rowShift = -1; rowShift <= 1; rowShift++) {
       for (let colShift = -1; colShift <= 1; colShift++) {
-        if (rowShift === 0 && colShift === 0) continue; //same
         const nCell = this.getCell(x + colShift, y + rowShift);
         if (!nCell) continue; //not exist
-
-        result.push(nCell);
+        nCells.push(nCell);
       }
     }
 
-    return result;
+    return nCells;
   }
 
-  paintCell(cell) {}
+  //todo: mb this could be calculated once on init, and saved as prop
+  getNeighborCellsForMany(basicCells, skipCells) {
+    const nCells = new Set(
+      basicCells.map(bCell => this.getNeighborCells(bCell)).flat()
+    );
+
+    skipCells.forEach(sCell => nCells.delete(sCell));
+
+    return [...nCells];
+  }
+
+  //todo: rename color to something better
+  paintCells(cells, color, skipCells = []) {
+    //1 - paint all?
+    cells.forEach(c => c.change(color));
+
+    skipCells.push(...cells);
+
+    //2 - get near for all?
+    const nCells = this.getNeighborCellsForMany(cells, skipCells);
+    //3 - filter
+    const cellsToRepaint = nCells.filter(nCell => {
+      //same color
+      // if (nCell.cellType === editor.brush) return;
+      //not bad/bad color
+      return !brushChains[color].includes(nCell.cellType);
+      //goto step
+    });
+
+    if (cellsToRepaint.length === 0) return skipCells;
+    //todo: smells like recursion - refac
+    return this.paintCells(cellsToRepaint, brushChains[color][0], skipCells);
+  }
 
   click = (col, row) => {
     //const brushChain = brushChains[editor.brush];
 
     const selectedCell = this.cells[row][col];
 
-    //1 - paint
-    selectedCell.change(editor.brush);
-    //2 - get near
-    const nCells = this.getNeighborCells(selectedCell);
-    //3 - filter?
+    const affectedCells = this.paintCells([selectedCell], editor.brush, []);
 
-    nCells.forEach(nCell => {
-      //same color
-      if (nCell.cellType === editor.brush) return;
-      if (!brushChains[editor.brush].includes(nCell.cellType)) {
-        nCell.change(brushChains[editor.brush][0]);
-      }
-    });
+    //todo:
+    //clear marked as repaint
 
     // brushChain.forEach((brush, index, { length }) => {
     //   const size = length - index - 1 + editor.brushSize;

@@ -6,7 +6,7 @@ import { editor } from "../config.js";
   //const ctx = new OffscreenCanvas(size, size).getContext("2d");
   const ctx = document.createElement("canvas").getContext("2d");
   //debug
-  document.body.append(ctx.canvas);
+  //document.body.append(ctx.canvas);
 
   const brushes = Object.entries(editor.brushes);
 
@@ -17,15 +17,20 @@ import { editor } from "../config.js";
 
   //setup canvas styles
   const fontSize = 14;
-  const markerColor = "#ffff0080";
   const textOffset = { x: 4, y: 11 };
   ctx.font = `${fontSize}px Courier New`;
-  ctx.strokeStyle = markerColor;
-  ctx.fillStyle = markerColor;
 
   //draw all markers
+  const brushColors = {
+    ice: "#97cfff",
+    snow: "#ffffff",
+    water: "#5995da",
+    forest: "#87f9cf",
+    rocks: "#ffb399",
+  };
   brushes.forEach(([key, value], index) => {
-    ctx.strokeRect(index * markerSize, 0, markerSize, markerSize);
+    ctx.strokeStyle = ctx.fillStyle = brushColors[key];
+    //ctx.strokeRect(index * markerSize, 0, markerSize, markerSize);
     ctx.fillText(value, index * markerSize + textOffset.x, textOffset.y);
   });
 

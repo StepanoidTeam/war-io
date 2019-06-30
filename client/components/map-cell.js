@@ -30,7 +30,9 @@ export class MapCell {
 
     ctx.drawImage(...tile, ...cellProps);
 
-    if (debug.showBrushMarkers) {
+    const isMissingTile = this.props.tile === debugTile;
+
+    if (debug.showBrushMarkers || isMissingTile) {
       const halfSizePx = cellSizePx / 2;
       for (let codeCol = 0; codeCol <= 1; codeCol++) {
         for (let codeRow = 0; codeRow <= 1; codeRow++) {

@@ -1,4 +1,5 @@
 import { Tile } from "./components/tile.js";
+import { cellSizePx } from "./config.js";
 
 const IMAGESETS = {
   WINTER: "winter.png",
@@ -8,7 +9,7 @@ const IMAGESETS = {
 };
 
 const imgSetConfig1 = {
-  sourceSize: 32,
+  sourceSize: cellSizePx,
   sourceOffset: 1,
   cols: 19,
   rows: 20,
@@ -153,7 +154,7 @@ export const testTileSet = {
     from: 95,
     to: 300,
     imgSetConfig: {
-      sourceSize: 32,
+      sourceSize: cellSizePx,
       sourceOffset: 0,
       cols: 19,
       rows: 20,

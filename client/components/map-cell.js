@@ -1,6 +1,6 @@
-import { cellSizePx, debug, editor } from "../config.js";
+import { cellSizePx, debug } from "../config.js";
 import { winterTileSet } from "../tilesets.js";
-import { debugTile } from "./tile.js";
+import { debugTile, brushTiles, cellTile } from "./tile.js";
 import { getRandomItem } from "../helpers/random.js";
 
 export class MapCell {
@@ -19,7 +19,7 @@ export class MapCell {
   }
 
   draw(ctx) {
-    const { col, row, tile } = this.props;
+    const { col, row, tile, tileCode } = this.props;
 
     const cellProps = [
       col * cellSizePx,
@@ -30,33 +30,25 @@ export class MapCell {
 
     ctx.drawImage(...tile, ...cellProps);
 
-    if (debug.enabled) {
-      ctx.strokeStyle = `rgba(${debug.cellColor})`;
-      ctx.strokeRect(...cellProps);
+    if (debug.showBrushMarkers) {
+      const halfSizePx = cellSizePx / 2;
+      for (let codeCol = 0; codeCol <= 1; codeCol++) {
+        for (let codeRow = 0; codeRow <= 1; codeRow++) {
+          const index = codeCol + codeRow * 2;
 
-      const fontSize = 14;
-      ctx.font = `${fontSize}px Courier New`;
-      ctx.fillStyle = "#ffffff";
+          ctx.drawImage(
+            ...brushTiles[tileCode[index]],
+            col * cellSizePx + codeCol * halfSizePx,
+            row * cellSizePx + codeRow * halfSizePx,
+            halfSizePx,
+            halfSizePx
+          );
+        }
+      }
+    }
 
-      ctx.fillText(
-        this.props.tileCode.slice(0, 2),
-        col * cellSizePx,
-        row * cellSizePx + fontSize * 1
-      );
-      ctx.fillText(
-        this.props.tileCode.slice(2, 4),
-        col * cellSizePx,
-        row * cellSizePx + fontSize * 2
-      );
-
-      //multi-line support
-      // this.debug.split("\n").forEach((part, i) => {
-      //   ctx.fillText(
-      //     part,
-      //     this.x * cellSizePx,
-      //     this.y * cellSizePx + fontSize * (i + 1)
-      //   );
-      // });
+    if (debug.showCells) {
+      ctx.drawImage(...cellTile, ...cellProps);
     }
   }
 }

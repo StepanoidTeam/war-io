@@ -1,7 +1,9 @@
-import { cellSizePx, debug } from "../config.js";
+import { editor, debug } from "../config.js";
 import { winterTileSet } from "../tilesets.js";
-import { debugTile, brushTiles, cellTile } from "./tile.js";
+import { debugTile } from "./tile.js";
 import { getRandomItem } from "../helpers/random.js";
+
+const { cellSizePx } = editor;
 
 export class MapCell {
   constructor(props) {
@@ -22,8 +24,8 @@ export class MapCell {
     const { col, row, tile, tileCode } = this.props;
 
     const cellProps = [
-      col * cellSizePx,
-      row * cellSizePx,
+      col * cellSizePx + cellSizePx / 2,
+      row * cellSizePx + cellSizePx / 2,
       cellSizePx,
       cellSizePx,
     ];
@@ -32,25 +34,25 @@ export class MapCell {
 
     const isMissingTile = this.props.tile === debugTile;
 
-    if (debug.showBrushMarkers || isMissingTile) {
-      const halfSizePx = cellSizePx / 2;
-      for (let codeCol = 0; codeCol <= 1; codeCol++) {
-        for (let codeRow = 0; codeRow <= 1; codeRow++) {
-          const index = codeCol + codeRow * 2;
+    // if (debug.showBrushMarkers || isMissingTile) {
+    //   const halfSizePx = cellSizePx / 2;
+    //   for (let codeCol = 0; codeCol <= 1; codeCol++) {
+    //     for (let codeRow = 0; codeRow <= 1; codeRow++) {
+    //       const index = codeCol + codeRow * 2;
 
-          ctx.drawImage(
-            ...brushTiles[tileCode[index]],
-            col * cellSizePx + codeCol * halfSizePx,
-            row * cellSizePx + codeRow * halfSizePx,
-            halfSizePx,
-            halfSizePx
-          );
-        }
-      }
-    }
+    //       ctx.drawImage(
+    //         ...brushTiles[tileCode[index]],
+    //         col * cellSizePx + codeCol,
+    //         row * cellSizePx + codeRow,
+    //         halfSizePx,
+    //         halfSizePx
+    //       );
+    //     }
+    //   }
+    // }
 
-    if (debug.showCells) {
-      ctx.drawImage(...cellTile, ...cellProps);
+    if (debug.showBrushMarkers) {
+      ctx.drawImage(...debugTile, ...cellProps);
     }
   }
 }

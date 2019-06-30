@@ -1,34 +1,71 @@
-import { editor } from "../config.js";
-
+import { editor, debug } from "../config.js";
+import { brushTiles } from "./tile.js";
 import { MapCell } from "./map-cell.js";
 
+const { cellSizePx } = editor;
 // brush/layer dependency order
 const brushChains = {
   [editor.brushes.water]: [
+    editor.brushes.ice, // water drops on snow/rocks/.. -> put ice
     //editor.brushes.snow, // only forest
-    //editor.brushes.ice, // water drops on snow/rocks/.. -> put ice
     editor.brushes.water,
   ],
   [editor.brushes.snow]: [
+    editor.brushes.ice,
     //editor.brushes.ice, // if snow drops on water/rocks -> put ice
     editor.brushes.snow,
+    editor.brushes.forest,
   ],
   [editor.brushes.forest]: [
+    editor.brushes.snow, //?
     //editor.brushes.ice, // if snow drops on rocks/water -> put ice
-    //editor.brushes.snow, //?
     editor.brushes.forest,
   ],
 
   [editor.brushes.ice]: [
-    //editor.brushes.snow, //if ice drops on forest -> put snow
+    editor.brushes.snow, //if ice drops on forest -> put snow
+    editor.brushes.water,
+    editor.brushes.rocks,
     editor.brushes.ice,
   ],
   [editor.brushes.rocks]: [
+    editor.brushes.ice, //?
     //editor.brushes.snow, // if ice drops on forest -> put snow
-    //editor.brushes.ice, //?
     editor.brushes.rocks,
   ],
 };
+
+class Cell {
+  constructor({ x, y, cellType }) {
+    this.x = x;
+    this.y = y;
+    this.change(cellType);
+  }
+
+  change(cellType) {
+    this.cellType = cellType;
+    this.tile = brushTiles[cellType];
+
+    this.subscribers.forEach(callback => callback(this));
+  }
+
+  subscribers = [];
+
+  onChange(callback) {
+    this.subscribers.push(callback);
+  }
+
+  draw(ctx) {
+    const cellProps = [
+      this.x * cellSizePx,
+      this.y * cellSizePx,
+      cellSizePx,
+      cellSizePx,
+    ];
+
+    ctx.drawImage(...this.tile, ...cellProps);
+  }
+}
 
 export class GameMap {
   constructor({ size }) {
@@ -41,18 +78,74 @@ export class GameMap {
     //init map with default tile cells
     const { rows, cols } = this.size;
     this.cells = [];
+    this.subCells = [];
 
+    //cells for main types info
     for (let row = 0, index = 0; row < rows; row++) {
+      this.cells[row] = [];
       for (let col = 0; col < cols; col++, index++) {
-        this.cells.push(
-          new MapCell({ col, row, tileCode: editor.defaultTileCode })
-        );
+        this.cells[row][col] = new Cell({
+          x: col,
+          y: row,
+          cellType: editor.brushes.snow,
+        });
+        //new MapCell({ col, row, tileCode: editor.defaultTileCode }),
       }
-    }
+    } //for
+
+    //subcells for tiles
+    for (let subRow = 0; subRow < this.size.rows - 1; subRow++) {
+      this.subCells[subRow] = [];
+      for (let subCol = 0; subCol < this.size.cols - 1; subCol++) {
+        const cells = this.getCellsForSub(subCol, subRow);
+
+        const tileCode = cells.map(c => c.cellType).join("");
+
+        const subCell = new MapCell({
+          col: subCol,
+          row: subRow,
+          tileCode,
+        });
+
+        cells.forEach(cell => {
+          cell.onChange(cell => {
+            const tileCode = cells.map(c => c.cellType).join("");
+            subCell.setTile(tileCode);
+          });
+        });
+
+        this.subCells[subRow][subCol] = subCell;
+      }
+    } //for
+  }
+
+  getCellsForSub(subCol, subRow) {
+    return [
+      this.cells[subRow][subCol],
+      this.cells[subRow][subCol + 1],
+      this.cells[subRow + 1][subCol],
+      this.cells[subRow + 1][subCol + 1],
+    ];
   }
 
   draw(ctx) {
-    this.cells.forEach(c => c.draw(ctx));
+    //tiles
+    if (debug.renderTiles) {
+      for (let row of this.subCells) {
+        for (let subCell of row) {
+          subCell.draw(ctx);
+        }
+      }
+    }
+
+    if (debug.showCells) {
+      //main cells
+      for (let row of this.cells) {
+        for (let cell of row) {
+          cell.draw(ctx);
+        }
+      }
+    }
   }
 
   getCell(col, row) {
@@ -61,8 +154,7 @@ export class GameMap {
     if (col < 0) return null;
     if (row < 0) return null;
 
-    const index = col + this.size.cols * row;
-    return this.cells[index];
+    return this.cells[row][col];
   }
 
   eachCellInArea(col, row, areaSize = 1, callback) {
@@ -112,16 +204,50 @@ export class GameMap {
     cell.setTile(tileCode);
   }
 
+  //todo: mb this could be calculated once on init, and saved as prop
+  getNeighborCells({ x, y }) {
+    const result = [];
+    for (let rowShift = -1; rowShift <= 1; rowShift++) {
+      for (let colShift = -1; colShift <= 1; colShift++) {
+        if (rowShift === 0 && colShift === 0) continue; //same
+        const nCell = this.getCell(x + colShift, y + rowShift);
+        if (!nCell) continue; //not exist
+
+        result.push(nCell);
+      }
+    }
+
+    return result;
+  }
+
+  paintCell(cell) {}
+
   click = (col, row) => {
-    const brushChain = brushChains[editor.brush];
+    //const brushChain = brushChains[editor.brush];
 
-    brushChain.forEach((brush, index, { length }) => {
-      const size = length - index - 1 + editor.brushSize;
+    const selectedCell = this.cells[row][col];
 
-      this.eachCellInArea(col, row, size, (...args) =>
-        this.paintCell(...args, brush, brushChain.slice(index))
-      );
+    //1 - paint
+    selectedCell.change(editor.brush);
+    //2 - get near
+    const nCells = this.getNeighborCells(selectedCell);
+    //3 - filter?
+
+    nCells.forEach(nCell => {
+      //same color
+      if (nCell.cellType === editor.brush) return;
+      if (!brushChains[editor.brush].includes(nCell.cellType)) {
+        nCell.change(brushChains[editor.brush][0]);
+      }
     });
+
+    // brushChain.forEach((brush, index, { length }) => {
+    //   const size = length - index - 1 + editor.brushSize;
+
+    //   this.eachCellInArea(col, row, size, (...args) =>
+    //     this.paintCell(...args, brush, brushChain.slice(index))
+    //   );
+    // });
     //todo: steps:
     //1. paint clicked cell parts with brush 1
     //2. get affected neigbour cell parts inlc. diags - shifted cells?

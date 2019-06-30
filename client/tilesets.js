@@ -1,5 +1,7 @@
 import { Tile } from "./components/tile.js";
-import { cellSizePx } from "./config.js";
+import { editor } from "./config.js";
+
+const { cellSizePx } = editor;
 
 const IMAGESETS = {
   WINTER: "winter.png",

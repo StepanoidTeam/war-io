@@ -10,14 +10,15 @@ import { editor } from "../config.js";
 
   const brushes = Object.entries(editor.brushes);
 
-  const markerSize = 16;
+  //todo: just use cellsize directly
+  const markerSize = editor.cellSizePx;
 
   ctx.canvas.width = markerSize * brushes.length;
   ctx.canvas.height = markerSize;
 
   //setup canvas styles
-  const fontSize = 14;
-  const textOffset = { x: 4, y: 11 };
+  const fontSize = 28;
+  const textOffset = { x: 8, y: 24 };
   ctx.font = `${fontSize}px Courier New`;
 
   //draw all markers
@@ -30,7 +31,7 @@ import { editor } from "../config.js";
   };
   brushes.forEach(([key, value], index) => {
     ctx.strokeStyle = ctx.fillStyle = brushColors[key];
-    //ctx.strokeRect(index * markerSize, 0, markerSize, markerSize);
+    ctx.strokeRect(index * markerSize, 0, markerSize, markerSize);
     ctx.fillText(value, index * markerSize + textOffset.x, textOffset.y);
   });
 

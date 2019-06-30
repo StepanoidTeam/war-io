@@ -1,7 +1,9 @@
 import { ctx } from "./context.js";
 import { GameMap } from "./components/game-map.js";
-import { debug, editor, cellSizePx } from "./config.js";
+import { debug, editor } from "./config.js";
 import { cursor } from "./components/cursor.js";
+
+const { cellSizePx, mapSize } = editor;
 
 const canvasCleaner = {
   draw(ctx) {
@@ -10,7 +12,7 @@ const canvasCleaner = {
 };
 
 (async () => {
-  const gameMap = new GameMap({ size: { rows: 20, cols: 20 } });
+  const gameMap = new GameMap({ size: { rows: mapSize, cols: mapSize } });
 
   let isDrawing = false;
   //todo: hanlde events better
@@ -56,4 +58,5 @@ gui.add(editor, "brush", editor.brushes);
 gui.add(editor, "brushSize", 1, 3).step(1);
 gui.add(debug, "showBrushMarkers");
 gui.add(debug, "showCells");
+gui.add(debug, "renderTiles");
 //gui.addColor(debug, "cellColor");

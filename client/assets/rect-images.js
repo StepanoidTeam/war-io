@@ -1,7 +1,7 @@
 import { IMAGES, imageLib } from "./image-lib.js";
-import { cellSizePx, editor } from "../config.js";
+import { editor } from "../config.js";
 
-function createRectImage({ color, size = cellSizePx }) {
+function createRectImage({ color, size = editor.cellSizePx }) {
   //const ctx = new OffscreenCanvas(size, size).getContext("2d");
   const ctx = document.createElement("canvas").getContext("2d");
   //debug

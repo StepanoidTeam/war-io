@@ -1,7 +1,8 @@
 import { getImage } from "../helpers/get-image.js";
 import { imageLib, IMAGES } from "../assets/index.js";
-import { editor, cellSizePx } from "../config.js";
+import { editor } from "../config.js";
 
+const { cellSizePx } = editor;
 /**
  * image, or image part (with size) to draw on canvas
  */
@@ -54,14 +55,13 @@ export const crossTile = new Tile({
 
 const brushes = Object.entries(editor.brushes);
 
-const brushSize = cellSizePx / 2;
 export const brushTiles = brushes.reduce(
   (tiles, [key, value], index) => ({
     ...tiles,
     [value]: new Tile({
-      x: brushSize * index,
+      x: cellSizePx * index,
       y: 0,
-      size: brushSize,
+      size: cellSizePx,
       imageName: IMAGES.BRUSH_MARKERS,
     }),
   }),

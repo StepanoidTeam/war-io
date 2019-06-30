@@ -1,5 +1,5 @@
 import { cellSizePx } from "../config.js";
-import { cursorTile } from "./tile.js";
+import { cursorTile, debugTile } from "./tile.js";
 
 export const cursor = {
   x: 0,
@@ -16,6 +16,13 @@ export const cursor = {
       this.y * cellSizePx,
       cellSizePx,
       cellSizePx
+    );
+    ctx.drawImage(
+      ...debugTile,
+      this.x * cellSizePx - cellSizePx / 2,
+      this.y * cellSizePx - cellSizePx / 2,
+      cellSizePx * 2,
+      cellSizePx * 2
     );
   },
 };

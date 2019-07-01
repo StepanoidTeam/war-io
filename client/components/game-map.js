@@ -271,7 +271,7 @@ export class GameMap {
     }
 
     const affectedCells = this.paintCells(selectedCells, editor.brush, []);
-    console.log(affectedCells.length);
+    //console.log(affectedCells.length);
     //todo:
     //clear marked as repaint
 

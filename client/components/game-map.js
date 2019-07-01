@@ -6,32 +6,40 @@ const { cellSizePx } = editor;
 // brush/layer dependency order
 const brushChains = {
   [editor.brushes.water]: [
-    editor.brushes.ice, // water drops on snow/rocks/.. -> put ice
-    //editor.brushes.snow, // only forest
+    editor.brushes.ice, //
     editor.brushes.water,
   ],
   [editor.brushes.snow]: [
     editor.brushes.ice,
-    //editor.brushes.ice, // if snow drops on water/rocks -> put ice
-    editor.brushes.snow,
     editor.brushes.forest,
+    editor.brushes.snowDark,
+    editor.brushes.snow,
   ],
   [editor.brushes.forest]: [
-    editor.brushes.snow, //?
-    //editor.brushes.ice, // if snow drops on rocks/water -> put ice
+    editor.brushes.snow, //
     editor.brushes.forest,
   ],
 
   [editor.brushes.ice]: [
-    editor.brushes.snow, //if ice drops on forest -> put snow
+    editor.brushes.snow, //
     editor.brushes.water,
     editor.brushes.rocks,
+    editor.brushes.iceDark,
     editor.brushes.ice,
   ],
   [editor.brushes.rocks]: [
-    editor.brushes.ice, //?
-    //editor.brushes.snow, // if ice drops on forest -> put snow
+    editor.brushes.ice, //
     editor.brushes.rocks,
+  ],
+
+  [editor.brushes.iceDark]: [
+    editor.brushes.ice, //
+    editor.brushes.iceDark,
+  ],
+
+  [editor.brushes.snowDark]: [
+    editor.brushes.snow, //
+    editor.brushes.snowDark,
   ],
 };
 

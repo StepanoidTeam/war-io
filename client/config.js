@@ -5,7 +5,17 @@ export const debug = {
   renderTiles: true,
 };
 
-const brushes = { ice: "i", snow: "s", water: "w", forest: "f", rocks: "r" };
+const brushes = {
+  ice: "i",
+  snow: "s",
+  water: "w",
+  forest: "f",
+  rocks: "r",
+  //darkness
+  iceDark: "I",
+  snowDark: "S",
+  //waterDark: "W",
+};
 
 export const editor = {
   cellSizePx: 32,

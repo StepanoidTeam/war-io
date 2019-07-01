@@ -140,6 +140,40 @@ export const winterTileSet = {
   ["iirr"]: winter(141, 165),
   ["rirr"]: winter(143),
   ["irrr"]: winter(140),
+
+  ["IIII"]: winter([340, 343]), //dark ice
+  //transitions - todo: not sure about those, recheck
+  ["Iiii"]: winter([175, 176]), //ok
+  ["iIii"]: winter([177, 178]), //ok
+  ["IIii"]: winter([179, 180]), //ok
+  ["iiIi"]: winter([181, 182]), //ok
+  ["IiIi"]: winter([183, 184]), //ok
+  ["iIIi"]: winter([185, 186]),
+  ["IIIi"]: winter(187), //cant find
+  ["iiiI"]: winter([188, 189]), //ok
+  ["IiiI"]: winter([190, 191]), //ok
+  ["iIiI"]: winter([192, 193]), //ok
+  ["IIiI"]: winter(194),
+  ["iiII"]: winter([195, 196]),
+  ["IiII"]: winter(198),
+  ["iIII"]: winter(197),
+
+  ["SSSS"]: winter([364, 366]), //snow dark
+  //transitions
+  ["Ssss"]: winter([231, 232]),
+  ["sSss"]: winter([233, 234]),
+  ["SSss"]: winter([235, 236, 237]),
+  ["ssSs"]: winter([238, 239]),
+  ["SsSs"]: winter([240, 242]),
+  ["sSSs"]: winter([243, 244]),
+  ["SSSs"]: winter(245),
+  ["sssS"]: winter([246, 247]),
+  ["SssS"]: winter([248, 249]),
+  ["sSsS"]: winter([250, 252]),
+  ["SSsS"]: winter(253),
+  ["ssSS"]: winter([254, 256]),
+  ["SsSS"]: winter(258),
+  ["sSSS"]: winter(257),
 };
 
 export const springTileSet = {

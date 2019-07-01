@@ -28,6 +28,8 @@ import { editor } from "../config.js";
     water: "#5995da",
     forest: "#87f9cf",
     rocks: "#ffb399",
+    iceDark: "lightgray",
+    snowDark: "gray",
   };
   brushes.forEach(([key, value], index) => {
     ctx.strokeStyle = ctx.fillStyle = brushColors[key];

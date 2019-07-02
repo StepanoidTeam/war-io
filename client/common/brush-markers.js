@@ -1,4 +1,4 @@
-import { IMAGES, imageLib } from "./image-lib.js.js";
+import { IMAGES, imageLib } from "./image-lib.js";
 import { editor } from "../config.js";
 
 const { cellSizePx } = editor;

@@ -1,5 +1,5 @@
 import { getImage } from "../helpers/get-image.js";
-import { imageLib, IMAGES } from "../assets/index.js";
+import { imageLib, IMAGES } from "../common/index.js";
 import { editor } from "../config.js";
 
 const { cellSizePx } = editor;

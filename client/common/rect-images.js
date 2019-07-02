@@ -1,4 +1,4 @@
-import { IMAGES, imageLib } from "./image-lib.js";
+import { IMAGES, imageLib } from "./image-lib.js.js";
 import { editor } from "../config.js";
 
 function createRectImage({ color, size = editor.cellSizePx }) {

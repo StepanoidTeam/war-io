@@ -1,4 +1,4 @@
-import { IMAGES, imageLib } from "./image-lib.js";
+import { IMAGES, imageLib } from "./image-lib.js.js";
 import { editor } from "../config.js";
 
 //todo: bake all brush markers / text drawings here

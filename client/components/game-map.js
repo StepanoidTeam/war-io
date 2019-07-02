@@ -2,12 +2,21 @@ import { editor, debug } from "../config.js";
 import { MapCell } from "./map-cell.js";
 import { Cell } from "./cell.js";
 import { brushChains } from "../common/index.js";
+import { ctx } from "../context.js";
 
 export class GameMap {
   constructor({ size }) {
     this.size = size;
 
     this.init();
+
+    //todo: extract as separate component
+    this.miniMapCtx = document.createElement("canvas").getContext("2d");
+
+    this.miniMapCtx.canvas.width = 100;
+    this.miniMapCtx.canvas.height = 100;
+
+    document.body.appendChild(this.miniMapCtx.canvas);
   }
 
   init() {
@@ -155,5 +164,18 @@ export class GameMap {
     //1. put 1x1 2x2 3x3 shifted cells (not mapcells)
     //2. get replaced cell neighbours - check whether they ok to be near brush 1
     //3. if not - replace them with brush 2, goto step2
+
+    //debug
+    this.drawMinimap();
   };
+
+  drawMinimap() {
+    this.miniMapCtx.drawImage(
+      ctx.canvas,
+      0,
+      0,
+      this.miniMapCtx.canvas.width,
+      this.miniMapCtx.canvas.height
+    );
+  }
 }

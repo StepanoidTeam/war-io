@@ -72,8 +72,38 @@ export const winterTileSet = {
    * $1z$3
    */
 
+  ["ffff"]: winter([135, 136], 125), //forest
   ["ssss"]: winter([349, 351]), //snow
-  ["iiii"]: winter([331, 334]), //ice
+  ["iiii"]: winter([331, 333]), //ice
+  ["wwww"]: winter([319, 321]), //water
+
+  ["0000"]: winter([0, 7]), //null
+
+  ["rrrr"]: winter(/*160*/ [172, 174]), //rocks
+  ["SSSS"]: winter([364, 366]), //snow dark - seems ok
+  ["IIII"]: winter([340, 342]), //dark ice
+  ["WWWW"]: winter([325, 327]), //water dark -- seems everything is ok
+
+  ["0001"]: winter([0, 7]), //null
+
+  //transitions - todo: not sure about those, recheck
+  ["fsss"]: winter(110, 133),
+  ["sfss"]: winter(102, 127),
+  ["ffss"]: winter(124, 134),
+  ["ssfs"]: winter(107, 131),
+  ["fsfs"]: winter(109, 132),
+  ["sffs"]: winter(114),
+  ["fffs"]: winter(111),
+  ["sssf"]: winter(104, 129),
+  ["fssf"]: winter([112, 113]),
+  ["sfsf"]: winter(115, 128),
+  ["ffsf"]: winter(112, 113, 120),
+  ["ssff"]: winter(106, 130),
+  ["fsff"]: winter(108),
+  ["sfff"]: winter(105),
+
+  ["0002"]: winter([0, 10], [0, 3]), //null
+
   //transitions
   ["isss"]: winter([259, 260]),
   ["siss"]: winter([261, 262]),
@@ -90,7 +120,8 @@ export const winterTileSet = {
   ["isii"]: winter([287, 288]),
   ["siii"]: winter([289, 290]),
 
-  ["wwww"]: winter([319, 321]), //water
+  ["0003"]: winter([0, 7]), //null
+
   //transitions
   ["wiii"]: winter([199, 200]),
   ["iwii"]: winter([201, 202]),
@@ -107,58 +138,61 @@ export const winterTileSet = {
   ["wiww"]: winter([225, 226]),
   ["iwww"]: winter([227, 228]),
 
-  ["ffff"]: winter(136), //forest
-  //transitions - todo: not sure about those, recheck
-  ["fsss"]: winter(110, 133),
-  ["sfss"]: winter(102, 127),
-  ["ffss"]: winter(124, 134),
-  ["ssfs"]: winter(107, 131),
-  ["fsfs"]: winter(109, 132),
-  ["sffs"]: winter(114), //podstava
-  ["fffs"]: winter(111),
-  ["sssf"]: winter(104, 129),
-  ["fssf"]: winter([112, 113]),
-  ["sfsf"]: winter(115, 128),
-  ["ffsf"]: winter(112, 113, 120),
-  ["ssff"]: winter(106, 130),
-  ["fsff"]: winter(125),
-  ["sfff"]: winter(105),
+  ["0004"]: winter([0, 7]), //null
 
-  ["rrrr"]: winter(160, [172, 174]), //rocks
   //transitions - todo: not sure about those, recheck
-  ["riii"]: winter(145, 168),
-  ["irii"]: winter(137, 162),
-  ["rrii"]: winter(159, 171),
-  ["iiri"]: winter(142, 166),
-  ["riri"]: winter(151, 167),
-  ["irri"]: winter(170), // /
-  ["rrri"]: winter(146, 149),
-  ["iiir"]: winter(139, 164),
-  ["riir"]: winter(169), // \
-  ["irir"]: winter(138, 163),
-  ["rrir"]: winter(147, 148),
-  ["iirr"]: winter(141, 165),
-  ["rirr"]: winter(143),
-  ["irrr"]: winter(140),
+  ["riii"]: winter(145, 168), //2
+  ["irii"]: winter(137, 162), //2
+  ["rrii"]: winter(159, 171), //⚠️ missing tile
+  ["iiri"]: winter(142, 166), //2
+  ["riri"]: winter(151, 167), //⚠️ missing tile
+  ["irri"]: winter(170), //⚠️ missing tile
+  ["rrri"]: winter(146, 149), // additional???
+  ["iiir"]: winter(139, 164), //2
+  ["riir"]: winter(169), //1
+  ["irir"]: winter(138, 163), //⚠️ missing tile
+  ["rrir"]: winter(147, 148), //additional???
+  ["iirr"]: winter(141, 165), //⚠️ missing tile
+  ["rirr"]: winter(143), //1
+  ["irrr"]: winter(140), //1
 
-  ["IIII"]: winter([340, 343]), //dark ice
+  ["0005"]: winter([0, 7], [0, 7]), //null
+
   //transitions - todo: not sure about those, recheck
-  ["Iiii"]: winter([175, 176]), //ok
-  ["iIii"]: winter([177, 178]), //ok
-  ["IIii"]: winter([179, 180]), //ok
-  ["iiIi"]: winter([181, 182]), //ok
-  ["IiIi"]: winter([183, 184]), //ok
-  ["iIIi"]: winter([185, 186]),
-  ["IIIi"]: winter(187), //cant find
-  ["iiiI"]: winter([188, 189]), //ok
-  ["IiiI"]: winter([190, 191]), //ok
-  ["iIiI"]: winter([192, 193]), //ok
-  ["IIiI"]: winter(194),
-  ["iiII"]: winter([195, 196]),
-  ["IiII"]: winter(198),
-  ["iIII"]: winter(197),
+  ["Iiii"]: winter([175, 176]), //2
+  ["iIii"]: winter([177, 178]), //2
+  ["IIii"]: winter([179, 180]), //⚠️ missing tile
+  ["iiIi"]: winter([181, 182]), //2
+  ["IiIi"]: winter([183, 184]), //⚠️ missing tile
+  ["iIIi"]: winter([185, 186]), //2
+  ["IIIi"]: winter(187), //1
+  ["iiiI"]: winter([188, 189]), //2
+  ["IiiI"]: winter([190, 191]), //2
+  ["iIiI"]: winter([192, 193]), //⚠️ missing tile
+  ["IIiI"]: winter(194), //1
+  ["iiII"]: winter([195, 196]), //⚠️ missing tile
+  ["IiII"]: winter(198), //1
+  ["iIII"]: winter(197), //1
 
-  ["SSSS"]: winter([364, 366]), //snow dark - seems ok
+  ["0006"]: winter([0, 7], [0, 7]), //null
+
+  //transitions
+  ["Wwww"]: winter([291, 292]), //2
+  ["wWww"]: winter([293, 294]), //2
+  ["WWww"]: winter([295, 297]), //3
+  ["wwWw"]: winter([298, 299]), //2
+  ["WwWw"]: winter([300, 302]), //3
+  ["wWWw"]: winter([303, 304]), //2
+  ["WWWw"]: winter(305), //1
+  ["wwwW"]: winter([306, 307]), //2
+  ["WwwW"]: winter([308, 309]), //2
+  ["wWwW"]: winter([310, 312]), //3
+  ["WWwW"]: winter(313), //1
+  ["wwWW"]: winter([314, 316]), //3
+  ["WwWW"]: winter(317), //1
+  ["wWWW"]: winter(318), //1
+
+  ["0007"]: winter([0, 11]), //null
   //transitions
   ["Ssss"]: winter([231, 232]),
   ["sSss"]: winter([233, 234]),
@@ -174,23 +208,6 @@ export const winterTileSet = {
   ["ssSS"]: winter([254, 256]),
   ["SsSS"]: winter(258),
   ["sSSS"]: winter(257),
-
-  ["WWWW"]: winter([325, 327]), //water dark -- seems everything is ok
-  //transitions
-  ["Wwww"]: winter([291, 292]),
-  ["wWww"]: winter([293, 294]),
-  ["WWww"]: winter([295, 297]),
-  ["wwWw"]: winter([298, 299]),
-  ["WwWw"]: winter([300, 302]),
-  ["wWWw"]: winter([303, 304]),
-  ["WWWw"]: winter(305),
-  ["wwwW"]: winter([306, 307]),
-  ["WwwW"]: winter([308, 309]),
-  ["wWwW"]: winter([310, 312]),
-  ["WWwW"]: winter(313),
-  ["wwWW"]: winter([314, 316]),
-  ["WwWW"]: winter(317),
-  ["wWWW"]: winter(318),
 };
 
 export const springTileSet = {

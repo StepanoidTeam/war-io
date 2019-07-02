@@ -1,5 +1,5 @@
-import { brushTiles } from "./tile";
-import { editor } from "../config";
+import { brushTiles } from "./tile.js";
+import { editor } from "../config.js";
 
 const { cellSizePx } = editor;
 

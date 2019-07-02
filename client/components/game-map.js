@@ -9,6 +9,7 @@ const { cellSizePx } = editor;
 const brushChains = {
   [editor.brushes.water]: [
     editor.brushes.ice, //
+    editor.brushes.waterDark,
     editor.brushes.water,
   ],
   [editor.brushes.snow]: [
@@ -24,7 +25,7 @@ const brushChains = {
 
   [editor.brushes.ice]: [
     editor.brushes.snow, //
-    editor.brushes.water,
+    editor.brushes.water, // for water-dark only use water instead of snow
     editor.brushes.rocks,
     editor.brushes.iceDark,
     editor.brushes.ice,
@@ -42,6 +43,10 @@ const brushChains = {
   [editor.brushes.snowDark]: [
     editor.brushes.snow, //
     editor.brushes.snowDark,
+  ],
+  [editor.brushes.waterDark]: [
+    editor.brushes.water, //
+    editor.brushes.waterDark,
   ],
 };
 

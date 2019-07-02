@@ -51,7 +51,7 @@ export class MapCell {
     //   }
     // }
 
-    if (debug.showBrushMarkers) {
+    if (debug.showTileGrid) {
       ctx.drawImage(...debugTile, ...cellProps);
     }
   }

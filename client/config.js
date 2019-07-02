@@ -1,6 +1,6 @@
 export const debug = {
-  showBrushMarkers: false,
-  showCells: false,
+  showTileGrid: false,
+  showCellTypes: false,
   cellColor: [255, 255, 255, 0.2],
   renderTiles: true,
 };

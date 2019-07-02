@@ -56,7 +56,7 @@ const canvasCleaner = {
 const gui = new dat.GUI();
 gui.add(editor, "brush", editor.brushes);
 gui.add(editor, "brushSize", 1, 3).step(1);
-gui.add(debug, "showBrushMarkers");
-gui.add(debug, "showCells");
+gui.add(debug, "showTileGrid");
+gui.add(debug, "showCellTypes");
 gui.add(debug, "renderTiles");
 //gui.addColor(debug, "cellColor");

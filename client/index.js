@@ -2,6 +2,7 @@ import { ctx } from "./context.js";
 import { GameMap } from "./components/game-map.js";
 import { debug, editor } from "./config.js";
 import { cursor } from "./components/cursor.js";
+import { tilesDrawer } from "./components/tiles-drawer.js";
 
 const { cellSizePx, mapSize } = editor;
 
@@ -10,6 +11,14 @@ const canvasCleaner = {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   },
 };
+
+function getColRowFromMouseEvent(event) {
+  const { layerX, layerY } = event;
+  const col = Math.floor(layerX / cellSizePx);
+  const row = Math.floor(layerY / cellSizePx);
+
+  return [col, row];
+}
 
 (async () => {
   const gameMap = new GameMap({ size: { rows: mapSize, cols: mapSize } });
@@ -25,10 +34,7 @@ const canvasCleaner = {
   });
 
   ctx.canvas.addEventListener("mousemove", event => {
-    const { layerX, layerY } = event;
-
-    const col = Math.floor(layerX / cellSizePx);
-    const row = Math.floor(layerY / cellSizePx);
+    const [col, row] = getColRowFromMouseEvent(event);
 
     if (isDrawing) gameMap.click(col, row);
 
@@ -36,15 +42,17 @@ const canvasCleaner = {
   });
 
   ctx.canvas.addEventListener("click", event => {
-    const { layerX, layerY } = event;
-
-    const col = Math.floor(layerX / cellSizePx);
-    const row = Math.floor(layerY / cellSizePx);
+    const [col, row] = getColRowFromMouseEvent(event);
 
     gameMap.click(col, row);
   });
 
-  const drawables = [canvasCleaner, gameMap, cursor];
+  const drawables = [
+    canvasCleaner,
+    gameMap,
+    //tilesDrawer,
+    cursor,
+  ];
 
   requestAnimationFrame(function render() {
     drawables.forEach(s => s.draw(ctx));

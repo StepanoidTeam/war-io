@@ -1,9 +1,7 @@
 import { editor, debug } from "../config.js";
-import { brushTiles } from "./tile.js";
 import { MapCell } from "./map-cell.js";
 import { Cell } from "./cell.js";
 
-const { cellSizePx } = editor;
 // brush/layer dependency order
 //todo: these could be generated programmatically (somehow)
 const brushChains = {
@@ -24,8 +22,9 @@ const brushChains = {
   ],
 
   [editor.brushes.ice]: [
+    // BUG: rocks/dark ice on dark water fails
     editor.brushes.snow, //
-    editor.brushes.water, // for water-dark only use water instead of snow
+    editor.brushes.water, //todo: for water-dark only use water instead of snow
     editor.brushes.rocks,
     editor.brushes.iceDark,
     editor.brushes.ice,
@@ -121,7 +120,7 @@ export class GameMap {
       }
     }
 
-    if (debug.showCells) {
+    if (debug.showCellTypes) {
       //main cells
       for (let row of this.cells) {
         for (let cell of row) {
@@ -196,7 +195,7 @@ export class GameMap {
       }
     }
 
-    this.paintCells(selectedCells, editor.brush, []);
+    this.paintCells(selectedCells.filter(c => c !== null), editor.brush, []);
 
     //new approach:
     //1. put 1x1 2x2 3x3 shifted cells (not mapcells)

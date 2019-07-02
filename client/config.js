@@ -14,7 +14,7 @@ const brushes = {
   //darkness
   iceDark: "I",
   snowDark: "S",
-  //waterDark: "W",
+  waterDark: "W",
 };
 
 export const editor = {

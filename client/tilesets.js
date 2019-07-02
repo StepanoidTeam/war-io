@@ -158,11 +158,11 @@ export const winterTileSet = {
   ["IiII"]: winter(198),
   ["iIII"]: winter(197),
 
-  ["SSSS"]: winter([364, 366]), //snow dark
+  ["SSSS"]: winter([364, 366]), //snow dark - seems ok
   //transitions
   ["Ssss"]: winter([231, 232]),
   ["sSss"]: winter([233, 234]),
-  ["SSss"]: winter([235, 236, 237]),
+  ["SSss"]: winter([235, 237]),
   ["ssSs"]: winter([238, 239]),
   ["SsSs"]: winter([240, 242]),
   ["sSSs"]: winter([243, 244]),
@@ -174,6 +174,23 @@ export const winterTileSet = {
   ["ssSS"]: winter([254, 256]),
   ["SsSS"]: winter(258),
   ["sSSS"]: winter(257),
+
+  ["WWWW"]: winter([325, 327]), //water dark -- seems everything is ok
+  //transitions
+  ["Wwww"]: winter([291, 292]),
+  ["wWww"]: winter([293, 294]),
+  ["WWww"]: winter([295, 297]),
+  ["wwWw"]: winter([298, 299]),
+  ["WwWw"]: winter([300, 302]),
+  ["wWWw"]: winter([303, 304]),
+  ["WWWw"]: winter(305),
+  ["wwwW"]: winter([306, 307]),
+  ["WwwW"]: winter([308, 309]),
+  ["wWwW"]: winter([310, 312]),
+  ["WWwW"]: winter(313),
+  ["wwWW"]: winter([314, 316]),
+  ["WwWW"]: winter(317),
+  ["wWWW"]: winter(318),
 };
 
 export const springTileSet = {

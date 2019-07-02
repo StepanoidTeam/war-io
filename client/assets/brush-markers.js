@@ -28,8 +28,9 @@ import { editor } from "../config.js";
     water: "#5995da",
     forest: "#87f9cf",
     rocks: "#ffb399",
-    iceDark: "lightgray",
+    iceDark: "lightgray", //todo: set better colors
     snowDark: "gray",
+    waterDark: "blue",
   };
   brushes.forEach(([key, value], index) => {
     ctx.strokeStyle = ctx.fillStyle = brushColors[key];

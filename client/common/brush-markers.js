@@ -1,6 +1,8 @@
 import { IMAGES, imageLib } from "./image-lib.js.js";
 import { editor } from "../config.js";
 
+const { cellSizePx } = editor;
+
 //todo: bake all brush markers / text drawings here
 (() => {
   //const ctx = new OffscreenCanvas(size, size).getContext("2d");
@@ -10,11 +12,8 @@ import { editor } from "../config.js";
 
   const brushes = Object.entries(editor.brushes);
 
-  //todo: just use cellsize directly
-  const markerSize = editor.cellSizePx;
-
-  ctx.canvas.width = markerSize * brushes.length;
-  ctx.canvas.height = markerSize;
+  ctx.canvas.width = cellSizePx * brushes.length;
+  ctx.canvas.height = cellSizePx;
 
   //setup canvas styles
   const fontSize = 28;
@@ -34,8 +33,8 @@ import { editor } from "../config.js";
   };
   brushes.forEach(([key, value], index) => {
     ctx.strokeStyle = ctx.fillStyle = brushColors[key];
-    ctx.strokeRect(index * markerSize, 0, markerSize, markerSize);
-    ctx.fillText(value, index * markerSize + textOffset.x, textOffset.y);
+    ctx.strokeRect(index * cellSizePx, 0, cellSizePx, cellSizePx);
+    ctx.fillText(value, index * cellSizePx + textOffset.x, textOffset.y);
   });
 
   imageLib.set(IMAGES.BRUSH_MARKERS, ctx.canvas);

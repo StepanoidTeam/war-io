@@ -1,16 +1,18 @@
 import { editor, debug } from "../config.js";
 import { brushTiles } from "./tile.js";
 import { MapCell } from "./map-cell.js";
+import { Cell } from "./cell.js";
 
 const { cellSizePx } = editor;
 // brush/layer dependency order
+//todo: these could be generated programmatically (somehow)
 const brushChains = {
   [editor.brushes.water]: [
     editor.brushes.ice, //
     editor.brushes.water,
   ],
   [editor.brushes.snow]: [
-    editor.brushes.ice,
+    editor.brushes.ice, //
     editor.brushes.forest,
     editor.brushes.snowDark,
     editor.brushes.snow,
@@ -42,38 +44,6 @@ const brushChains = {
     editor.brushes.snowDark,
   ],
 };
-
-class Cell {
-  constructor({ x, y, cellType }) {
-    this.x = x;
-    this.y = y;
-    this.change(cellType);
-  }
-
-  change(cellType) {
-    this.cellType = cellType;
-    this.tile = brushTiles[cellType];
-
-    this.subscribers.forEach(callback => callback(this));
-  }
-
-  subscribers = [];
-
-  onChange(callback) {
-    this.subscribers.push(callback);
-  }
-
-  draw(ctx) {
-    const cellProps = [
-      this.x * cellSizePx,
-      this.y * cellSizePx,
-      cellSizePx,
-      cellSizePx,
-    ];
-
-    ctx.drawImage(...this.tile, ...cellProps);
-  }
-}
 
 export class GameMap {
   constructor({ size }) {
@@ -165,53 +135,6 @@ export class GameMap {
     return this.cells[row][col];
   }
 
-  eachCellInArea(col, row, areaSize = 1, callback) {
-    //neighbour cells
-    for (let rowShift = -areaSize; rowShift <= areaSize; rowShift++) {
-      for (let colShift = -areaSize; colShift <= areaSize; colShift++) {
-        const cell = this.getCell(col + colShift, row + rowShift);
-        if (!cell) continue;
-
-        callback(cell, colShift, rowShift, areaSize);
-      }
-    }
-  }
-  //todo: concat with above?
-  paintCells(
-    cell,
-    sibShiftCol = 0,
-    sibShiftRow = 0,
-    areaSize = 0,
-    currentBrush,
-    brushesToSkip = []
-  ) {
-    const code = cell.props.tileCode.split("");
-
-    for (let tileRow = 0; tileRow <= 1; tileRow++) {
-      for (let tileCol = 0; tileCol <= 1; tileCol++) {
-        //todo: how to simplify these conditions?
-        //bokovushki
-        if (sibShiftCol === -areaSize && tileCol === 0) continue;
-        if (sibShiftCol === +areaSize && tileCol === 1) continue; //sx=2(t),1
-        if (sibShiftRow === -areaSize && tileRow === 0) continue;
-        if (sibShiftRow === +areaSize && tileRow === 1) continue;
-
-        const index = tileCol + tileRow * 2;
-        //do not overlap basic brush
-        if (brushesToSkip.includes(code[index])) continue;
-
-        code[index] = currentBrush;
-      }
-    }
-
-    const tileCode = code.join("");
-
-    //do not change same tile
-    //if (cell.props.tileCode === tileCode) return;
-
-    cell.setTile(tileCode);
-  }
-
   getNeighborCells({ x, y }) {
     const nCells = [];
 
@@ -249,15 +172,13 @@ export class GameMap {
     //3 - filter
     const cellsToRepaint = nCells.filter(nCell => {
       //same color
-      // if (nCell.cellType === editor.brush) return;
       //not bad/bad color
       return !brushChains[color].includes(nCell.cellType);
-      //goto step
     });
 
-    if (cellsToRepaint.length === 0) return skipCells;
+    if (cellsToRepaint.length === 0) return;
     //todo: smells like recursion - refac
-    return this.paintCells(cellsToRepaint, brushChains[color][0], skipCells);
+    this.paintCells(cellsToRepaint, brushChains[color][0], skipCells);
   }
 
   click = (col, row) => {
@@ -270,31 +191,11 @@ export class GameMap {
       }
     }
 
-    const affectedCells = this.paintCells(selectedCells, editor.brush, []);
-    //console.log(affectedCells.length);
-    //todo:
-    //clear marked as repaint
-
-    // brushChain.forEach((brush, index, { length }) => {
-    //   const size = length - index - 1 + editor.brushSize;
-
-    //   this.eachCellInArea(col, row, size, (...args) =>
-    //     this.paintCell(...args, brush, brushChain.slice(index))
-    //   );
-    // });
-    //todo: steps:
-    //1. paint clicked cell parts with brush 1
-    //2. get affected neigbour cell parts inlc. diags - shifted cells?
-    //3. paint those with brush 1
-    //4. get affected neighbour cell parts incl. diags - shifted cells?
-    //5. if they do not meet new brush - replace them with brush 2
-    //6.
+    this.paintCells(selectedCells, editor.brush, []);
 
     //new approach:
     //1. put 1x1 2x2 3x3 shifted cells (not mapcells)
     //2. get replaced cell neighbours - check whether they ok to be near brush 1
     //3. if not - replace them with brush 2, goto step2
-
-    //console.log(col, row, index);
   };
 }

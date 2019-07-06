@@ -1,16 +1,13 @@
-import { editor, brushColors, IMAGES } from "../config.js";
-import { imageLib } from "./image-lib.js";
+import { editor, brushColors } from "../config.js";
 
 const { cellSizePx } = editor;
 
 //todo: bake all brush markers / text drawings here
-(() => {
+export function createBrushMarkers(brushes) {
   //const ctx = new OffscreenCanvas(size, size).getContext("2d");
   const ctx = document.createElement("canvas").getContext("2d");
   //debug
   //document.body.append(ctx.canvas);
-
-  const brushes = Object.entries(editor.brushes);
 
   ctx.canvas.width = cellSizePx * brushes.length;
   ctx.canvas.height = cellSizePx;
@@ -26,5 +23,5 @@ const { cellSizePx } = editor;
     ctx.fillText(value, index * cellSizePx + textOffset.x, textOffset.y);
   });
 
-  imageLib.set(IMAGES.BRUSH_MARKERS, ctx.canvas);
-})();
+  return ctx.canvas;
+}

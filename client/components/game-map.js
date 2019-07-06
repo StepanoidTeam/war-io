@@ -145,6 +145,10 @@ export class GameMap {
       const currentChain = brushChains[cell.cellType][brushCode];
       if (currentChain.length <= 2) return; //near color is ok
 
+      //todo: seems here is a 🐛BUG:
+      //neighbor cells must be calculated separately for each affected cell,
+      //so different newBrushCode should be applied for different cells in wave
+      // even wave should be separated into sub-waves by different cell types
       newBrushCode = currentChain[currentChain.length - 2];
       cell.change(newBrushCode);
 
@@ -153,10 +157,7 @@ export class GameMap {
 
     if (paintedCells.length === 0) return;
 
-    setTimeout(
-      () => this.paintAffectedCells(paintedCells, newBrushCode, skipCells),
-      300
-    );
+    this.paintAffectedCells(paintedCells, newBrushCode, skipCells);
 
     //todo: smells like recursion - refac
   }

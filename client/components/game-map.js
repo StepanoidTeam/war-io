@@ -1,7 +1,8 @@
 import { editor, debug } from "../config.js";
 import { MapCell } from "./map-cell.js";
 import { Cell } from "./cell.js";
-import { brushChains } from "../common/index.js";
+import { brushChains } from "../common/brush-chains.js";
+
 import { ctx } from "../context.js";
 
 export class GameMap {
@@ -128,37 +129,54 @@ export class GameMap {
   }
 
   //todo: rename color to something better
-  paintCells(cells, color, skipCells = []) {
-    //1 - paint all?
-    cells.forEach(c => c.change(color));
+  paintAffectedCells(baseCells, brushCode, skipCells = []) {
+    //skip base
+    skipCells.push(...baseCells);
 
-    skipCells.push(...cells);
+    //get near for all?
+    const neighborCells = this.getNeighborCellsForMany(baseCells, skipCells);
+    //filter affected cells
 
-    //2 - get near for all?
-    const nCells = this.getNeighborCellsForMany(cells, skipCells);
-    //3 - filter
-    const cellsToRepaint = nCells.filter(nCell => {
-      //same color
-      //not bad/bad color
-      return !brushChains[color].includes(nCell.cellType);
+    const paintedCells = [];
+    let newBrushCode = null;
+    neighborCells.forEach(cell => {
+      skipCells.push(cell);
+      if (cell.cellType === brushCode) return; //same color, skip
+      const currentChain = brushChains[cell.cellType][brushCode];
+      if (currentChain.length <= 2) return; //near color is ok
+
+      newBrushCode = currentChain[currentChain.length - 2];
+      cell.change(newBrushCode);
+
+      paintedCells.push(cell);
     });
 
-    if (cellsToRepaint.length === 0) return;
+    if (paintedCells.length === 0) return;
+
+    setTimeout(
+      () => this.paintAffectedCells(paintedCells, newBrushCode, skipCells),
+      300
+    );
+
     //todo: smells like recursion - refac
-    this.paintCells(cellsToRepaint, brushChains[color][0], skipCells);
   }
 
   click = (col, row) => {
     //const brushChain = brushChains[editor.brush];
 
-    const selectedCells = [];
+    let selectedCells = [];
     for (let brushRow = 0; brushRow < editor.brushSize; brushRow++) {
       for (let brushCol = 0; brushCol < editor.brushSize; brushCol++) {
         selectedCells.push(this.getCell(col + brushCol, row + brushRow));
       }
     }
 
-    this.paintCells(selectedCells.filter(c => c !== null), editor.brush, []);
+    selectedCells = selectedCells.filter(c => c !== null);
+
+    //just paint, 1st iter.
+    selectedCells.forEach(c => c.change(editor.brush));
+    //paint affected
+    this.paintAffectedCells(selectedCells, editor.brush, []);
 
     //new approach:
     //1. put 1x1 2x2 3x3 shifted cells (not mapcells)

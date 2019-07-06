@@ -1,5 +1,5 @@
-import { IMAGES, imageLib } from "./image-lib.js";
-import { editor } from "../config.js";
+import { editor, brushColors, IMAGES } from "../config.js";
+import { imageLib } from "./image-lib.js";
 
 const { cellSizePx } = editor;
 
@@ -20,17 +20,6 @@ const { cellSizePx } = editor;
   const textOffset = { x: 8, y: 24 };
   ctx.font = `${fontSize}px Courier New`;
 
-  //draw all markers
-  const brushColors = {
-    ice: "#97cfff",
-    snow: "#ffffff",
-    water: "#5995da",
-    forest: "#87f9cf",
-    rocks: "#ffb399",
-    iceDark: "lightgray", //todo: set better colors
-    snowDark: "gray",
-    waterDark: "blue",
-  };
   brushes.forEach(([key, value], index) => {
     ctx.strokeStyle = ctx.fillStyle = brushColors[key];
     ctx.strokeRect(index * cellSizePx, 0, cellSizePx, cellSizePx);

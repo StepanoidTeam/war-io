@@ -17,6 +17,32 @@ const brushes = {
   waterDark: "W",
 };
 
+//concat with brushes
+export const brushColors = {
+  ice: "#97cfff",
+  snow: "#ffffff",
+  water: "#5995da",
+  forest: "#87f9cf",
+  rocks: "#ffb399",
+  iceDark: "lightgray", //todo: set better colors
+  snowDark: "gray",
+  waterDark: "blue",
+};
+
+export const IMAGES = {
+  DEBUG: "debug",
+  CURSOR: "cursor",
+  CELL: "cell",
+  BRUSH_MARKERS: "brush_markers",
+};
+
+export const IMAGESETS = {
+  WINTER: "winter.png",
+  DESERT: "desert.png",
+  SPRING: "spring.png",
+  //todo: SHROOMS? find that sprites
+};
+
 export const editor = {
   cellSizePx: 32,
   mapSize: 20,

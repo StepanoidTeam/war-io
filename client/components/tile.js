@@ -1,6 +1,6 @@
 import { getImage } from "../helpers/get-image.js";
-import { imageLib, IMAGES } from "../common/index.js";
-import { editor } from "../config.js";
+import { editor, IMAGES } from "../config.js";
+import { imageLib } from "../common/image-lib.js";
 
 const { cellSizePx } = editor;
 /**
@@ -62,6 +62,7 @@ export const brushTiles = brushes.reduce(
       x: cellSizePx * index,
       y: 0,
       size: cellSizePx,
+      //todo: 🐛bug here, fake image name tries to load as real image
       imageName: IMAGES.BRUSH_MARKERS,
     }),
   }),

@@ -1,4 +1,4 @@
-import { winterTileSet } from "../tilesets.js";
+import { winterTileSet } from "../common/tilesets.js";
 import { editor } from "../config.js";
 
 //debug: to draw all used tiles from tileset

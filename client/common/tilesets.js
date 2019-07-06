@@ -1,23 +1,21 @@
-import { Tile } from "./components/tile.js";
-import { editor } from "./config.js";
+import { Tile } from "../components/tile.js";
+import { editor, IMAGESETS } from "../config.js";
 
 const { cellSizePx } = editor;
 
-const IMAGESETS = {
-  WINTER: "winter.png",
-  DESERT: "desert.png",
-  SPRING: "spring.png",
-  //todo: SHROOMS? find that sprites
-};
-
-const imgSetConfig1 = {
+const defaultImgSetConfig = {
   sourceSize: cellSizePx,
   sourceOffset: 1,
   cols: 19,
   rows: 20,
 };
 
-function loadTiles({ imageName, from, to, imgSetConfig = imgSetConfig1 }) {
+function loadTiles({
+  imageName,
+  from,
+  to,
+  imgSetConfig = defaultImgSetConfig,
+}) {
   const tiles = [];
   const { cols, rows, sourceSize, sourceOffset } = imgSetConfig;
 
@@ -42,15 +40,16 @@ function loadTiles({ imageName, from, to, imgSetConfig = imgSetConfig1 }) {
 
 //todo: simplify this and above
 function winter(...ranges) {
+  const imageName = IMAGESETS.WINTER;
   return ranges
     .map(index => {
       if (Array.isArray(index)) {
         const [from, to] = index;
 
-        return loadTiles({ imageName: IMAGESETS.WINTER, from, to });
+        return loadTiles({ imageName, from, to });
       } else if (Number.isInteger(index)) {
         return loadTiles({
-          imageName: IMAGESETS.WINTER,
+          imageName,
           from: index,
           to: index,
         });
@@ -58,12 +57,6 @@ function winter(...ranges) {
     })
     .flat();
 }
-
-export const winterTileSetDebug = loadTiles({
-  imageName: IMAGESETS.WINTER,
-  from: 16,
-  to: 378,
-});
 
 export const winterTileSet = {
   /**
@@ -210,24 +203,11 @@ export const winterTileSet = {
   ["sSSS"]: winter(257),
 };
 
-export const springTileSet = {
-  all: loadTiles({ imageName: IMAGESETS.SPRING, from: 16, to: 371 }),
-};
+console.log("tilesets done");
 
-export const desertTileSet = {
-  all: loadTiles({ imageName: IMAGESETS.DESERT, from: 16, to: 372 }),
-};
-
-export const testTileSet = {
-  all: loadTiles({
-    imageName: "test.jpg",
-    from: 95,
-    to: 300,
-    imgSetConfig: {
-      sourceSize: cellSizePx,
-      sourceOffset: 0,
-      cols: 19,
-      rows: 20,
-    },
-  }),
-};
+//get unique brush pairs from tileset
+export const brushPairs = new Set(
+  Object.keys(winterTileSet)
+    .map(tileCode => [...new Set(tileCode)].sort().join(""))
+    .filter(pair => pair.length > 1)
+);

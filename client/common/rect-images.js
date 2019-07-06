@@ -1,7 +1,6 @@
-import { IMAGES, imageLib } from "./image-lib.js";
 import { editor } from "../config.js";
 
-function createRectImage({ color, size = editor.cellSizePx }) {
+export function createRectImage({ color, size = editor.cellSizePx }) {
   //const ctx = new OffscreenCanvas(size, size).getContext("2d");
   const ctx = document.createElement("canvas").getContext("2d");
   //debug
@@ -15,8 +14,3 @@ function createRectImage({ color, size = editor.cellSizePx }) {
 
   return ctx.canvas;
 }
-
-//generate rects
-imageLib.set(IMAGES.DEBUG, createRectImage({ color: "red" }));
-imageLib.set(IMAGES.CURSOR, createRectImage({ color: editor.cursorColor }));
-imageLib.set(IMAGES.CELL, createRectImage({ color: "white" }));

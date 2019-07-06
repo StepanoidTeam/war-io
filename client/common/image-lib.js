@@ -1,8 +1,11 @@
-export const IMAGES = {
-  DEBUG: "debug",
-  CURSOR: "cursor",
-  CELL: "cell",
-  BRUSH_MARKERS: "brush_markers",
-};
+import { IMAGES, editor } from "../config.js";
+import { createRectImage } from "./rect-images.js";
 
-export const imageLib = new Map();
+const imageLib = new Map();
+
+//generate rects
+imageLib.set(IMAGES.DEBUG, createRectImage({ color: "red" }));
+imageLib.set(IMAGES.CURSOR, createRectImage({ color: editor.cursorColor }));
+imageLib.set(IMAGES.CELL, createRectImage({ color: "white" }));
+
+export { imageLib };

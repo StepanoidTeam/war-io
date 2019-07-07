@@ -9,7 +9,7 @@ export class MapCell {
   constructor(props) {
     this.props = props;
 
-    this.setTile(props.tileCode);
+    this.setTile("");
   }
 
   setTile(tileCode) {
@@ -21,7 +21,7 @@ export class MapCell {
   }
 
   draw(ctx) {
-    const { col, row, tile, tileCode } = this.props;
+    const { col, row, tile } = this.props;
 
     const cellProps = [
       col * cellSizePx + cellSizePx / 2,
@@ -31,25 +31,6 @@ export class MapCell {
     ];
 
     ctx.drawImage(...tile, ...cellProps);
-
-    const isMissingTile = this.props.tile === debugTile;
-
-    // if (debug.showBrushMarkers || isMissingTile) {
-    //   const halfSizePx = cellSizePx / 2;
-    //   for (let codeCol = 0; codeCol <= 1; codeCol++) {
-    //     for (let codeRow = 0; codeRow <= 1; codeRow++) {
-    //       const index = codeCol + codeRow * 2;
-
-    //       ctx.drawImage(
-    //         ...brushTiles[tileCode[index]],
-    //         col * cellSizePx + codeCol,
-    //         row * cellSizePx + codeRow,
-    //         halfSizePx,
-    //         halfSizePx
-    //       );
-    //     }
-    //   }
-    // }
 
     if (debug.showTileGrid) {
       ctx.drawImage(...debugTile, ...cellProps);

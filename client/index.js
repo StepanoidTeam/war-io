@@ -1,8 +1,8 @@
 import { ctx } from "./context.js";
 import { GameMap } from "./components/game-map.js";
-import { debug, editor } from "./config.js";
+import { debug, editor, brushColors } from "./config.js";
 import { cursor } from "./components/cursor.js";
-import { tilesDrawer } from "./components/tiles-drawer.js";
+import { MiniMap } from "./components/mini-map.js";
 
 const { cellSizePx, mapSize } = editor;
 
@@ -47,10 +47,15 @@ function getColRowFromMouseEvent(event) {
     gameMap.click(col, row);
   });
 
+  const miniMap = new MiniMap({ width: 100, height: 100 });
+
+  document.body.append(miniMap.ctx.canvas);
+
   const drawables = [
     canvasCleaner,
     gameMap,
     //tilesDrawer,
+    miniMap,
     cursor,
   ];
 
@@ -67,4 +72,9 @@ gui.add(editor, "brushSize", 1, 3).step(1);
 gui.add(debug, "showTileGrid");
 gui.add(debug, "showCellTypes");
 gui.add(debug, "renderTiles");
+
+Object.keys(brushColors).forEach(key => {
+  gui.addColor(brushColors, key);
+});
+
 //gui.addColor(debug, "cellColor");

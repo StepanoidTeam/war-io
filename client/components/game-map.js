@@ -14,7 +14,7 @@ export class GameMap {
     //init map with default tile cells
     const { rows, cols } = this.size;
     this.cells = [];
-    this.subCells = [];
+    this.mapTileCells = [];
 
     //cells for main types info
     for (let row = 0, index = 0; row < rows; row++) {
@@ -31,26 +31,27 @@ export class GameMap {
 
     //subcells for tiles
     for (let subRow = 0; subRow < this.size.rows - 1; subRow++) {
-      this.subCells[subRow] = [];
+      this.mapTileCells[subRow] = [];
       for (let subCol = 0; subCol < this.size.cols - 1; subCol++) {
         const cells = this.getCellsForSub(subCol, subRow);
-
-        const tileCode = cells.map(c => c.cellType).join("");
 
         const subCell = new MapCell({
           col: subCol,
           row: subRow,
-          tileCode,
         });
+
+        this.mapTileCells[subRow][subCol] = subCell;
+
+        function updateSubCellTile() {
+          const tileCode = cells.map(c => c.cellType).join("");
+          subCell.setTile(tileCode);
+        }
 
         cells.forEach(cell => {
-          cell.onChange(cell => {
-            const tileCode = cells.map(c => c.cellType).join("");
-            subCell.setTile(tileCode);
-          });
+          cell.onChange(updateSubCellTile);
         });
 
-        this.subCells[subRow][subCol] = subCell;
+        updateSubCellTile();
       }
     } //for
   }
@@ -67,15 +68,15 @@ export class GameMap {
   draw(ctx) {
     //tiles
     if (debug.renderTiles) {
-      for (let row of this.subCells) {
+      for (let row of this.mapTileCells) {
         for (let subCell of row) {
           subCell.draw(ctx);
         }
       }
     }
 
+    //main cells
     if (debug.showCellTypes) {
-      //main cells
       for (let row of this.cells) {
         for (let cell of row) {
           cell.draw(ctx);

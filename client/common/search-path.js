@@ -64,6 +64,6 @@ export function findSequence({ from, to }) {
     return result;
   }
 
-  console.log("⛔️path not found");
+  console.log(`⛔️path not found from: ${from} to: ${to}`);
   return null;
 }

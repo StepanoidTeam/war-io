@@ -1,5 +1,5 @@
 import { editor, debug } from "../../config.js";
-import { winterTileSet } from "../../common/tilesets/tilesets.js";
+import { surfaceTileSet } from "../../common/tilesets/tilesets.js";
 import { debugTile } from "../tile.js";
 import { getRandomItem } from "../../helpers/random.js";
 
@@ -16,7 +16,7 @@ export class TileCell {
     this.props.tileCode = tileCode;
 
     this.props.tile = getRandomItem(
-      winterTileSet[this.props.tileCode] || [debugTile]
+      surfaceTileSet[this.props.tileCode] || [debugTile]
     );
   }
 

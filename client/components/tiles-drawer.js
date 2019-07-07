@@ -1,9 +1,9 @@
-import { winterTileSet } from "../common/tilesets.js";
+import { surfaceTileSet } from "../common/tilesets.js";
 import { editor } from "../config.js";
 
 //debug: to draw all used tiles from tileset
 export const tilesDrawer = {
-  tiles: Object.entries(winterTileSet),
+  tiles: Object.entries(surfaceTileSet),
   draw(ctx) {
     let x = 0,
       y = 0;

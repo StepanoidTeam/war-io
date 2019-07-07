@@ -1,6 +1,4 @@
-import { editor } from "../config.js";
-
-export function createRectImage({ color, size = editor.cellSizePx }) {
+export function createRectImage({ color, size }) {
   //const ctx = new OffscreenCanvas(size, size).getContext("2d");
   const ctx = document.createElement("canvas").getContext("2d");
   //debug

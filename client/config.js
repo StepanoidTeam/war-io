@@ -1,6 +1,6 @@
 export const debug = {
   showTileGrid: false,
-  showCellTypes: false,
+  showCellTypes: true,
   cellColor: [255, 255, 255, 0.2],
   renderTiles: true,
 };
@@ -19,14 +19,14 @@ const brushes = {
 
 //concat with brushes
 export const brushColors = {
-  ice: "#97cfff",
-  snow: "#ffffff",
-  water: "#5995da",
-  forest: "#87f9cf",
-  rocks: "#ffb399",
-  iceDark: "lightgray", //todo: set better colors
-  snowDark: "gray",
-  waterDark: "blue",
+  ice: "#80b4e1",
+  snow: "#e3e3e3",
+  water: "#327cc7",
+  forest: "#2ceba5",
+  rocks: "#ffa07f",
+  iceDark: "#5f98ca",
+  snowDark: "#c3c3c3",
+  waterDark: "#2065ab",
 };
 
 export const IMAGES = {
@@ -49,6 +49,6 @@ export const editor = {
   brushes,
   defaultTileCode: brushes.snow.repeat(4),
   brush: brushes.water,
-  brushSize: 1,
+  brushSize: 2,
   cursorColor: "greenyellow",
 };

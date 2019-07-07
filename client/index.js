@@ -73,8 +73,4 @@ gui.add(debug, "showTileGrid");
 gui.add(debug, "showCellTypes");
 gui.add(debug, "renderTiles");
 
-Object.keys(brushColors).forEach(key => {
-  gui.addColor(brushColors, key);
-});
-
 //gui.addColor(debug, "cellColor");

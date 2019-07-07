@@ -4,6 +4,8 @@ import { cursor } from "./components/cursor.js";
 import { MiniMap } from "./components/mini-map.js";
 import { CanvasCleaner } from "./components/canvas-cleaner.js";
 import { TileMap } from "./components/map/tile-map.js";
+import { WallMap } from "./components/map/wall-map.js";
+import { wallTileSet } from "./common/tilesets/tilesets.js";
 
 const { cellSizePx, mapSize } = editor;
 
@@ -19,6 +21,7 @@ function getColRowFromMouseEvent(event) {
   const gameMap = new GameMap({ size: { rows: mapSize, cols: mapSize } });
 
   const tileMap = new TileMap({ surfaceTypeCells: gameMap.cells });
+  const wallMap = new WallMap(wallTileSet);
 
   const ctxTileLayer = document.createElement("canvas").getContext("2d");
   const ctxOverlayLayer = document.createElement("canvas").getContext("2d");
@@ -41,6 +44,17 @@ function getColRowFromMouseEvent(event) {
   mapContainer.append(ctxTileLayer.canvas);
   mapContainer.append(ctxOverlayLayer.canvas);
 
+  function paint(col, row) {
+    if (!isDrawing) return;
+
+    //todo: make better statement
+    if (editor.brush === editor.brushes.wall) {
+      wallMap.paint(col, row);
+    } else {
+      gameMap.click(col, row);
+    }
+  }
+
   let isDrawing = false;
   //todo: hanlde events better
   //not sure, should i bind on canvas or mb on whole container?
@@ -54,16 +68,15 @@ function getColRowFromMouseEvent(event) {
 
   mapContainer.addEventListener("mousemove", event => {
     const [col, row] = getColRowFromMouseEvent(event);
-
-    if (isDrawing) gameMap.click(col, row);
+    paint(col, row);
 
     cursor.move(col, row);
   });
 
   mapContainer.addEventListener("click", event => {
     const [col, row] = getColRowFromMouseEvent(event);
-
-    gameMap.click(col, row);
+    //todo: doesn't work - fix
+    paint(col, row);
   });
 
   const miniMap = new MiniMap({ width: 100, height: 100 });
@@ -74,6 +87,8 @@ function getColRowFromMouseEvent(event) {
     [new CanvasCleaner(), ctxTileLayer],
     [new CanvasCleaner(), ctxOverlayLayer],
     [tileMap, ctxTileLayer],
+    //todo: make separate layer for walls?
+    [wallMap, ctxTileLayer],
     [gameMap, ctxOverlayLayer],
     [miniMap, ctxTileLayer],
     [cursor, ctxOverlayLayer],

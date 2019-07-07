@@ -15,6 +15,9 @@ const brushes = {
   iceDark: "I",
   snowDark: "S",
   waterDark: "W",
+  //todo: should it be there?
+  //or separate brush type? mb for buildings?
+  wall: "x",
 };
 
 //concat with brushes
@@ -48,7 +51,7 @@ export const editor = {
   mapSize: 20,
   brushes,
   defaultTileCode: brushes.snow.repeat(4),
-  brush: brushes.water,
-  brushSize: 2,
+  brush: brushes.wall,
+  brushSize: 1,
   cursorColor: "greenyellow",
 };

@@ -1,7 +1,7 @@
-import { editor, debug } from "../config.js";
-import { MapCell } from "./map-cell.js";
-import { Cell } from "./cell.js";
-import { brushChains } from "../common/brush-chains.js";
+import { editor, debug } from "../../config.js";
+import { MapCell } from "../map-cell.js";
+import { Cell } from "../cell.js";
+import { brushChains } from "../../common/brush-chains.js";
 
 export class GameMap {
   constructor({ size }) {
@@ -14,7 +14,8 @@ export class GameMap {
     //init map with default tile cells
     const { rows, cols } = this.size;
     this.cells = [];
-    this.mapTileCells = [];
+
+    this.subCells = [];
 
     //cells for main types info
     for (let row = 0, index = 0; row < rows; row++) {
@@ -31,7 +32,7 @@ export class GameMap {
 
     //subcells for tiles
     for (let subRow = 0; subRow < this.size.rows - 1; subRow++) {
-      this.mapTileCells[subRow] = [];
+      this.subCells[subRow] = [];
       for (let subCol = 0; subCol < this.size.cols - 1; subCol++) {
         const cells = this.getCellsForSub(subCol, subRow);
 
@@ -40,7 +41,7 @@ export class GameMap {
           row: subRow,
         });
 
-        this.mapTileCells[subRow][subCol] = subCell;
+        this.subCells[subRow][subCol] = subCell;
 
         function updateSubCellTile() {
           const tileCode = cells.map(c => c.cellType).join("");
@@ -68,7 +69,7 @@ export class GameMap {
   draw(ctx) {
     //tiles
     if (debug.renderTiles) {
-      for (let row of this.mapTileCells) {
+      for (let row of this.subCells) {
         for (let subCell of row) {
           subCell.draw(ctx);
         }
@@ -119,7 +120,6 @@ export class GameMap {
     return [...nCells];
   }
 
-  //todo: rename color to something better
   paintAffectedCells(baseCells, brushCode, skipCells = []) {
     //skip base
     skipCells.push(...baseCells);
@@ -132,9 +132,9 @@ export class GameMap {
     let newBrushCode = null;
     neighborCells.forEach(cell => {
       skipCells.push(cell);
-      if (cell.cellType === brushCode) return; //same color, skip
+      if (cell.cellType === brushCode) return; //same brushCode, skip
       const currentChain = brushChains[cell.cellType][brushCode];
-      if (currentChain.length <= 2) return; //near color is ok
+      if (currentChain.length <= 2) return; //near brushCode is ok
 
       //todo: seems here is a 🐛BUG:
       //neighbor cells must be calculated separately for each affected cell,

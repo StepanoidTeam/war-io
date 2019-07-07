@@ -1,4 +1,4 @@
-import { GameMap } from "./components/game-map.js";
+import { GameMap } from "./components/map/game-map.js";
 import { debug, editor } from "./config.js";
 import { cursor } from "./components/cursor.js";
 import { MiniMap } from "./components/mini-map.js";

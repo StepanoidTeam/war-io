@@ -1,6 +1,6 @@
 import { Tile } from "../../components/tile.js";
 import { editor, IMAGESETS } from "../../config.js";
-import { winter } from "./winter.js";
+import { winter, winterWalls } from "./winter.js";
 
 const { cellSizePx } = editor;
 
@@ -59,18 +59,24 @@ function loadWinter(...ranges) {
     .flat();
 }
 
-const winterTileSet = Object.entries(winter).reduce((acc, [key, value]) => {
+const surfaceTileSet = Object.entries(winter).reduce((acc, [key, value]) => {
   acc[key] = loadWinter(value);
   return acc;
 }, {});
 
-//console.log("tilesets done", winterTileSet);
+//console.log("tilesets done", surfaceTileSet);
+
+//todo: make func for that and above
+const wallTileSet = Object.entries(winterWalls).reduce((acc, [key, value]) => {
+  acc[key] = loadWinter(value);
+  return acc;
+}, {});
 
 //get unique brush pairs from tileset
 export const brushPairs = new Set(
-  Object.keys(winterTileSet)
+  Object.keys(surfaceTileSet)
     .map(tileCode => [...new Set(tileCode)].sort().join(""))
     .filter(pair => pair.length > 1)
 );
 
-export { winterTileSet };
+export { surfaceTileSet, wallTileSet };

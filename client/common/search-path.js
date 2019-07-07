@@ -1,5 +1,5 @@
 import { editor } from "../config.js";
-import { brushPairs } from "./tilesets.js";
+import { brushPairs } from "./tilesets/tilesets.js";
 
 export const brushSymbols = Object.values(editor.brushes);
 

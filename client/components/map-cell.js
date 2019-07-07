@@ -1,5 +1,5 @@
 import { editor, debug } from "../config.js";
-import { winterTileSet } from "../common/tilesets.js";
+import { winterTileSet } from "../common/tilesets/tilesets.js";
 import { debugTile } from "./tile.js";
 import { getRandomItem } from "../helpers/random.js";
 

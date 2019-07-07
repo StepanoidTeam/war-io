@@ -1,8 +1,13 @@
+const debugMode = false;
+
 export function createRectImage({ color, size }) {
-  //const ctx = new OffscreenCanvas(size, size).getContext("2d");
-  const ctx = document.createElement("canvas").getContext("2d");
-  //debug
-  //document.body.append(ctx.canvas);
+  let ctx;
+  if (debugMode) {
+    ctx = document.createElement("canvas").getContext("2d");
+    document.body.append(ctx.canvas);
+  } else {
+    ctx = new OffscreenCanvas(size, size).getContext("2d");
+  }
 
   ctx.canvas.width = size;
   ctx.canvas.height = size;

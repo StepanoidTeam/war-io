@@ -11,6 +11,12 @@ body {
   align-items: center;
 }
 
-canvas {
+#map-container {
+  position: relative;
   background-color: black;
+}
+#map-container > canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
 }

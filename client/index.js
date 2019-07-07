@@ -1,4 +1,3 @@
-import { ctx } from "./context.js";
 import { GameMap } from "./components/game-map.js";
 import { debug, editor } from "./config.js";
 import { cursor } from "./components/cursor.js";
@@ -18,17 +17,39 @@ function getColRowFromMouseEvent(event) {
 (async () => {
   const gameMap = new GameMap({ size: { rows: mapSize, cols: mapSize } });
 
+  const ctxTileLayer = document.createElement("canvas").getContext("2d");
+  const ctxOverlayLayer = document.createElement("canvas").getContext("2d");
+  //set canvas size
+
+  const canvasSize = mapSize * cellSizePx;
+  //canvas container
+  const mapContainer = document.getElementById("map-container");
+  mapContainer.style.width = `${canvasSize}px`;
+  mapContainer.style.height = `${canvasSize}px`;
+
+  //tile layer
+  ctxTileLayer.canvas.height = canvasSize;
+  ctxTileLayer.canvas.width = canvasSize;
+  //overlay layer - debug info, cursor
+  ctxOverlayLayer.canvas.height = canvasSize;
+  ctxOverlayLayer.canvas.width = canvasSize;
+  //layers - more to go: units, etc...
+
+  mapContainer.append(ctxTileLayer.canvas);
+  mapContainer.append(ctxOverlayLayer.canvas);
+
   let isDrawing = false;
   //todo: hanlde events better
-  ctx.canvas.addEventListener("mousedown", () => {
+  //not sure, should i bind on canvas or mb on whole container?
+  mapContainer.addEventListener("mousedown", () => {
     isDrawing = true;
   });
 
-  ctx.canvas.addEventListener("mouseup", () => {
+  mapContainer.addEventListener("mouseup", () => {
     isDrawing = false;
   });
 
-  ctx.canvas.addEventListener("mousemove", event => {
+  mapContainer.addEventListener("mousemove", event => {
     const [col, row] = getColRowFromMouseEvent(event);
 
     if (isDrawing) gameMap.click(col, row);
@@ -36,7 +57,7 @@ function getColRowFromMouseEvent(event) {
     cursor.move(col, row);
   });
 
-  ctx.canvas.addEventListener("click", event => {
+  mapContainer.addEventListener("click", event => {
     const [col, row] = getColRowFromMouseEvent(event);
 
     gameMap.click(col, row);
@@ -46,10 +67,16 @@ function getColRowFromMouseEvent(event) {
 
   document.body.append(miniMap.ctx.canvas);
 
-  const drawables = [new CanvasCleaner(), gameMap, miniMap, cursor];
+  const drawables = [
+    [new CanvasCleaner(), ctxTileLayer],
+    [new CanvasCleaner(), ctxOverlayLayer],
+    [gameMap, ctxTileLayer],
+    [miniMap, ctxTileLayer],
+    [cursor, ctxOverlayLayer],
+  ];
 
   requestAnimationFrame(function render() {
-    drawables.forEach(s => s.draw(ctx));
+    drawables.forEach(([component, context]) => component.draw(context));
     requestAnimationFrame(render);
   });
 })();

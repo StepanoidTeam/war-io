@@ -4,6 +4,7 @@ const { cellSizePx } = editor;
 
 //todo: bake all brush markers / text drawings here
 export function createBrushMarkers(brushes) {
+  //todo: enable debugging, unify with drawRect?
   //const ctx = new OffscreenCanvas(size, size).getContext("2d");
   const ctx = document.createElement("canvas").getContext("2d");
   //debug

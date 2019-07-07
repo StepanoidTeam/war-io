@@ -1,6 +1,6 @@
 import { ctx } from "./context.js";
 import { GameMap } from "./components/game-map.js";
-import { debug, editor, brushColors } from "./config.js";
+import { debug, editor } from "./config.js";
 import { cursor } from "./components/cursor.js";
 import { MiniMap } from "./components/mini-map.js";
 
@@ -51,13 +51,7 @@ function getColRowFromMouseEvent(event) {
 
   document.body.append(miniMap.ctx.canvas);
 
-  const drawables = [
-    canvasCleaner,
-    gameMap,
-    //tilesDrawer,
-    miniMap,
-    cursor,
-  ];
+  const drawables = [canvasCleaner, gameMap, miniMap, cursor];
 
   requestAnimationFrame(function render() {
     drawables.forEach(s => s.draw(ctx));

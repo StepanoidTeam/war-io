@@ -3,14 +3,9 @@ import { GameMap } from "./components/game-map.js";
 import { debug, editor } from "./config.js";
 import { cursor } from "./components/cursor.js";
 import { MiniMap } from "./components/mini-map.js";
+import { CanvasCleaner } from "./components/canvas-cleaner.js";
 
 const { cellSizePx, mapSize } = editor;
-
-const canvasCleaner = {
-  draw(ctx) {
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  },
-};
 
 function getColRowFromMouseEvent(event) {
   const { layerX, layerY } = event;
@@ -51,7 +46,7 @@ function getColRowFromMouseEvent(event) {
 
   document.body.append(miniMap.ctx.canvas);
 
-  const drawables = [canvasCleaner, gameMap, miniMap, cursor];
+  const drawables = [new CanvasCleaner(), gameMap, miniMap, cursor];
 
   requestAnimationFrame(function render() {
     drawables.forEach(s => s.draw(ctx));

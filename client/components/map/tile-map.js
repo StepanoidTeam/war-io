@@ -1,5 +1,5 @@
 import { debug } from "../../config.js";
-import { MapCell } from "../map-cell.js";
+import { TileCell } from "./tile-cell.js";
 
 export class TileMap {
   constructor({ surfaceTypeCells }) {
@@ -16,15 +16,6 @@ export class TileMap {
     this.init();
   }
 
-  getCellsForSub(col, row) {
-    return [
-      this.surfaceTypeCells[row][col],
-      this.surfaceTypeCells[row][col + 1],
-      this.surfaceTypeCells[row + 1][col],
-      this.surfaceTypeCells[row + 1][col + 1],
-    ];
-  }
-
   init() {
     //subcells for tiles
     for (let tileRow = 0; tileRow < this.size.rows - 1; tileRow++) {
@@ -32,7 +23,7 @@ export class TileMap {
       for (let tileCol = 0; tileCol < this.size.cols - 1; tileCol++) {
         const cells = this.getCellsForSub(tileCol, tileRow);
 
-        const subCell = new MapCell({
+        const subCell = new TileCell({
           col: tileCol,
           row: tileRow,
         });
@@ -51,6 +42,15 @@ export class TileMap {
         updateSubCellTile();
       }
     } //for
+  }
+
+  getCellsForSub(col, row) {
+    return [
+      this.surfaceTypeCells[row][col],
+      this.surfaceTypeCells[row][col + 1],
+      this.surfaceTypeCells[row + 1][col],
+      this.surfaceTypeCells[row + 1][col + 1],
+    ];
   }
 
   draw(ctx) {

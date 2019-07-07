@@ -1,11 +1,11 @@
-import { editor, debug } from "../config.js";
-import { winterTileSet } from "../common/tilesets/tilesets.js";
-import { debugTile } from "./tile.js";
-import { getRandomItem } from "../helpers/random.js";
+import { editor, debug } from "../../config.js";
+import { winterTileSet } from "../../common/tilesets/tilesets.js";
+import { debugTile } from "../tile.js";
+import { getRandomItem } from "../../helpers/random.js";
 
 const { cellSizePx } = editor;
 
-export class MapCell {
+export class TileCell {
   constructor(props) {
     this.props = props;
 

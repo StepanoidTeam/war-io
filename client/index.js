@@ -3,6 +3,7 @@ import { debug, editor } from "./config.js";
 import { cursor } from "./components/cursor.js";
 import { MiniMap } from "./components/mini-map.js";
 import { CanvasCleaner } from "./components/canvas-cleaner.js";
+import { TileMap } from "./components/map/tile-map.js";
 
 const { cellSizePx, mapSize } = editor;
 
@@ -16,6 +17,8 @@ function getColRowFromMouseEvent(event) {
 
 (async () => {
   const gameMap = new GameMap({ size: { rows: mapSize, cols: mapSize } });
+
+  const tileMap = new TileMap({ surfaceTypeCells: gameMap.cells });
 
   const ctxTileLayer = document.createElement("canvas").getContext("2d");
   const ctxOverlayLayer = document.createElement("canvas").getContext("2d");
@@ -70,7 +73,8 @@ function getColRowFromMouseEvent(event) {
   const drawables = [
     [new CanvasCleaner(), ctxTileLayer],
     [new CanvasCleaner(), ctxOverlayLayer],
-    [gameMap, ctxTileLayer],
+    [tileMap, ctxTileLayer],
+    [gameMap, ctxOverlayLayer],
     [miniMap, ctxTileLayer],
     [cursor, ctxOverlayLayer],
   ];

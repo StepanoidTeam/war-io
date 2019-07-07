@@ -1,5 +1,4 @@
 import { editor, debug } from "../../config.js";
-import { MapCell } from "../map-cell.js";
 import { Cell } from "../cell.js";
 import { brushChains } from "../../common/brush-chains.js";
 
@@ -7,15 +6,9 @@ export class GameMap {
   constructor({ size }) {
     this.size = size;
 
-    this.init();
-  }
-
-  init() {
     //init map with default tile cells
     const { rows, cols } = this.size;
     this.cells = [];
-
-    this.subCells = [];
 
     //cells for main types info
     for (let row = 0, index = 0; row < rows; row++) {
@@ -26,56 +19,11 @@ export class GameMap {
           y: row,
           cellType: editor.brushes.snow,
         });
-        //new MapCell({ col, row, tileCode: editor.defaultTileCode }),
       }
     } //for
-
-    //subcells for tiles
-    for (let subRow = 0; subRow < this.size.rows - 1; subRow++) {
-      this.subCells[subRow] = [];
-      for (let subCol = 0; subCol < this.size.cols - 1; subCol++) {
-        const cells = this.getCellsForSub(subCol, subRow);
-
-        const subCell = new MapCell({
-          col: subCol,
-          row: subRow,
-        });
-
-        this.subCells[subRow][subCol] = subCell;
-
-        function updateSubCellTile() {
-          const tileCode = cells.map(c => c.cellType).join("");
-          subCell.setTile(tileCode);
-        }
-
-        cells.forEach(cell => {
-          cell.onChange(updateSubCellTile);
-        });
-
-        updateSubCellTile();
-      }
-    } //for
-  }
-
-  getCellsForSub(subCol, subRow) {
-    return [
-      this.cells[subRow][subCol],
-      this.cells[subRow][subCol + 1],
-      this.cells[subRow + 1][subCol],
-      this.cells[subRow + 1][subCol + 1],
-    ];
   }
 
   draw(ctx) {
-    //tiles
-    if (debug.renderTiles) {
-      for (let row of this.subCells) {
-        for (let subCell of row) {
-          subCell.draw(ctx);
-        }
-      }
-    }
-
     //main cells
     if (debug.showCellTypes) {
       for (let row of this.cells) {

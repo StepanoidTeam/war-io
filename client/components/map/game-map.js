@@ -1,9 +1,9 @@
-import { editor, debug } from "../../config.js";
+import { debug } from "../../config.js";
 import { Cell } from "./cell.js";
 import { brushChains } from "../../common/brush-chains.js";
 
 export class GameMap {
-  constructor({ size }) {
+  constructor({ size, ininitalBrush }) {
     this.size = size;
 
     //init map with default tile cells
@@ -17,7 +17,7 @@ export class GameMap {
         this.cells[row][col] = new Cell({
           x: col,
           y: row,
-          cellType: editor.brushes.snow,
+          cellType: ininitalBrush,
         });
       }
     } //for
@@ -101,12 +101,10 @@ export class GameMap {
     //todo: smells like recursion - refac
   }
 
-  click = (col, row) => {
-    //const brushChain = brushChains[editor.brush];
-
+  click = ({ col, row, brush, brushSize }) => {
     let selectedCells = [];
-    for (let brushRow = 0; brushRow < editor.brushSize; brushRow++) {
-      for (let brushCol = 0; brushCol < editor.brushSize; brushCol++) {
+    for (let brushRow = 0; brushRow < brushSize; brushRow++) {
+      for (let brushCol = 0; brushCol < brushSize; brushCol++) {
         selectedCells.push(this.getCell(col + brushCol, row + brushRow));
       }
     }
@@ -114,8 +112,8 @@ export class GameMap {
     selectedCells = selectedCells.filter(c => c !== null);
 
     //just paint, 1st iter.
-    selectedCells.forEach(c => c.change(editor.brush));
+    selectedCells.forEach(c => c.change(brush));
     //paint affected
-    this.paintAffectedCells(selectedCells, editor.brush, []);
+    this.paintAffectedCells(selectedCells, brush, []);
   };
 }

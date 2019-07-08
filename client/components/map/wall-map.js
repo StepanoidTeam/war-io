@@ -61,8 +61,8 @@ export class WallMap {
       ctx.drawImage(
         //todo: get random tile - but not here
         ...this.wallTileSet[wall.tileCode][0],
-        wall.col * editor.cellSizePx,
-        wall.row * editor.cellSizePx,
+        wall.col * editor.cellSizePx + editor.cellSizePx / 2,
+        wall.row * editor.cellSizePx + editor.cellSizePx / 2,
         editor.cellSizePx,
         editor.cellSizePx
       )

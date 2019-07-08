@@ -18,7 +18,10 @@ function getColRowFromMouseEvent(event) {
 }
 
 (async () => {
-  const gameMap = new GameMap({ size: { rows: mapSize, cols: mapSize } });
+  const gameMap = new GameMap({
+    size: { rows: mapSize, cols: mapSize },
+    ininitalBrush: editor.brushes.snow,
+  });
 
   const tileMap = new TileMap({ surfaceTypeCells: gameMap.cells });
   const wallMap = new WallMap(wallTileSet);
@@ -50,8 +53,19 @@ function getColRowFromMouseEvent(event) {
     //todo: make better statement
     if (editor.brush === editor.brushes.wall) {
       wallMap.paint(col, row);
+      gameMap.click({
+        col,
+        row,
+        brush: editor.brushes.snow,
+        brushSize: 2,
+      });
     } else {
-      gameMap.click(col, row);
+      gameMap.click({
+        col,
+        row,
+        brush: editor.brush,
+        brushSize: editor.brushSize,
+      });
     }
   }
 

@@ -96,7 +96,10 @@ function getColRowFromMouseEvent(event) {
     isDrawing = false;
   });
 
-  const miniMap = new MiniMap({ width: 100, height: 100 });
+  const miniMap = new MiniMap({
+    width: cellSizePx * 4,
+    height: cellSizePx * 4,
+  });
 
   const miniMapContainer = document.getElementById("mini-map-container");
   miniMapContainer.append(miniMap.ctx.canvas);

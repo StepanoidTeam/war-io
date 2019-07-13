@@ -13,8 +13,8 @@ const { cellSizePx, mapSize } = editor;
 
 function getColRowFromMouseEvent(event) {
   const { layerX, layerY } = event;
-  const col = Math.floor(layerX / cellSizePx);
-  const row = Math.floor(layerY / cellSizePx);
+  const col = Math.floor((layerX - cursor.offset) / cellSizePx);
+  const row = Math.floor((layerY - cursor.offset) / cellSizePx);
 
   return [col, row];
 }
@@ -52,23 +52,7 @@ function getColRowFromMouseEvent(event) {
   function paint(col, row) {
     if (!isDrawing) return;
 
-    //todo: make better statement
-    if (editor.brush === editor.brushes.wall) {
-      wallMap.paint(col, row);
-      gameMap.paint({
-        col,
-        row,
-        brush: editor.brushes.snow,
-        brushSize: 2,
-      });
-    } else {
-      gameMap.paint({
-        col,
-        row,
-        brush: editor.brush,
-        brushSize: editor.brushSize,
-      });
-    }
+    editor.currentTool(col, row);
   }
 
   let isDrawing = false;
@@ -124,25 +108,13 @@ function getColRowFromMouseEvent(event) {
     drawables.forEach(([component, context]) => component.draw(context));
     requestAnimationFrame(render);
   });
-})();
 
-//dat-gui
-const gui = new dat.GUI();
-gui.add(editor, "brush", editor.brushes);
-gui.add(editor, "brushSize", 1, 3).step(1);
-gui.add(debug, "showTileGrid");
-gui.add(debug, "showCellTypes");
-gui.add(debug, "renderTiles");
+  //editor tools
+  const toolBox = document.querySelector(".tool-box");
 
-//gui.addColor(debug, "cellColor");
+  //debugTile, crossTile,
 
-//editor tools
-const toolBox = document.querySelector(".tool-box");
-
-//debugTile, crossTile,
-
-// init surface tools
-(async () => {
+  // init surface tools
   // explicit declaration to keep proper order (not obj.entries)
   const surfaceBrushes = [
     "forest",
@@ -153,18 +125,54 @@ const toolBox = document.querySelector(".tool-box");
     "iceDark",
     "water",
     "waterDark",
-  ].map(type => [type, editor.brushes[type]]);
+  ]
+    .map(type => [type, editor.brushes[type]])
 
-  // surface tools
-  surfaceBrushes
-    .map(([type, brush]) => [type, brush.repeat(4)])
-    .map(([type, brushCode]) => [type, surfaceTileSet[brushCode][0]])
-    .map(EditorTool)
-    .forEach(elem => {
-      elem.onclick = () => {
-        editor.brush = elem.brush;
+    .map(([type, brush]) =>
+      EditorTool({
+        tile: surfaceTileSet[brush.repeat(4)][0],
+        groupName: "surface",
+        value: type,
+        callback: () => {
+          cursor.offset = 0;
+          editor.currentTool = (col, row) =>
+            gameMap.paint({
+              col,
+              row,
+              brush,
+              brushSize: editor.brushSize,
+            });
+        },
+      })
+    )
+    .forEach(elem => toolBox.append(elem));
+
+  // wall tool
+  const wallTool = EditorTool({
+    tile: wallTileSet["0000"][0],
+    groupName: "surface",
+    value: "wall",
+    callback: () => {
+      cursor.offset = cellSizePx / 2;
+      editor.currentTool = (col, row) => {
+        wallMap.paint(col, row);
+        gameMap.paint({
+          col,
+          row,
+          brush: editor.brushes.snow,
+          brushSize: 2,
+        });
       };
-      toolBox.append(elem);
-    });
-  //
+    },
+  });
+
+  toolBox.append(wallTool);
 })();
+
+//dat-gui
+const gui = new dat.GUI();
+gui.add(editor, "brush", editor.brushes);
+gui.add(editor, "brushSize", 1, 3).step(1);
+gui.add(debug, "showTileGrid");
+gui.add(debug, "showCellTypes");
+gui.add(debug, "renderTiles");

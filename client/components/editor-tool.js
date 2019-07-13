@@ -1,20 +1,19 @@
 import { editor } from "../config.js";
 
-export function EditorTool([type, tile]) {
+export function EditorTool({ tile, groupName, value, callback }) {
   //making element
   const element = document.createElement("label");
 
   const radio = document.createElement("input");
   radio.type = "radio";
-  radio.name = "surface"; //todo: get from params
-  radio.value = type;
+  radio.name = groupName;
+  radio.value = value;
   element.append(radio);
 
   const img = new Image(editor.cellSizePx, editor.cellSizePx);
   element.append(img);
 
-  //todo: refac
-  element.brush = editor.brushes[type];
+  element.onclick = callback;
 
   (async function initImage() {
     await tile.whenReady;

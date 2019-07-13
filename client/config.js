@@ -55,6 +55,7 @@ export const editor = {
   brushes,
   defaultTileCode: brushes.snow.repeat(4),
   brush: brushes.ice,
+  currentTool: () => {},
   brushSize: 1,
   cursorColor: "#ffffff",
 };

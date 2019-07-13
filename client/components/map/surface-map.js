@@ -2,7 +2,7 @@ import { debug } from "../../config.js";
 import { Cell } from "./cell.js";
 import { brushChains } from "../../common/brush-chains.js";
 
-export class GameMap {
+export class SurfaceMap {
   constructor({ size, ininitalBrush }) {
     this.size = size;
 

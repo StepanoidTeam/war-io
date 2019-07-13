@@ -1,4 +1,4 @@
-import { GameMap } from "./components/map/game-map.js";
+import { SurfaceMap } from "./components/map/surface-map.js";
 import { debug, editor } from "./config.js";
 import { cursor } from "./components/cursor.js";
 import { MiniMap } from "./components/mini-map.js";
@@ -20,12 +20,12 @@ function getColRowFromMouseEvent(event) {
 }
 
 (async () => {
-  const gameMap = new GameMap({
+  const surfaceMap = new SurfaceMap({
     size: { rows: mapSize, cols: mapSize },
     ininitalBrush: editor.brushes.snow,
   });
 
-  const tileMap = new TileMap({ surfaceTypeCells: gameMap.cells });
+  const tileMap = new TileMap({ surfaceTypeCells: surfaceMap.cells });
   const wallMap = new WallMap(wallTileSet);
 
   const ctxTileLayer = document.createElement("canvas").getContext("2d");
@@ -99,7 +99,7 @@ function getColRowFromMouseEvent(event) {
     [tileMap, ctxTileLayer],
     //todo: make separate layer for walls?
     [wallMap, ctxTileLayer],
-    [gameMap, ctxOverlayLayer],
+    [surfaceMap, ctxOverlayLayer],
     [miniMap, ctxTileLayer],
     [cursor, ctxOverlayLayer],
   ];
@@ -136,7 +136,7 @@ function getColRowFromMouseEvent(event) {
         callback: () => {
           cursor.offset = 0;
           editor.currentTool = (col, row) =>
-            gameMap.paint({
+            surfaceMap.paint({
               col,
               row,
               brush,
@@ -156,7 +156,8 @@ function getColRowFromMouseEvent(event) {
       cursor.offset = cellSizePx / 2;
       editor.currentTool = (col, row) => {
         wallMap.paint(col, row);
-        gameMap.paint({
+        //todo: should not be strictly linked to surface map
+        surfaceMap.paint({
           col,
           row,
           brush: editor.brushes.snow,

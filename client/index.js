@@ -31,18 +31,18 @@ function getColRowFromMouseEvent(event) {
     ininitalBrush: editor.brushes.snow,
   });
 
+  const canvasSize = mapSize * cellSizePx;
+  //canvas container
+  const mapContainer = document.getElementById("map-container");
+  mapContainer.style.width = `${canvasSize}px`;
+  mapContainer.style.height = `${canvasSize}px`;
+
   const tileMap = new TileMap({ surfaceTypeCells: surfaceMap.cells });
   const wallMap = new WallMap(wallTileSet);
 
   const ctxTileLayer = document.createElement("canvas").getContext("2d");
   const ctxOverlayLayer = document.createElement("canvas").getContext("2d");
   //set canvas size
-
-  const canvasSize = mapSize * cellSizePx;
-  //canvas container
-  const mapContainer = document.getElementById("map-container");
-  mapContainer.style.width = `${canvasSize}px`;
-  mapContainer.style.height = `${canvasSize}px`;
 
   //tile layer
   ctxTileLayer.canvas.height = canvasSize;
@@ -150,6 +150,7 @@ function getColRowFromMouseEvent(event) {
               brushSize: editor.brushSize,
             });
 
+            //todo: get tilecells affected
             console.log(totalCells.length);
           };
         },
@@ -168,6 +169,8 @@ function getColRowFromMouseEvent(event) {
       editor.currentTool = (col, row) => {
         wallMap.paint(col, row);
         //todo: should not be strictly linked to surface map
+
+        //todo: can check if not buildable - only then put snow
         surfaceMap.paint({
           col,
           row,
@@ -202,6 +205,6 @@ function getColRowFromMouseEvent(event) {
 const gui = new dat.GUI();
 gui.add(editor, "brush", editor.brushes);
 gui.add(editor, "brushSize", 1, 3).step(1);
-gui.add(debug, "showTileGrid");
+gui.add(debug, "showCollides");
 gui.add(debug, "showCellTypes");
 gui.add(debug, "renderTiles");

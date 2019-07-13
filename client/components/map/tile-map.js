@@ -2,6 +2,7 @@ import { debug } from "../../config.js";
 import { TileCell } from "./tile-cell.js";
 
 export class TileMap {
+  //todo: do not bind so strictly to surface cells?
   constructor({ surfaceTypeCells }) {
     this.surfaceTypeCells = surfaceTypeCells;
 
@@ -54,11 +55,11 @@ export class TileMap {
   }
 
   draw(ctx) {
-    if (debug.renderTiles) {
-      for (let row of this.tileCells) {
-        for (let subCell of row) {
-          subCell.draw(ctx);
-        }
+    if (!debug.renderTiles) return;
+
+    for (let row of this.tileCells) {
+      for (let subCell of row) {
+        subCell.draw(ctx);
       }
     }
   }

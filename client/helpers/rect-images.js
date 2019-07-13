@@ -12,10 +12,10 @@ export function createRectImage({ color, size, fill = false }) {
   ctx.canvas.width = size;
   ctx.canvas.height = size;
 
-  ctx.strokeStyle = color;
+  ctx.strokeStyle = color.slice(0, 7);
   ctx.fillStyle = color;
   if (fill) ctx.fillRect(0, 0, size, size);
-  else ctx.strokeRect(0, 0, size, size);
+  ctx.strokeRect(0, 0, size, size);
 
   return ctx.canvas;
 }

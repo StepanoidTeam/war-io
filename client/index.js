@@ -8,7 +8,12 @@ import { WallMap } from "./components/map/wall-map.js";
 import { wallTileSet, surfaceTileSet } from "./common/tilesets/tilesets.js";
 import { EditorTool } from "./components/editor-tool.js";
 import { Status } from "./components/status.js";
-import { brushTiles, cursorTile } from "./components/tile.js";
+import {
+  brushTiles,
+  cursorTile,
+  crossTile,
+  debugTile,
+} from "./components/tile.js";
 
 const { cellSizePx, mapSize } = editor;
 
@@ -137,13 +142,16 @@ function getColRowFromMouseEvent(event) {
         callback: () => {
           cursor.offset = 0;
           cursor.tile = brushTiles[brush];
-          editor.currentTool = (col, row) =>
-            surfaceMap.paint({
+          editor.currentTool = (col, row) => {
+            const totalCells = surfaceMap.paint({
               col,
               row,
               brush,
               brushSize: editor.brushSize,
             });
+
+            console.log(totalCells.length);
+          };
         },
       })
     )
@@ -171,6 +179,23 @@ function getColRowFromMouseEvent(event) {
   });
 
   toolBox.append(wallTool);
+
+  //remove wall tool
+  const removeWallTool = EditorTool({
+    tile: crossTile,
+    groupName: "surface",
+    value: "wall-erase",
+    callback: () => {
+      cursor.offset = cellSizePx / 2;
+      cursor.tile = debugTile;
+      editor.currentTool = (col, row) => {
+        wallMap.erase(col, row);
+      };
+    },
+  });
+
+  toolBox.append(removeWallTool);
+  //
 })();
 
 //dat-gui

@@ -8,10 +8,17 @@ export class WallMap {
   }
 
   paint(col, row) {
+    if (!this.getWall(col, row)) {
+      this.setWall(col, row);
+
+      this.update();
+    }
+  }
+
+  erase(col, row) {
     if (this.getWall(col, row)) {
       //cell = this.walls.get(key);
-    } else {
-      this.setWall(col, row);
+      this.deleteWall(col, row);
     }
 
     this.update();
@@ -27,13 +34,18 @@ export class WallMap {
     return this.walls.set(
       key,
       //todo: do we need to set tile?
-      //do we need to subscibe to neighbors?
+      //do we need to subscribe to neighbors?
       {
         tileCode: "0000",
         col,
         row,
       }
     );
+  }
+
+  deleteWall(col, row) {
+    const key = `${col}:${row}`;
+    return this.walls.delete(key);
   }
 
   getWallPatternCode(col, row) {

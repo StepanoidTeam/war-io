@@ -1,14 +1,23 @@
 import { editor, debug } from "../../config.js";
+import { getRandomItem } from "../../helpers/random.js";
 import { surfaceTileSet } from "../../common/tilesets/tilesets.js";
 import {
   debugTile,
+  buildableTile,
   obstacleTile,
   passableTile,
-  buildableTile,
 } from "../tile.js";
-import { getRandomItem } from "../../helpers/random.js";
 
 const { cellSizePx } = editor;
+
+const obstacles = [
+  editor.brushes.forest,
+  editor.brushes.rocks,
+  editor.brushes.water,
+  editor.brushes.waterDark,
+];
+
+const noBuild = [...obstacles, editor.brushes.ice, editor.brushes.iceDark];
 
 export class TileCell {
   constructor(props) {
@@ -23,6 +32,11 @@ export class TileCell {
     this.props.tile = getRandomItem(
       surfaceTileSet[this.props.tileCode] || [debugTile]
     );
+
+    //update collisions
+
+    this.isObstacle = obstacles.some(b => tileCode.includes(b));
+    this.canBuild = !noBuild.some(b => tileCode.includes(b));
   }
 
   draw(ctx) {
@@ -37,33 +51,15 @@ export class TileCell {
 
     ctx.drawImage(...tile, ...cellProps);
 
-    if (debug.showTileGrid) {
-      //ctx.drawImage(...debugTile, ...cellProps);
+    if (!debug.showCollides) return;
 
-      const obstacles = [
-        editor.brushes.forest,
-        editor.brushes.rocks,
-        editor.brushes.water,
-        editor.brushes.waterDark,
-      ];
-
-      const noBuild = [
-        ...obstacles,
-        editor.brushes.ice,
-        editor.brushes.iceDark,
-      ];
-
-      const isObstacle = obstacles.some(b => this.props.tileCode.includes(b));
-      const canBuild = !noBuild.some(b => this.props.tileCode.includes(b));
-
-      ctx.drawImage(
-        ...(isObstacle
-          ? obstacleTile
-          : canBuild
-          ? buildableTile
-          : passableTile),
-        ...cellProps
-      );
-    }
+    ctx.drawImage(
+      ...(this.isObstacle
+        ? obstacleTile
+        : this.canBuild
+        ? buildableTile
+        : passableTile),
+      ...cellProps
+    );
   }
 }

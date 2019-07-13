@@ -1,8 +1,8 @@
 export const debug = {
-  showTileGrid: false,
   showCellTypes: true,
   cellColor: [255, 255, 255, 0.2],
   renderTiles: true,
+  showCollides: false,
 };
 
 const brushes = {

@@ -1,5 +1,5 @@
 import { editor } from "../config.js";
-import { cursorTile, debugTile } from "./tile.js";
+import { cursorTile } from "./tile.js";
 
 const { cellSizePx } = editor;
 export const cursor = {

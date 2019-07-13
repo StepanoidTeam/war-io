@@ -7,6 +7,7 @@ import { TileMap } from "./components/map/tile-map.js";
 import { WallMap } from "./components/map/wall-map.js";
 import { wallTileSet, surfaceTileSet } from "./common/tilesets/tilesets.js";
 import { EditorTool } from "./components/editor-tool.js";
+import { Status } from "./components/status.js";
 
 const { cellSizePx, mapSize } = editor;
 
@@ -85,6 +86,8 @@ function getColRowFromMouseEvent(event) {
     const [col, row] = getColRowFromMouseEvent(event);
     cursor.move(col, row);
 
+    status.update(col, row);
+
     paint(col, row);
   });
 
@@ -100,6 +103,8 @@ function getColRowFromMouseEvent(event) {
     width: cellSizePx * 4,
     height: cellSizePx * 4,
   });
+
+  const status = new Status(document.querySelector(".status-bar"));
 
   const miniMapContainer = document.getElementById("mini-map-container");
   miniMapContainer.append(miniMap.ctx.canvas);

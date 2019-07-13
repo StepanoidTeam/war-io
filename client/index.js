@@ -8,6 +8,7 @@ import { WallMap } from "./components/map/wall-map.js";
 import { wallTileSet, surfaceTileSet } from "./common/tilesets/tilesets.js";
 import { EditorTool } from "./components/editor-tool.js";
 import { Status } from "./components/status.js";
+import { brushTiles, cursorTile } from "./components/tile.js";
 
 const { cellSizePx, mapSize } = editor;
 
@@ -135,6 +136,7 @@ function getColRowFromMouseEvent(event) {
         value: type,
         callback: () => {
           cursor.offset = 0;
+          cursor.tile = brushTiles[brush];
           editor.currentTool = (col, row) =>
             surfaceMap.paint({
               col,
@@ -154,6 +156,7 @@ function getColRowFromMouseEvent(event) {
     value: "wall",
     callback: () => {
       cursor.offset = cellSizePx / 2;
+      cursor.tile = cursorTile;
       editor.currentTool = (col, row) => {
         wallMap.paint(col, row);
         //todo: should not be strictly linked to surface map

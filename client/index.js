@@ -155,19 +155,16 @@ const toolBox = document.querySelector(".tool-box");
     "waterDark",
   ].map(type => [type, editor.brushes[type]]);
 
-  const tools = await Promise.all(
-    surfaceBrushes
-      .map(([type, brush]) => [type, brush.repeat(4)])
-      .map(([type, brushCode]) => [type, surfaceTileSet[brushCode][0]])
-      .map(EditorTool)
-  );
-
-  tools.forEach(elem => {
-    elem.onclick = () => {
-      editor.brush = elem.brush;
-    };
-
-    toolBox.append(elem);
-  });
+  // surface tools
+  surfaceBrushes
+    .map(([type, brush]) => [type, brush.repeat(4)])
+    .map(([type, brushCode]) => [type, surfaceTileSet[brushCode][0]])
+    .map(EditorTool)
+    .forEach(elem => {
+      elem.onclick = () => {
+        editor.brush = elem.brush;
+      };
+      toolBox.append(elem);
+    });
   //
 })();

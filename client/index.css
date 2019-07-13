@@ -1,3 +1,6 @@
+@import "./flex.css";
+@import "./toolbox.css";
+
 html,
 body {
   height: 100%;
@@ -6,47 +9,12 @@ body {
 body {
   margin: 0;
   background-color: silver;
-  display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.editor {
-  display: flex;
-  flex-direction: row;
 }
 
 .panel-left {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-}
-
-.tool-box {
-  display: flex;
-  flex-wrap: wrap;
-  width: 100px;
-  align-items: center;
-  justify-content: center;
-}
-
-.tool-box label {
-  font-size: 0;
-  border: 1px solid black;
-  margin: 2px;
-}
-
-.tool-box input {
-  display: none;
-}
-
-.tool-box img {
-  padding: 0px;
-  padding: 1px;
-}
-
-.tool-box input:checked + img {
-  outline: 2px ridge gold;
 }
 
 #map-container {
@@ -63,4 +31,9 @@ body {
 #mini-map-container {
   font-size: 0;
   background-color: black;
+}
+
+.status-bar {
+  font-family: "Courier New", Courier, monospace;
+  border: 3px ridge gray;
 }

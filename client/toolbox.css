@@ -1,0 +1,25 @@
+.tool-box {
+  flex-wrap: wrap;
+  width: 100px;
+  align-items: center;
+  justify-content: center;
+}
+
+.tool-box label {
+  font-size: 0;
+  border: 1px solid black;
+  margin: 2px;
+}
+
+.tool-box input {
+  display: none;
+}
+
+.tool-box img {
+  padding: 0px;
+  padding: 1px;
+}
+
+.tool-box input:checked + img {
+  outline: 2px ridge gold;
+}

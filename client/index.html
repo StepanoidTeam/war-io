@@ -12,13 +12,19 @@
     ></script>
     <script defer type="module" src="./index.js"></script>
   </head>
-  <body>
-    <div class="editor">
-      <div class="panel-left">
-        <div id="mini-map-container"></div>
-        <div class="tool-box"></div>
-      </div>
-      <div id="map-container"></div>
+  <body class="flex">
+    <div class="editor flex col">
+      <header class="flex row"></header>
+      <section class="main flex row">
+        <aside class="panel-left flex col">
+          <div id="mini-map-container"></div>
+          <div class="tool-box flex"></div>
+        </aside>
+        <div id="map-container"></div>
+      </section>
+      <footer class="flex row">
+        <div class="status-bar">xx:xx</div>
+      </footer>
     </div>
   </body>
 </html>

@@ -1,6 +1,6 @@
 import { editor, debug } from "../../config.js";
 import { surfaceTileSet } from "../../common/tilesets/tilesets.js";
-import { debugTile } from "../tile.js";
+import { debugTile, obstacleTile, passableTile } from "../tile.js";
 import { getRandomItem } from "../../helpers/random.js";
 
 const { cellSizePx } = editor;
@@ -33,7 +33,21 @@ export class TileCell {
     ctx.drawImage(...tile, ...cellProps);
 
     if (debug.showTileGrid) {
-      ctx.drawImage(...debugTile, ...cellProps);
+      //ctx.drawImage(...debugTile, ...cellProps);
+
+      const obstacles = [
+        editor.brushes.forest,
+        editor.brushes.rocks,
+        editor.brushes.water,
+        editor.brushes.waterDark,
+      ];
+
+      const isObstacle = obstacles.some(b => this.props.tileCode.includes(b));
+
+      ctx.drawImage(
+        ...(isObstacle ? obstacleTile : passableTile),
+        ...cellProps
+      );
     }
   }
 }

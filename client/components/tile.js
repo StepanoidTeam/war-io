@@ -43,6 +43,16 @@ export const debugTile = new Tile({
   imageName: IMAGES.DEBUG,
 });
 
+export const obstacleTile = new Tile({
+  size: cellSizePx,
+  imageName: IMAGES.OBSTACLE,
+});
+
+export const passableTile = new Tile({
+  size: cellSizePx,
+  imageName: IMAGES.PASSABLE,
+});
+
 export const cellTile = new Tile({
   size: cellSizePx,
   imageName: IMAGES.CELL,

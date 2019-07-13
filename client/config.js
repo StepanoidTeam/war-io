@@ -37,6 +37,8 @@ export const IMAGES = {
   CURSOR: "cursor",
   CELL: "cell",
   BRUSH_MARKERS: "brush_markers",
+  OBSTACLE: "obstacle",
+  PASSABLE: "passable",
 };
 
 export const IMAGESETS = {

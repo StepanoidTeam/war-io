@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "http-server ./client",
-    "make-dependency-graph": "madge --image graph.svg client/index.js"
+    "graph": "madge --image graph.svg client/index.js"
   },
   "repository": {
     "type": "git",

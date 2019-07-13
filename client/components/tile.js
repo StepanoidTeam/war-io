@@ -11,7 +11,7 @@ export class Tile {
     this.x = x;
     this.y = y;
     this.size = size;
-    this.setImage(imageName);
+    this.whenReady = this.setImage(imageName);
   }
 
   async setImage(imageName) {

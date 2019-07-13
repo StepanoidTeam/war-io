@@ -5,7 +5,8 @@ import { MiniMap } from "./components/mini-map.js";
 import { CanvasCleaner } from "./components/canvas-cleaner.js";
 import { TileMap } from "./components/map/tile-map.js";
 import { WallMap } from "./components/map/wall-map.js";
-import { wallTileSet } from "./common/tilesets/tilesets.js";
+import { wallTileSet, surfaceTileSet } from "./common/tilesets/tilesets.js";
+import { EditorTool } from "./components/editor-tool.js";
 
 const { cellSizePx, mapSize } = editor;
 
@@ -53,14 +54,14 @@ function getColRowFromMouseEvent(event) {
     //todo: make better statement
     if (editor.brush === editor.brushes.wall) {
       wallMap.paint(col, row);
-      gameMap.click({
+      gameMap.paint({
         col,
         row,
         brush: editor.brushes.snow,
         brushSize: 2,
       });
     } else {
-      gameMap.click({
+      gameMap.paint({
         col,
         row,
         brush: editor.brush,
@@ -82,20 +83,23 @@ function getColRowFromMouseEvent(event) {
 
   mapContainer.addEventListener("mousemove", event => {
     const [col, row] = getColRowFromMouseEvent(event);
-    paint(col, row);
-
     cursor.move(col, row);
+
+    paint(col, row);
   });
 
   mapContainer.addEventListener("click", event => {
+    isDrawing = true;
     const [col, row] = getColRowFromMouseEvent(event);
     //todo: doesn't work - fix
     paint(col, row);
+    isDrawing = false;
   });
 
   const miniMap = new MiniMap({ width: 100, height: 100 });
 
-  document.body.append(miniMap.ctx.canvas);
+  const miniMapContainer = document.getElementById("mini-map-container");
+  miniMapContainer.append(miniMap.ctx.canvas);
 
   const drawables = [
     [new CanvasCleaner(), ctxTileLayer],
@@ -123,3 +127,39 @@ gui.add(debug, "showCellTypes");
 gui.add(debug, "renderTiles");
 
 //gui.addColor(debug, "cellColor");
+
+//editor tools
+const toolBox = document.querySelector(".tool-box");
+
+//debugTile, crossTile,
+
+// init surface tools
+(async () => {
+  // explicit declaration to keep proper order (not obj.entries)
+  const surfaceBrushes = [
+    "forest",
+    "rocks",
+    "snow",
+    "snowDark",
+    "ice",
+    "iceDark",
+    "water",
+    "waterDark",
+  ].map(type => [type, editor.brushes[type]]);
+
+  const tools = await Promise.all(
+    surfaceBrushes
+      .map(([type, brush]) => [type, brush.repeat(4)])
+      .map(([type, brushCode]) => [type, surfaceTileSet[brushCode][0]])
+      .map(EditorTool)
+  );
+
+  tools.forEach(elem => {
+    elem.onclick = () => {
+      editor.brush = elem.brush;
+    };
+
+    toolBox.append(elem);
+  });
+  //
+})();

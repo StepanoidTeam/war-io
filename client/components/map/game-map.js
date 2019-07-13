@@ -101,7 +101,7 @@ export class GameMap {
     //todo: smells like recursion - refac
   }
 
-  click = ({ col, row, brush, brushSize }) => {
+  paint = ({ col, row, brush, brushSize }) => {
     let selectedCells = [];
     for (let brushRow = 0; brushRow < brushSize; brushRow++) {
       for (let brushCol = 0; brushCol < brushSize; brushCol++) {

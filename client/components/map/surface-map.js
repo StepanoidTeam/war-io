@@ -114,6 +114,9 @@ export class SurfaceMap {
     //just paint, 1st iter.
     selectedCells.forEach(c => c.change(brush));
     //paint affected
-    this.paintAffectedCells(selectedCells, brush, []);
+    const totalAffectedCells = [];
+    this.paintAffectedCells(selectedCells, brush, totalAffectedCells);
+
+    return totalAffectedCells;
   };
 }

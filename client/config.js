@@ -39,6 +39,7 @@ export const IMAGES = {
   BRUSH_MARKERS: "brush_markers",
   OBSTACLE: "obstacle",
   PASSABLE: "passable",
+  BUILDABLE: "buildable",
 };
 
 export const IMAGESETS = {

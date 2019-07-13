@@ -25,7 +25,12 @@ imageLib.set(
 );
 imageLib.set(
   IMAGES.PASSABLE,
-  createRectImage({ color: "#00ff0010", size: editor.cellSizePx, fill: true })
+  createRectImage({ color: "#ffd70030", size: editor.cellSizePx, fill: true })
+);
+
+imageLib.set(
+  IMAGES.BUILDABLE,
+  createRectImage({ color: "#00ff0000", size: editor.cellSizePx, fill: true })
 );
 
 const brushes = Object.entries(editor.brushes);

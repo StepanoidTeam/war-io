@@ -53,6 +53,11 @@ export const passableTile = new Tile({
   imageName: IMAGES.PASSABLE,
 });
 
+export const buildableTile = new Tile({
+  size: cellSizePx,
+  imageName: IMAGES.BUILDABLE,
+});
+
 export const cellTile = new Tile({
   size: cellSizePx,
   imageName: IMAGES.CELL,

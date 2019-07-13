@@ -1,6 +1,11 @@
 import { editor, debug } from "../../config.js";
 import { surfaceTileSet } from "../../common/tilesets/tilesets.js";
-import { debugTile, obstacleTile, passableTile } from "../tile.js";
+import {
+  debugTile,
+  obstacleTile,
+  passableTile,
+  buildableTile,
+} from "../tile.js";
 import { getRandomItem } from "../../helpers/random.js";
 
 const { cellSizePx } = editor;
@@ -42,10 +47,21 @@ export class TileCell {
         editor.brushes.waterDark,
       ];
 
+      const noBuild = [
+        ...obstacles,
+        editor.brushes.ice,
+        editor.brushes.iceDark,
+      ];
+
       const isObstacle = obstacles.some(b => this.props.tileCode.includes(b));
+      const canBuild = !noBuild.some(b => this.props.tileCode.includes(b));
 
       ctx.drawImage(
-        ...(isObstacle ? obstacleTile : passableTile),
+        ...(isObstacle
+          ? obstacleTile
+          : canBuild
+          ? buildableTile
+          : passableTile),
         ...cellProps
       );
     }

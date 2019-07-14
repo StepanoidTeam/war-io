@@ -40,7 +40,7 @@ export function loadTiles({
 }
 
 //todo: simplify this and above
-function loadWinter(...ranges) {
+function loadWinter(ranges) {
   const imageName = IMAGESETS.WINTER;
   return ranges
     .map(index => {

@@ -14,6 +14,7 @@ import {
   crossTile,
   debugTile,
 } from "./components/tile.js";
+import { TileCell } from "./components/map/tile-cell.js";
 
 const { cellSizePx, mapSize } = editor;
 
@@ -39,6 +40,13 @@ function getColRowFromMouseEvent(event) {
 
   const tileMap = new TileMap({ surfaceTypeCells: surfaceMap.cells });
   const wallMap = new WallMap(wallTileSet);
+
+  //remove walls if they were painted out by surface
+  TileCell.onChange(tileCell => {
+    if (tileCell.canBuild === false) {
+      wallMap.erase(tileCell.props.col, tileCell.props.row);
+    }
+  });
 
   const ctxTileLayer = document.createElement("canvas").getContext("2d");
   const ctxOverlayLayer = document.createElement("canvas").getContext("2d");
@@ -122,7 +130,7 @@ function getColRowFromMouseEvent(event) {
 
   // init surface tools
   // explicit declaration to keep proper order (not obj.entries)
-  const surfaceBrushes = [
+  [
     "forest",
     "rocks",
     "snow",
@@ -133,7 +141,6 @@ function getColRowFromMouseEvent(event) {
     "waterDark",
   ]
     .map(type => [type, editor.brushes[type]])
-
     .map(([type, brush]) =>
       EditorTool({
         tile: surfaceTileSet[brush.repeat(4)][0],
@@ -150,8 +157,9 @@ function getColRowFromMouseEvent(event) {
               brushSize: editor.brushSize,
             });
 
+            //console.log("cells", totalCells.length);
+
             //todo: get tilecells affected
-            console.log(totalCells.length);
           };
         },
       })
@@ -167,7 +175,6 @@ function getColRowFromMouseEvent(event) {
       cursor.offset = cellSizePx / 2;
       cursor.tile = cursorTile;
       editor.currentTool = (col, row) => {
-        wallMap.paint(col, row);
         //todo: should not be strictly linked to surface map
 
         //todo: can check if not buildable - only then put snow
@@ -177,6 +184,8 @@ function getColRowFromMouseEvent(event) {
           brush: editor.brushes.snow,
           brushSize: 2,
         });
+
+        wallMap.paint(col, row);
       };
     },
   });

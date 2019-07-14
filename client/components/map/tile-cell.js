@@ -19,7 +19,13 @@ const obstacles = [
 
 const noBuild = [...obstacles, editor.brushes.ice, editor.brushes.iceDark];
 
+const subscribers = [];
+
 export class TileCell {
+  static onChange(callback) {
+    subscribers.push(callback);
+  }
+
   constructor(props) {
     this.props = props;
 
@@ -37,6 +43,8 @@ export class TileCell {
 
     this.isObstacle = obstacles.some(b => tileCode.includes(b));
     this.canBuild = !noBuild.some(b => tileCode.includes(b));
+
+    subscribers.forEach(callback => callback(this));
   }
 
   draw(ctx) {

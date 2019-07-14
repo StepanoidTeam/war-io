@@ -15,6 +15,7 @@ import {
   debugTile,
 } from "./components/tile.js";
 import { TileCell } from "./components/map/tile-cell.js";
+import { Peasant } from "./common/tilesets/units/peasant.js";
 
 const { cellSizePx, mapSize } = editor;
 
@@ -107,6 +108,13 @@ function getColRowFromMouseEvent(event) {
   const miniMapContainer = document.getElementById("mini-map-container");
   miniMapContainer.append(miniMap.ctx.canvas);
 
+  const units = [
+    [new Peasant({ x: 1, y: 1, animation: "walk-up" }), ctxOverlayLayer],
+    [new Peasant({ x: 4, y: 4, animation: "walk-right" }), ctxOverlayLayer],
+    [new Peasant({ x: 10, y: 4, animation: "hatch-up" }), ctxOverlayLayer],
+    [new Peasant({ x: 4, y: 11, animation: "die-up" }), ctxOverlayLayer],
+  ];
+
   const drawables = [
     [new CanvasCleaner(), ctxTileLayer],
     [new CanvasCleaner(), ctxOverlayLayer],
@@ -116,6 +124,8 @@ function getColRowFromMouseEvent(event) {
     [surfaceMap, ctxOverlayLayer],
     [miniMap, ctxTileLayer],
     [cursor, ctxOverlayLayer],
+
+    ...units,
   ];
 
   requestAnimationFrame(function render() {

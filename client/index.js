@@ -15,7 +15,7 @@ import {
   debugTile,
 } from "./components/tile.js";
 import { TileCell } from "./components/map/tile-cell.js";
-import { Peasant } from "./common/tilesets/units/peasant.js";
+import { Peasant, peasantTileSet } from "./common/tilesets/units/peasant.js";
 
 const { cellSizePx, mapSize } = editor;
 
@@ -42,6 +42,33 @@ function getColRowFromMouseEvent(event) {
   const tileMap = new TileMap({ surfaceTypeCells: surfaceMap.cells });
   const wallMap = new WallMap(wallTileSet);
 
+  const units = [
+    new Peasant({ x: 1, y: 1, animation: "walk-up" }),
+    new Peasant({ x: 4, y: 4, animation: "walk-right" }),
+    new Peasant({ x: 10, y: 4, animation: "hatch-up" }),
+    new Peasant({ x: 4, y: 11, animation: "die-up" }),
+  ];
+
+  //todo: extract?
+  const unitsMap = {
+    units,
+    getUnitIndex(x, y) {
+      const unitIndex = this.units.findIndex(u => u.x === x && u.y === y);
+      return unitIndex;
+    },
+    paint({ x, y, unit }) {
+      const unitIndex = this.getUnitIndex(x, y);
+      if (unitIndex < 0)
+        this.units.push(new unit({ x, y, animation: "walk-up" }));
+    },
+    erase(x, y) {
+      const unitIndex = this.getUnitIndex(x, y);
+      if (unitIndex >= 0) this.units.splice(unitIndex, 1);
+    },
+    draw(ctx) {
+      this.units.forEach(u => u.draw(ctx));
+    },
+  };
   //remove walls if they were painted out by surface
   TileCell.onChange(tileCell => {
     if (tileCell.canBuild === false) {
@@ -49,20 +76,29 @@ function getColRowFromMouseEvent(event) {
     }
   });
 
-  const ctxTileLayer = document.createElement("canvas").getContext("2d");
-  const ctxOverlayLayer = document.createElement("canvas").getContext("2d");
-  //set canvas size
+  //remove units if they were painted out by surface
+  TileCell.onChange(tileCell => {
+    if (tileCell.isObstacle === true) {
+      unitsMap.erase(tileCell.props.col, tileCell.props.row);
+    }
+  });
 
-  //tile layer
-  ctxTileLayer.canvas.height = canvasSize;
-  ctxTileLayer.canvas.width = canvasSize;
-  //overlay layer - debug info, cursor
-  ctxOverlayLayer.canvas.height = canvasSize;
-  ctxOverlayLayer.canvas.width = canvasSize;
-  //layers - more to go: units, etc...
+  function createMapLayer() {
+    const ctxLayer = document.createElement("canvas").getContext("2d");
+    ctxLayer.canvas.height = canvasSize;
+    ctxLayer.canvas.width = canvasSize;
 
-  mapContainer.append(ctxTileLayer.canvas);
-  mapContainer.append(ctxOverlayLayer.canvas);
+    //todo: move outside?
+    mapContainer.append(ctxLayer.canvas);
+
+    return ctxLayer;
+  }
+
+  const layers = {
+    tiles: createMapLayer(),
+    overlay: createMapLayer(),
+    units: createMapLayer(),
+  };
 
   function paint(col, row) {
     if (!isDrawing) return;
@@ -108,24 +144,17 @@ function getColRowFromMouseEvent(event) {
   const miniMapContainer = document.getElementById("mini-map-container");
   miniMapContainer.append(miniMap.ctx.canvas);
 
-  const units = [
-    [new Peasant({ x: 1, y: 1, animation: "walk-up" }), ctxOverlayLayer],
-    [new Peasant({ x: 4, y: 4, animation: "walk-right" }), ctxOverlayLayer],
-    [new Peasant({ x: 10, y: 4, animation: "hatch-up" }), ctxOverlayLayer],
-    [new Peasant({ x: 4, y: 11, animation: "die-up" }), ctxOverlayLayer],
-  ];
-
   const drawables = [
-    [new CanvasCleaner(), ctxTileLayer],
-    [new CanvasCleaner(), ctxOverlayLayer],
-    [tileMap, ctxTileLayer],
+    [new CanvasCleaner(), layers.tiles],
+    [new CanvasCleaner(), layers.overlay],
+    [new CanvasCleaner(), layers.units],
+    [tileMap, layers.tiles],
     //todo: make separate layer for walls?
-    [wallMap, ctxTileLayer],
-    [surfaceMap, ctxOverlayLayer],
-    [miniMap, ctxTileLayer],
-    [cursor, ctxOverlayLayer],
-
-    ...units,
+    [wallMap, layers.tiles],
+    [surfaceMap, layers.overlay],
+    [miniMap, layers.tiles],
+    [cursor, layers.overlay],
+    [unitsMap, layers.units],
   ];
 
   requestAnimationFrame(function render() {
@@ -202,8 +231,28 @@ function getColRowFromMouseEvent(event) {
 
   toolBox.append(wallTool);
 
+  // peasant tool
+  const addPeasantTool = EditorTool({
+    tile: peasantTileSet["stand"][0],
+    groupName: "surface",
+    value: "peasant",
+    callback: () => {
+      cursor.offset = cellSizePx / 2;
+      cursor.tile = cursorTile;
+      editor.currentTool = (x, y) => {
+        unitsMap.paint({
+          x,
+          y,
+          unit: Peasant,
+        });
+      };
+    },
+  });
+
+  toolBox.append(addPeasantTool);
+
   //remove wall tool
-  const removeWallTool = EditorTool({
+  const removeUnitAndWallTool = EditorTool({
     tile: crossTile,
     groupName: "surface",
     value: "wall-erase",
@@ -212,11 +261,12 @@ function getColRowFromMouseEvent(event) {
       cursor.tile = debugTile;
       editor.currentTool = (col, row) => {
         wallMap.erase(col, row);
+        unitsMap.erase(col, row);
       };
     },
   });
 
-  toolBox.append(removeWallTool);
+  toolBox.append(removeUnitAndWallTool);
   //
 })();
 

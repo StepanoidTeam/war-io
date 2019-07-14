@@ -207,11 +207,11 @@ function getColRowFromMouseEvent(event) {
     )
     .forEach(elem => toolBox.append(elem));
 
-  // wall tool
-  const wallTool = EditorTool({
-    tile: wallTileSet["0000"][0],
+  // human wall tool
+  const humanWallTool = EditorTool({
+    tile: wallTileSet["hum-0000"][0],
     groupName: "surface",
-    value: "wall",
+    value: "wall-human",
     callback: () => {
       cursor.offset = cellSizePx / 2;
       cursor.tile = cursorTile;
@@ -226,12 +226,38 @@ function getColRowFromMouseEvent(event) {
           brushSize: 2,
         });
 
-        wallMap.paint(col, row);
+        wallMap.paint(col, row, WallMap.TYPES.HUMAN);
       };
     },
   });
 
-  toolBox.append(wallTool);
+  toolBox.append(humanWallTool);
+
+  // human wall tool
+  const orcWallTool = EditorTool({
+    tile: wallTileSet["orc-0000"][0],
+    groupName: "surface",
+    value: "wall-orc",
+    callback: () => {
+      cursor.offset = cellSizePx / 2;
+      cursor.tile = cursorTile;
+      editor.currentTool = (col, row) => {
+        //todo: should not be strictly linked to surface map
+
+        //todo: can check if not buildable - only then put snow
+        surfaceMap.paint({
+          col,
+          row,
+          brush: editor.brushes.snow,
+          brushSize: 2,
+        });
+
+        wallMap.paint(col, row, WallMap.TYPES.ORC);
+      };
+    },
+  });
+
+  toolBox.append(orcWallTool);
 
   const peasantTile = peasantTileSet["stand"][0];
   peasantTile.size = cellSizePx;

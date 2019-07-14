@@ -1,15 +1,23 @@
 import { editor } from "../../config.js";
 
+const TYPES = {
+  HUMAN: "hum",
+  ORC: "orc",
+};
+
 export class WallMap {
+  static TYPES = TYPES;
+
   constructor(wallTileSet) {
     this.walls = new Map();
 
     this.wallTileSet = wallTileSet;
   }
 
-  paint(col, row) {
-    if (!this.getWall(col, row)) {
-      this.setWall(col, row);
+  paint(col, row, type = TYPES.HUMAN) {
+    const wall = this.getWall(col, row);
+    if (!wall || wall !== type) {
+      this.setWall(col, row, type);
 
       this.update();
     }
@@ -17,7 +25,6 @@ export class WallMap {
 
   erase(col, row) {
     if (this.getWall(col, row)) {
-      //cell = this.walls.get(key);
       this.deleteWall(col, row);
     }
 
@@ -29,14 +36,13 @@ export class WallMap {
     return this.walls.get(key);
   }
 
-  setWall(col, row) {
+  setWall(col, row, type = TYPES.HUMAN) {
     const key = `${col}:${row}`;
     return this.walls.set(
       key,
-      //todo: do we need to set tile?
       //do we need to subscribe to neighbors?
       {
-        tileCode: "0000",
+        type,
         col,
         row,
       }
@@ -49,15 +55,26 @@ export class WallMap {
   }
 
   getWallPatternCode(col, row) {
+    const currentWall = this.getWall(col, row);
+
     //clockwize: up right down left
-    return [
-      this.getWall(col, row - 1),
-      this.getWall(col + 1, row),
-      this.getWall(col, row + 1),
-      this.getWall(col - 1, row),
-    ]
-      .map(cell => (cell ? "x" : "0"))
-      .join("");
+    return (
+      currentWall.type +
+      "-" +
+      [
+        this.getWall(col, row - 1),
+        this.getWall(col + 1, row),
+        this.getWall(col, row + 1),
+        this.getWall(col - 1, row),
+      ]
+        .map(wall => {
+          if (!wall) return "0";
+          if (wall.type !== currentWall.type) return "0";
+
+          return "x";
+        })
+        .join("")
+    );
   }
 
   update() {

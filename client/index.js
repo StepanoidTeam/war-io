@@ -57,6 +57,8 @@ function getColRowFromMouseEvent(event) {
       return unitIndex;
     },
     paint({ x, y, unit }) {
+      if (tileMap.tileCells[y][x].isObstacle) return;
+
       const unitIndex = this.getUnitIndex(x, y);
       if (unitIndex < 0)
         this.units.push(new unit({ x, y, animation: "walk-up" }));
@@ -231,9 +233,15 @@ function getColRowFromMouseEvent(event) {
 
   toolBox.append(wallTool);
 
+  const peasantTile = peasantTileSet["stand"][0];
+  peasantTile.size = cellSizePx;
+  //72 - unit tile size
+  peasantTile.x = 72 / 2 - cellSizePx / 2;
+  peasantTile.y = 72 / 2 - cellSizePx / 2;
+
   // peasant tool
   const addPeasantTool = EditorTool({
-    tile: peasantTileSet["stand"][0],
+    tile: peasantTile,
     groupName: "surface",
     value: "peasant",
     callback: () => {

@@ -1,6 +1,5 @@
 export const debug = {
-  showCellTypes: true,
-  cellColor: [255, 255, 255, 0.2],
+  showCellTypes: false,
   renderTiles: true,
   showCollides: false,
 };

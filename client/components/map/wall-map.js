@@ -1,8 +1,14 @@
 import { editor } from "../../config.js";
 
 const TYPES = {
-  HUMAN: "hum",
+  HUMAN: "human",
   ORC: "orc",
+};
+
+const STATES = {
+  OK: "",
+  DAMAGED: "damaged",
+  DESTROYED: "destroyed",
 };
 
 export class WallMap {
@@ -36,13 +42,14 @@ export class WallMap {
     return this.walls.get(key);
   }
 
-  setWall(col, row, type = TYPES.HUMAN) {
+  setWall(col, row, type = TYPES.HUMAN, state = STATES.OK) {
     const key = `${col}:${row}`;
     return this.walls.set(
       key,
       //do we need to subscribe to neighbors?
       {
         type,
+        state,
         col,
         row,
       }
@@ -58,9 +65,10 @@ export class WallMap {
     const currentWall = this.getWall(col, row);
 
     //clockwize: up right down left
-    return (
-      currentWall.type +
-      "-" +
+    return [
+      currentWall.type,
+      currentWall.state,
+
       [
         this.getWall(col, row - 1),
         this.getWall(col + 1, row),
@@ -73,8 +81,10 @@ export class WallMap {
 
           return "x";
         })
-        .join("")
-    );
+        .join(""),
+    ]
+      .filter(str => str)
+      .join("-");
   }
 
   update() {
@@ -86,15 +96,17 @@ export class WallMap {
   }
 
   draw(ctx) {
-    this.walls.forEach(wall =>
+    this.walls.forEach(wall => {
+      const tile = this.wallTileSet[wall.tileCode][0];
+
       ctx.drawImage(
         //todo: get random tile - but not here
-        ...this.wallTileSet[wall.tileCode][0],
+        ...tile,
         wall.col * editor.cellSizePx + editor.cellSizePx / 2,
         wall.row * editor.cellSizePx + editor.cellSizePx / 2,
         editor.cellSizePx,
         editor.cellSizePx
-      )
-    );
+      );
+    });
   }
 }

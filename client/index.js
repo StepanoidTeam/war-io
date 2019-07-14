@@ -209,7 +209,7 @@ function getColRowFromMouseEvent(event) {
 
   // human wall tool
   const humanWallTool = EditorTool({
-    tile: wallTileSet["hum-0000"][0],
+    tile: wallTileSet["human-0000"][0],
     groupName: "surface",
     value: "wall-human",
     callback: () => {

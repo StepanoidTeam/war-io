@@ -146,22 +146,39 @@ export const winter = {
 
 export const winterWalls = {
   //human
-  ["hum-0000"]: [16],
-  ["hum-00x0"]: [17],
-  ["hum-0x00"]: [18],
-  ["hum-0xx0"]: [19],
-  ["hum-x000"]: [20],
-  ["hum-x0x0"]: [[21, 22]],
-  ["hum-xx00"]: [23],
-  ["hum-xxx0"]: [24],
-  ["hum-000x"]: [25],
-  ["hum-00xx"]: [26],
-  ["hum-0x0x"]: [[27, 28]],
-  ["hum-0xxx"]: [29],
-  ["hum-x00x"]: [30],
-  ["hum-x0xx"]: [31],
-  ["hum-xx0x"]: [32],
-  ["hum-xxxx"]: [33],
+  ["human-0000"]: [16],
+  ["human-00x0"]: [17],
+  ["human-0x00"]: [18],
+  ["human-0xx0"]: [19],
+  ["human-x000"]: [20],
+  ["human-x0x0"]: [[21, 22]],
+  ["human-xx00"]: [23],
+  ["human-xxx0"]: [24],
+  ["human-000x"]: [25],
+  ["human-00xx"]: [26],
+  ["human-0x0x"]: [[27, 28]],
+  ["human-0xxx"]: [29],
+  ["human-x00x"]: [30],
+  ["human-x0xx"]: [31],
+  ["human-xx0x"]: [32],
+  ["human-xxxx"]: [33],
+  //human damaged
+  ["human-damaged-0000"]: [52],
+  ["human-damaged-00x0"]: [53],
+  ["human-damaged-0x00"]: [54],
+  ["human-damaged-0xx0"]: [55],
+  ["human-damaged-x000"]: [56],
+  ["human-damaged-x0x0"]: [[57, 58]],
+  ["human-damaged-xx00"]: [59],
+  ["human-damaged-xxx0"]: [60],
+  ["human-damaged-000x"]: [61],
+  ["human-damaged-00xx"]: [62],
+  ["human-damaged-0x0x"]: [[63, 64]],
+  ["human-damaged-0xxx"]: [65],
+  ["human-damaged-x00x"]: [66],
+  ["human-damaged-x0xx"]: [67],
+  ["human-damaged-xx0x"]: [68],
+  ["human-damaged-xxxx"]: [69],
   //orc
   ["orc-0000"]: [34],
   ["orc-00x0"]: [35],
@@ -179,4 +196,55 @@ export const winterWalls = {
   ["orc-x0xx"]: [49],
   ["orc-xx0x"]: [50],
   ["orc-xxxx"]: [51],
+  //orc damaged
+  ["orc-damaged-0000"]: [70],
+  ["orc-damaged-00x0"]: [71],
+  ["orc-damaged-0x00"]: [72],
+  ["orc-damaged-0xx0"]: [73],
+  ["orc-damaged-x000"]: [74],
+  ["orc-damaged-x0x0"]: [[75, 76]],
+  ["orc-damaged-xx00"]: [77],
+  ["orc-damaged-xxx0"]: [78],
+  ["orc-damaged-000x"]: [79],
+  ["orc-damaged-00xx"]: [80],
+  ["orc-damaged-0x0x"]: [[81, 82]],
+  ["orc-damaged-0xxx"]: [83],
+  ["orc-damaged-x00x"]: [84],
+  ["orc-damaged-x0xx"]: [85],
+  ["orc-damaged-xx0x"]: [86],
+  ["orc-damaged-xxxx"]: [87],
+  //destroyed
+  ["human-destroyed-0000"]: [88],
+  ["human-destroyed-00x0"]: [89],
+  ["human-destroyed-0x00"]: [90],
+  ["human-destroyed-0xx0"]: [91],
+  ["human-destroyed-x000"]: [92],
+  ["human-destroyed-x0x0"]: [99], //!
+  ["human-destroyed-xx00"]: [94],
+  ["human-destroyed-xxx0"]: [94], //!
+  ["human-destroyed-000x"]: [95], //!
+  ["human-destroyed-00xx"]: [96], //!
+  ["human-destroyed-0x0x"]: [97], //!
+  ["human-destroyed-0xxx"]: [100], //!?
+  ["human-destroyed-x00x"]: [98], //!
+  ["human-destroyed-x0xx"]: [101],
+  ["human-destroyed-xx0x"]: [101],
+  ["human-destroyed-xxxx"]: [101], //!?
+  //same
+  ["orc-destroyed-0000"]: [88],
+  ["orc-destroyed-00x0"]: [89],
+  ["orc-destroyed-0x00"]: [90],
+  ["orc-destroyed-0xx0"]: [91],
+  ["orc-destroyed-x000"]: [92],
+  ["orc-destroyed-x0x0"]: [99], //!
+  ["orc-destroyed-xx00"]: [94],
+  ["orc-destroyed-xxx0"]: [94], //!
+  ["orc-destroyed-000x"]: [95], //!
+  ["orc-destroyed-00xx"]: [96], //!
+  ["orc-destroyed-0x0x"]: [97], //!
+  ["orc-destroyed-0xxx"]: [100], //!?
+  ["orc-destroyed-x00x"]: [98], //!
+  ["orc-destroyed-x0xx"]: [101],
+  ["orc-destroyed-xx0x"]: [101],
+  ["orc-destroyed-xxxx"]: [101], //!?
 };

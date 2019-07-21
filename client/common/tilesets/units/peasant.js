@@ -47,7 +47,6 @@ export const peasantCodes = {
   ["die-up-left"]: [51, 56, 61],
 };
 
-//todo: simplify this and above
 function loadUnit(ranges) {
   const imageName = "units/peasant.png";
   return ranges
@@ -82,6 +81,7 @@ export const peasantTileSet = Object.entries(peasantCodes).reduce(
 );
 
 export class Peasant {
+  tileCodes = Object.keys(peasantCodes);
   x = 0;
   y = 0;
   //todo: animation?
@@ -92,9 +92,15 @@ export class Peasant {
     this.props = props;
     this.x = props.x;
     this.y = props.y;
-    this.animation = props.animation;
     this.ticksPerFrame = props.ticksPerFrame || 4; //60/4 = 15fps
+    this.setAnimation(props.animation);
+  }
+
+  setAnimation(animation) {
+    this.animation = animation;
     this.tiles = peasantTileSet[this.animation];
+    this.ticks = 0;
+    this.frameIndex = 0;
   }
 
   move(x, y) {

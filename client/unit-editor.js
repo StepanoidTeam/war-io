@@ -39,8 +39,6 @@ function editorTemplate(item) {
     `;
   };
 
-  item.tileCodes;
-
   //
   //
   //<div>cords: ${item.x}, ${item.y}</div>
@@ -49,9 +47,10 @@ function editorTemplate(item) {
       <div>type: ${item.constructor.name}</div>
 
       ${numEditor("x")} ${numEditor("y")}
-      ${select(item.tileCodes, item.animation, value => {
-        item.setAnimation(value);
-      })}
+      ${item.animation &&
+        select(item.tileCodes, item.animation, value => {
+          item.setAnimation(value);
+        })}
 
       <button @click=${() => {}}>Click Me</button>
     </div>

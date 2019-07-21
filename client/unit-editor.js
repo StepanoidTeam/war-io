@@ -15,8 +15,8 @@ function select(items, selected, callback) {
   `;
 }
 
-function editorTemplate(item) {
-  if (!item)
+function editorTemplate(entity) {
+  if (!entity)
     return html`
       <div>nothing selected</div>
     `;
@@ -28,13 +28,13 @@ function editorTemplate(item) {
 
       if (isNaN(intValue)) return;
 
-      item[propName] = intValue;
+      entity[propName] = intValue;
     };
     return html`
       <label>
         ${propName}
 
-        <input type="text" value="${item[propName]}" @input=${handler} />
+        <input type="text" value="${entity[propName]}" @input=${handler} />
       </label>
     `;
   };
@@ -44,12 +44,12 @@ function editorTemplate(item) {
   //<div>cords: ${item.x}, ${item.y}</div>
   return html`
     <div class="unit-editor flex col">
-      <div>type: ${item.constructor.name}</div>
+      <div>type: ${entity.constructor.name}</div>
 
-      ${numEditor("x")} ${numEditor("y")}
-      ${item.animation &&
-        select(item.tileCodes, item.animation, value => {
-          item.setAnimation(value);
+      ${entity.x && numEditor("x")} ${entity.y && numEditor("y")}
+      ${entity.animation &&
+        select(entity.tileCodes, entity.animation, value => {
+          entity.setAnimation(value);
         })}
 
       <button @click=${() => {}}>Click Me</button>
@@ -57,8 +57,8 @@ function editorTemplate(item) {
   `;
 }
 
-export function showEditor(item) {
-  render(editorTemplate(item), container);
+export function showEditor(entity) {
+  render(editorTemplate(entity), container);
 }
 
 render(editorTemplate(null), container);

@@ -13,3 +13,8 @@ TODO:
 [ ] Switch between tilesets
 [ ] Animate units
 [ ] Tilesets
+
+KNOWN BUGS:
+[ ] walls/units could overlap
+[ ] peasant icon tile breaks itself for animation
+[ ] 

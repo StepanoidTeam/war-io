@@ -1,0 +1,12 @@
+.unit-editor {
+  border: 1px solid gray;
+  padding: 5px;
+}
+
+.unit-editor label {
+  padding: 5px;
+}
+
+.unit-editor input[type="text"] {
+  width: 40px;
+}

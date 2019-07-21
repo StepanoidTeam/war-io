@@ -16,6 +16,7 @@ import {
 } from "./components/tile.js";
 import { TileCell } from "./components/map/tile-cell.js";
 import { Peasant, peasantTileSet } from "./common/tilesets/units/peasant.js";
+import { showEditor } from "./unit-editor.js";
 
 const { cellSizePx, mapSize } = editor;
 
@@ -55,6 +56,9 @@ function getColRowFromMouseEvent(event) {
     getUnitIndex(x, y) {
       const unitIndex = this.units.findIndex(u => u.x === x && u.y === y);
       return unitIndex;
+    },
+    getUnit(x, y) {
+      return this.units.find(u => u.x === x && u.y === y);
     },
     paint({ x, y, unit }) {
       if (tileMap.tileCells[y][x].isObstacle) return;
@@ -259,9 +263,11 @@ function getColRowFromMouseEvent(event) {
 
   toolBox.append(orcWallTool);
 
+  //draw peasant
   const peasantTile = peasantTileSet["stand"][0];
   peasantTile.size = cellSizePx;
   //72 - unit tile size
+  //todo: ⚠️ this breaks the tile!11
   peasantTile.x = 72 / 2 - cellSizePx / 2;
   peasantTile.y = 72 / 2 - cellSizePx / 2;
 
@@ -272,7 +278,7 @@ function getColRowFromMouseEvent(event) {
     value: "peasant",
     callback: () => {
       cursor.offset = cellSizePx / 2;
-      cursor.tile = cursorTile;
+      cursor.tile = peasantTile;
       editor.currentTool = (x, y) => {
         unitsMap.paint({
           x,
@@ -301,12 +307,33 @@ function getColRowFromMouseEvent(event) {
   });
 
   toolBox.append(removeUnitAndWallTool);
+
+  //select unit tool
+  const selectionTool = EditorTool({
+    tile: debugTile,
+    groupName: "surface",
+    value: "select",
+    callback: () => {
+      cursor.offset = cellSizePx / 2;
+      cursor.tile = debugTile;
+      editor.currentTool = (col, row) => {
+        const unit = unitsMap.getUnit(col, row);
+        const wall = wallMap.getWall(col, row);
+
+        if (wall || unit) {
+          showEditor(unit);
+          console.log(unit, wall);
+        }
+      };
+    },
+  });
+
+  toolBox.append(selectionTool);
   //
 })();
 
 //dat-gui
 const gui = new dat.GUI();
-gui.add(editor, "brush", editor.brushes);
 gui.add(editor, "brushSize", 1, 3).step(1);
 gui.add(debug, "showCollides");
 gui.add(debug, "showCellTypes");

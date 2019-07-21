@@ -17,6 +17,7 @@ import {
 import { TileCell } from "./components/map/tile-cell.js";
 import { Peasant, peasantTileSet } from "./common/tilesets/units/peasant.js";
 import { showEditor } from "./unit-editor.js";
+import { unitsMap } from "./components/units-map.js";
 
 const { cellSizePx, mapSize } = editor;
 
@@ -43,38 +44,6 @@ function getColRowFromMouseEvent(event) {
   const tileMap = new TileMap({ surfaceTypeCells: surfaceMap.cells });
   const wallMap = new WallMap(wallTileSet);
 
-  const units = [
-    new Peasant({ x: 1, y: 1, animation: "walk-up" }),
-    new Peasant({ x: 4, y: 4, animation: "walk-right" }),
-    new Peasant({ x: 10, y: 4, animation: "hatch-up" }),
-    new Peasant({ x: 4, y: 11, animation: "die-up" }),
-  ];
-
-  //todo: extract?
-  const unitsMap = {
-    units,
-    getUnitIndex(x, y) {
-      const unitIndex = this.units.findIndex(u => u.x === x && u.y === y);
-      return unitIndex;
-    },
-    getUnit(x, y) {
-      return this.units.find(u => u.x === x && u.y === y);
-    },
-    paint({ x, y, unit }) {
-      if (tileMap.tileCells[y][x].isObstacle) return;
-
-      const unitIndex = this.getUnitIndex(x, y);
-      if (unitIndex < 0)
-        this.units.push(new unit({ x, y, animation: "walk-up" }));
-    },
-    erase(x, y) {
-      const unitIndex = this.getUnitIndex(x, y);
-      if (unitIndex >= 0) this.units.splice(unitIndex, 1);
-    },
-    draw(ctx) {
-      this.units.forEach(u => u.draw(ctx));
-    },
-  };
   //remove walls if they were painted out by surface
   TileCell.onChange(tileCell => {
     if (tileCell.canBuild === false) {
@@ -104,6 +73,7 @@ function getColRowFromMouseEvent(event) {
     tiles: createMapLayer(),
     overlay: createMapLayer(),
     units: createMapLayer(),
+    buildings: createMapLayer(),
   };
 
   function paint(col, row) {
@@ -154,6 +124,7 @@ function getColRowFromMouseEvent(event) {
     [new CanvasCleaner(), layers.tiles],
     [new CanvasCleaner(), layers.overlay],
     [new CanvasCleaner(), layers.units],
+    [new CanvasCleaner(), layers.buildings],
     [tileMap, layers.tiles],
     //todo: make separate layer for walls?
     [wallMap, layers.tiles],
@@ -161,6 +132,7 @@ function getColRowFromMouseEvent(event) {
     [miniMap, layers.tiles],
     [cursor, layers.overlay],
     [unitsMap, layers.units],
+    [unitsMap, layers.buildings],
   ];
 
   requestAnimationFrame(function render() {
@@ -316,9 +288,9 @@ function getColRowFromMouseEvent(event) {
     callback: () => {
       cursor.offset = cellSizePx / 2;
       cursor.tile = debugTile;
-      editor.currentTool = (col, row) => {
-        const unit = unitsMap.getUnit(col, row);
-        const wall = wallMap.getWall(col, row);
+      editor.currentTool = (x, y) => {
+        const unit = unitsMap.getUnit(x, y);
+        const wall = wallMap.getWall(x, y);
 
         const entity = wall || unit;
 

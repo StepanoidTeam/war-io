@@ -320,9 +320,11 @@ function getColRowFromMouseEvent(event) {
         const unit = unitsMap.getUnit(col, row);
         const wall = wallMap.getWall(col, row);
 
-        if (wall || unit) {
-          showEditor(unit);
-          console.log(unit, wall);
+        const entity = wall || unit;
+
+        if (entity) {
+          showEditor(entity);
+          console.log(entity);
         }
       };
     },

@@ -20,49 +20,49 @@ export class WallMap {
     this.wallTileSet = wallTileSet;
   }
 
-  paint(col, row, type = TYPES.HUMAN) {
-    const wall = this.getWall(col, row);
+  paint(x, y, type = TYPES.HUMAN) {
+    const wall = this.getWall(x, y);
     if (!wall || wall !== type) {
-      this.setWall(col, row, type);
+      this.setWall(x, y, type);
 
       this.update();
     }
   }
 
-  erase(col, row) {
-    if (this.getWall(col, row)) {
-      this.deleteWall(col, row);
+  erase(x, y) {
+    if (this.getWall(x, y)) {
+      this.deleteWall(x, y);
     }
 
     this.update();
   }
 
-  getWall(col, row) {
-    const key = `${col}:${row}`;
+  getWall(x, y) {
+    const key = `${x}:${y}`;
     return this.walls.get(key);
   }
 
-  setWall(col, row, type = TYPES.HUMAN, state = STATES.OK) {
-    const key = `${col}:${row}`;
+  setWall(x, y, type = TYPES.HUMAN, state = STATES.OK) {
+    const key = `${x}:${y}`;
     return this.walls.set(
       key,
       //do we need to subscribe to neighbors?
       {
         type,
         state,
-        col,
-        row,
+        x,
+        y,
       }
     );
   }
 
-  deleteWall(col, row) {
-    const key = `${col}:${row}`;
+  deleteWall(x, y) {
+    const key = `${x}:${y}`;
     return this.walls.delete(key);
   }
 
-  getWallPatternCode(col, row) {
-    const currentWall = this.getWall(col, row);
+  getWallPatternCode(x, y) {
+    const currentWall = this.getWall(x, y);
 
     //clockwize: up right down left
     return [
@@ -70,10 +70,10 @@ export class WallMap {
       currentWall.state,
 
       [
-        this.getWall(col, row - 1),
-        this.getWall(col + 1, row),
-        this.getWall(col, row + 1),
-        this.getWall(col - 1, row),
+        this.getWall(x, y - 1),
+        this.getWall(x + 1, y),
+        this.getWall(x, y + 1),
+        this.getWall(x - 1, y),
       ]
         .map(wall => {
           if (!wall) return "0";
@@ -89,7 +89,7 @@ export class WallMap {
 
   update() {
     this.walls.forEach(wall => {
-      const tileCode = this.getWallPatternCode(wall.col, wall.row);
+      const tileCode = this.getWallPatternCode(wall.x, wall.y);
       //todo: do not update if not changed
       wall.tileCode = tileCode;
     });
@@ -102,8 +102,8 @@ export class WallMap {
       ctx.drawImage(
         //todo: get random tile - but not here
         ...tile,
-        wall.col * editor.cellSizePx + editor.cellSizePx / 2,
-        wall.row * editor.cellSizePx + editor.cellSizePx / 2,
+        wall.x * editor.cellSizePx + editor.cellSizePx / 2,
+        wall.y * editor.cellSizePx + editor.cellSizePx / 2,
         editor.cellSizePx,
         editor.cellSizePx
       );

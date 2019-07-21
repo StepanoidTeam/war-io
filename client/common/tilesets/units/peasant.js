@@ -92,7 +92,7 @@ export class Peasant {
     this.props = props;
     this.x = props.x;
     this.y = props.y;
-    this.ticksPerFrame = props.ticksPerFrame || 4; //60/4 = 15fps
+    this.ticksPerFrame = props.ticksPerFrame || 10; //60/4 = 15fps
     this.setAnimation(props.animation);
   }
 

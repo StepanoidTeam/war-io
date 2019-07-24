@@ -4,7 +4,7 @@ import { cursor } from "./components/cursor.js";
 import { MiniMap } from "./components/mini-map.js";
 import { CanvasCleaner } from "./components/canvas-cleaner.js";
 import { TileMap } from "./components/map/tile-map.js";
-import { WallMap } from "./components/map/wall-map.js";
+import { StructureMap } from "./components/map/structure-map.js";
 import { wallTileSet, surfaceTileSet } from "./common/tilesets/tilesets.js";
 import { EditorTool } from "./components/editor-tool.js";
 import { Status } from "./components/status.js";
@@ -42,19 +42,19 @@ function getColRowFromMouseEvent(event) {
   mapContainer.style.height = `${canvasSize}px`;
 
   const tileMap = new TileMap({ surfaceTypeCells: surfaceMap.cells });
-  const wallMap = new WallMap(wallTileSet);
+  const structureMap = new StructureMap();
 
   //remove walls if they were painted out by surface
   TileCell.onChange(tileCell => {
     if (tileCell.canBuild === false) {
-      wallMap.erase(tileCell.props.col, tileCell.props.row);
+      structureMap.erase({ x: tileCell.props.col, y: tileCell.props.row });
     }
   });
 
   //remove units if they were painted out by surface
   TileCell.onChange(tileCell => {
     if (tileCell.isObstacle === true) {
-      unitsMap.erase(tileCell.props.col, tileCell.props.row);
+      unitsMap.erase({ x: tileCell.props.col, y: tileCell.props.row });
     }
   });
 
@@ -73,7 +73,7 @@ function getColRowFromMouseEvent(event) {
     tiles: createMapLayer(),
     overlay: createMapLayer(),
     units: createMapLayer(),
-    buildings: createMapLayer(),
+    structures: createMapLayer(),
   };
 
   function paint(col, row) {
@@ -124,15 +124,15 @@ function getColRowFromMouseEvent(event) {
     [new CanvasCleaner(), layers.tiles],
     [new CanvasCleaner(), layers.overlay],
     [new CanvasCleaner(), layers.units],
-    [new CanvasCleaner(), layers.buildings],
+    [new CanvasCleaner(), layers.structures],
     [tileMap, layers.tiles],
     //todo: make separate layer for walls?
-    [wallMap, layers.tiles],
+    [structureMap, layers.tiles],
     [surfaceMap, layers.overlay],
     [miniMap, layers.tiles],
     [cursor, layers.overlay],
     [unitsMap, layers.units],
-    [unitsMap, layers.buildings],
+    [unitsMap, layers.structures],
   ];
 
   requestAnimationFrame(function render() {
@@ -202,7 +202,7 @@ function getColRowFromMouseEvent(event) {
           brushSize: 2,
         });
 
-        wallMap.paint(col, row, WallMap.TYPES.HUMAN);
+        structureMap.paint(col, row, StructureMap.TYPES.HUMAN);
       };
     },
   });
@@ -228,7 +228,7 @@ function getColRowFromMouseEvent(event) {
           brushSize: 2,
         });
 
-        wallMap.paint(col, row, WallMap.TYPES.ORC);
+        structureMap.paint(col, row, StructureMap.TYPES.ORC);
       };
     },
   });
@@ -252,6 +252,7 @@ function getColRowFromMouseEvent(event) {
       cursor.offset = cellSizePx / 2;
       cursor.tile = peasantTile;
       editor.currentTool = (x, y) => {
+        if (tileMap.tileCells[y][x].isObstacle) return;
         unitsMap.paint({
           x,
           y,
@@ -271,9 +272,9 @@ function getColRowFromMouseEvent(event) {
     callback: () => {
       cursor.offset = cellSizePx / 2;
       cursor.tile = debugTile;
-      editor.currentTool = (col, row) => {
-        wallMap.erase(col, row);
-        unitsMap.erase(col, row);
+      editor.currentTool = (x, y) => {
+        structureMap.erase({ x, y });
+        unitsMap.erase({ x, y });
       };
     },
   });
@@ -290,7 +291,7 @@ function getColRowFromMouseEvent(event) {
       cursor.tile = debugTile;
       editor.currentTool = (x, y) => {
         const unit = unitsMap.getUnit(x, y);
-        const wall = wallMap.getWall(x, y);
+        const wall = structureMap.getStructure(x, y);
 
         const entity = wall || unit;
 

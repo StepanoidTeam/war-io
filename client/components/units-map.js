@@ -17,13 +17,11 @@ export const unitsMap = {
     return this.units.find(u => u.x === x && u.y === y);
   },
   paint({ x, y, unit }) {
-    if (tileMap.tileCells[y][x].isObstacle) return;
-
     const unitIndex = this.getUnitIndex(x, y);
     if (unitIndex < 0)
       this.units.push(new unit({ x, y, animation: "walk-up" }));
   },
-  erase(x, y) {
+  erase({ x, y }) {
     const unitIndex = this.getUnitIndex(x, y);
     if (unitIndex >= 0) this.units.splice(unitIndex, 1);
   },

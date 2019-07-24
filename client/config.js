@@ -15,7 +15,7 @@ const brushes = {
   snowDark: "S",
   waterDark: "W",
   //todo: should it be there?
-  //or separate brush type? mb for buildings?
+  //or separate brush type? mb for structures?
   //wall: "x",
 };
 

@@ -5,32 +5,25 @@ export class StructureMap {
 
   constructor() {}
 
-  paint(x, y, type = Wall.TYPES.HUMAN) {
+  //todo: here should be generic paint for any structure
+  paint(x, y, $class) {
     const structure = this.getStructure(x, y);
     if (structure) this.erase(structure);
 
-    this.setWall(x, y, type);
-
-    Wall.updateNeighborhood({ x, y });
+    this.structures.push(
+      //do we need to subscribe to neighbors?
+      new $class({ x, y })
+    );
   }
 
   erase({ x, y }) {
     if (this.getStructure(x, y)) {
       this.deleteStructure(x, y);
-
-      Wall.updateNeighborhood({ x, y });
     }
   }
 
   getStructure(x, y) {
     return this.structures.find(s => s.x === x && s.y === y);
-  }
-
-  setWall(x, y, type = Wall.TYPES.HUMAN, state = Wall.STATES.OK) {
-    return this.structures.push(
-      //do we need to subscribe to neighbors?
-      new Wall({ x, y, type, state })
-    );
   }
 
   deleteStructure(x, y) {
@@ -39,10 +32,7 @@ export class StructureMap {
     if (index < 0) return;
 
     const [structure] = this.structures.splice(index, 1);
-
-    if (structure instanceof Wall) {
-      structure.delete();
-    }
+    structure.delete(); //todo: impl delete for structure base class
   }
 
   draw(ctx) {

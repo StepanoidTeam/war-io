@@ -18,7 +18,7 @@ export class Wall {
   static TYPES = WALL_TYPES;
   static STATES = WALL_STATES;
   static entries = new Map();
-
+  //private
   static getWall({ x, y }) {
     return Wall.entries.get(`${x}:${y}`);
   }
@@ -33,7 +33,7 @@ export class Wall {
       });
   }
 
-  constructor({ x, y, type, state }) {
+  constructor({ x, y, type }) {
     this.x = x;
     this.y = y;
     this.type = type;
@@ -41,6 +41,8 @@ export class Wall {
 
     Wall.entries.set(`${x}:${y}`, this);
     this.update();
+
+    Wall.updateNeighborhood(this);
   }
 
   get state() {
@@ -113,5 +115,17 @@ export class Wall {
       editor.cellSizePx,
       editor.cellSizePx
     );
+  }
+}
+
+export class WallOrc extends Wall {
+  constructor(props) {
+    super({ ...props, type: Wall.TYPES.ORC });
+  }
+}
+
+export class WallHuman extends Wall {
+  constructor(props) {
+    super({ ...props, type: Wall.TYPES.HUMAN });
   }
 }

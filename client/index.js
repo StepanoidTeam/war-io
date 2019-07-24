@@ -18,6 +18,7 @@ import { TileCell } from "./components/map/tile-cell.js";
 import { Peasant, peasantTileSet } from "./common/tilesets/units/peasant.js";
 import { showEditor } from "./unit-editor.js";
 import { unitsMap } from "./components/units-map.js";
+import { Wall } from "./components/structures/wall.js";
 
 const { cellSizePx, mapSize } = editor;
 
@@ -202,7 +203,7 @@ function getColRowFromMouseEvent(event) {
           brushSize: 2,
         });
 
-        structureMap.paint(col, row, StructureMap.TYPES.HUMAN);
+        structureMap.paint(col, row, Wall.TYPES.HUMAN);
       };
     },
   });
@@ -228,7 +229,7 @@ function getColRowFromMouseEvent(event) {
           brushSize: 2,
         });
 
-        structureMap.paint(col, row, StructureMap.TYPES.ORC);
+        structureMap.paint(col, row, Wall.TYPES.ORC);
       };
     },
   });

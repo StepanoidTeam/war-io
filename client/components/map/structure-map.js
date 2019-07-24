@@ -79,7 +79,8 @@ class Wall {
         .map(wall => {
           if (!wall) return "0";
           if (wall.type !== type) return "0";
-          if (wall.state === WALL_STATES.DESTROYED) return "0";
+          //seems destroyed is also have different tile types
+          //if (wall.state === WALL_STATES.DESTROYED) return "0";
 
           return "x";
         })

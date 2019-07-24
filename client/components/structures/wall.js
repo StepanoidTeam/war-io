@@ -2,6 +2,7 @@ import { editor } from "../../config.js";
 import { wallTileSet } from "../../common/tilesets/tilesets.js";
 import { neighborhood } from "../../helpers/neighborhood.js";
 import { getRandomItem } from "../../helpers/random.js";
+import { Structure } from "./structure.js";
 
 const WALL_TYPES = {
   HUMAN: "human",
@@ -14,7 +15,7 @@ const WALL_STATES = {
   DESTROYED: "destroyed",
 };
 
-export class Wall {
+export class Wall extends Structure {
   static TYPES = WALL_TYPES;
   static STATES = WALL_STATES;
   static entries = new Map();
@@ -34,8 +35,7 @@ export class Wall {
   }
 
   constructor({ x, y, type }) {
-    this.x = x;
-    this.y = y;
+    super({ x, y });
     this.type = type;
     this.health = getRandomItem([0, 50, 100]);
 

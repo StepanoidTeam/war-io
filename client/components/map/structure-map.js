@@ -1,5 +1,3 @@
-import { Wall } from "../structures/wall.js";
-
 export class StructureMap {
   structures = [];
 
@@ -22,12 +20,13 @@ export class StructureMap {
     }
   }
 
+  //todo: impl size? for ballistas?
   getStructure(x, y) {
-    return this.structures.find(s => s.x === x && s.y === y);
+    return this.structures.find(s => s.collides({ x, y }));
   }
 
   deleteStructure(x, y) {
-    const index = this.structures.findIndex(s => s.x === x && s.y === y);
+    const index = this.structures.findIndex(s => s.collides({ x, y }));
 
     if (index < 0) return;
 

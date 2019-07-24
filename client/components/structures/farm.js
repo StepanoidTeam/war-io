@@ -1,10 +1,10 @@
 import { editor } from "../../config.js";
 import { farmTileSet } from "../../common/tilesets/tilesets.js";
+import { Structure } from "./structure.js";
 
-export class Farm {
-  constructor({ x, y }) {
-    this.x = x;
-    this.y = y;
+export class Farm extends Structure {
+  constructor(props) {
+    super(props);
 
     this.tileCode = "human-farm-done";
   }

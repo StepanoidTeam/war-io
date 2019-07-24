@@ -1,4 +1,4 @@
-import { loadTiles } from "../tilesets.js";
+import { loadTileSet } from "../tilesets.js";
 import { editor } from "../../../config.js";
 
 const unitImgSize = 72;
@@ -47,34 +47,13 @@ export const peasantCodes = {
   ["die-up-left"]: [51, 56, 61],
 };
 
-function loadUnit(ranges) {
-  const imageName = "units/peasant.png";
-  return ranges
-    .map(index => {
-      if (Array.isArray(index)) {
-        const [from, to] = index;
-
-        return loadTiles({
-          imageName,
-          from,
-          to,
-          imgSetConfig: peasantImgSetConfig,
-        });
-      } else if (Number.isInteger(index)) {
-        return loadTiles({
-          imageName,
-          from: index,
-          to: index,
-          imgSetConfig: peasantImgSetConfig,
-        });
-      }
-    })
-    .flat();
-}
-
 export const peasantTileSet = Object.entries(peasantCodes).reduce(
   (acc, [key, value]) => {
-    acc[key] = loadUnit(value);
+    acc[key] = loadTileSet({
+      imageName: "units/peasant.png",
+      ranges: value,
+      imgSetConfig: peasantImgSetConfig,
+    });
     return acc;
   },
   {}

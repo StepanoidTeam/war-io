@@ -39,24 +39,37 @@ export function loadTiles({
   return tiles;
 }
 
-//todo: simplify this and above
-function loadWinter(ranges) {
-  const imageName = IMAGESETS.WINTER;
+export function loadTileSet({ imageName, ranges, imgSetConfig }) {
   return ranges
     .map(index => {
       if (Array.isArray(index)) {
         const [from, to] = index;
 
-        return loadTiles({ imageName, from, to });
+        return loadTiles({
+          imageName,
+          from,
+          to,
+          imgSetConfig,
+        });
       } else if (Number.isInteger(index)) {
         return loadTiles({
           imageName,
           from: index,
           to: index,
+          imgSetConfig,
         });
       }
     })
     .flat();
+}
+
+//todo: simplify this and above
+function loadWinter(ranges) {
+  return loadTileSet({
+    imageName: IMAGESETS.WINTER,
+    ranges,
+    imgSetConfig: defaultImgSetConfig,
+  });
 }
 
 const surfaceTileSet = Object.entries(winter).reduce((acc, [key, value]) => {
@@ -72,6 +85,30 @@ const wallTileSet = Object.entries(winterWalls).reduce((acc, [key, value]) => {
   return acc;
 }, {});
 
+// FARM
+
+const building2x2ImgSetConfig = {
+  sourceSize: cellSizePx * 2,
+  sourceOffset: 0,
+  cols: 1,
+  rows: 2,
+};
+
+export const winterFarm = {
+  ["human-farm-done"]: [0],
+  ["human-farm-building"]: [1],
+};
+
+const farmTileSet = Object.entries(winterFarm).reduce((acc, [key, ranges]) => {
+  acc[key] = loadTileSet({
+    imageName: "structures/farm.png",
+    ranges,
+    imgSetConfig: building2x2ImgSetConfig,
+  });
+
+  return acc;
+}, {});
+
 //get unique brush pairs from tileset
 export const brushPairs = new Set(
   Object.keys(surfaceTileSet)
@@ -79,4 +116,4 @@ export const brushPairs = new Set(
     .filter(pair => pair.length > 1)
 );
 
-export { surfaceTileSet, wallTileSet };
+export { surfaceTileSet, wallTileSet, farmTileSet };

@@ -1,4 +1,4 @@
-# buildings info:
+# structures info:
 
 https://wow.gamepedia.com/Warcraft_II_buildings
 

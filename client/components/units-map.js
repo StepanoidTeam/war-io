@@ -10,11 +10,11 @@ const units = [
 export const unitsMap = {
   units,
   getUnitIndex(x, y) {
-    const unitIndex = this.units.findIndex(u => u.x === x && u.y === y);
+    const unitIndex = this.units.findIndex(u => u.collides({ x, y }));
     return unitIndex;
   },
   getUnit(x, y) {
-    return this.units.find(u => u.x === x && u.y === y);
+    return this.units.find(u => u.collides({ x, y }));
   },
   paint({ x, y, unit }) {
     const unitIndex = this.getUnitIndex(x, y);

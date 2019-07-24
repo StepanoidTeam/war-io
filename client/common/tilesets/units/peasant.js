@@ -1,5 +1,6 @@
 import { loadTileSet } from "../tilesets.js";
 import { editor } from "../../../config.js";
+import { Unit } from "../../../components/map/units/unit.js";
 
 const unitImgSize = 72;
 
@@ -59,18 +60,16 @@ export const peasantTileSet = Object.entries(peasantCodes).reduce(
   {}
 );
 
-export class Peasant {
+//todo: extract
+export class Peasant extends Unit {
   tileCodes = Object.keys(peasantCodes);
-  x = 0;
-  y = 0;
   //todo: animation?
   frameIndex = 0;
   ticks = 0;
 
   constructor(props) {
-    this.props = props;
-    this.x = props.x;
-    this.y = props.y;
+    super(props);
+
     this.ticksPerFrame = props.ticksPerFrame || 10; //60/4 = 15fps
     this.setAnimation(props.animation);
   }

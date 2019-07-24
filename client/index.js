@@ -5,7 +5,11 @@ import { MiniMap } from "./components/mini-map.js";
 import { CanvasCleaner } from "./components/canvas-cleaner.js";
 import { TileMap } from "./components/map/tile-map.js";
 import { StructureMap } from "./components/map/structure-map.js";
-import { wallTileSet, surfaceTileSet } from "./common/tilesets/tilesets.js";
+import {
+  wallTileSet,
+  surfaceTileSet,
+  farmTileSet,
+} from "./common/tilesets/tilesets.js";
 import { EditorTool } from "./components/editor-tool.js";
 import { Status } from "./components/status.js";
 import {
@@ -18,7 +22,8 @@ import { TileCell } from "./components/map/tile-cell.js";
 import { Peasant, peasantTileSet } from "./common/tilesets/units/peasant.js";
 import { showEditor } from "./unit-editor.js";
 import { unitsMap } from "./components/units-map.js";
-import { Wall } from "./components/structures/wall.js";
+import { WallHuman, WallOrc } from "./components/structures/wall.js";
+import { Farm } from "./components/structures/farm.js";
 
 const { cellSizePx, mapSize } = editor;
 
@@ -203,14 +208,14 @@ function getColRowFromMouseEvent(event) {
           brushSize: 2,
         });
 
-        structureMap.paint(col, row, Wall.TYPES.HUMAN);
+        structureMap.paint(col, row, WallHuman);
       };
     },
   });
 
   toolBox.append(humanWallTool);
 
-  // human wall tool
+  // orc wall tool
   const orcWallTool = EditorTool({
     tile: wallTileSet["orc-0000"][0],
     groupName: "surface",
@@ -229,7 +234,7 @@ function getColRowFromMouseEvent(event) {
           brushSize: 2,
         });
 
-        structureMap.paint(col, row, Wall.TYPES.ORC);
+        structureMap.paint(col, row, WallOrc);
       };
     },
   });
@@ -248,7 +253,7 @@ function getColRowFromMouseEvent(event) {
   const addPeasantTool = EditorTool({
     tile: peasantTile,
     groupName: "surface",
-    value: "peasant",
+    value: "peasant-human",
     callback: () => {
       cursor.offset = cellSizePx / 2;
       cursor.tile = peasantTile;
@@ -306,6 +311,35 @@ function getColRowFromMouseEvent(event) {
 
   toolBox.append(selectionTool);
   //
+
+  // add farm tool
+  const farmTool = EditorTool({
+    tile: farmTileSet["human-farm-done"][0],
+    groupName: "surface",
+    value: "farm-human",
+    callback() {
+      cursor.offset = cellSizePx / 2;
+      cursor.tile = farmTileSet["human-farm-done"][0];
+      //todo: this should be reset for other tools,
+      //also maybe it should be a part of cursor?
+      editor.brushSize = 2;
+      editor.currentTool = (col, row) => {
+        //todo: should not be strictly linked to surface map
+
+        //todo: can check if not buildable - only then put snow
+        surfaceMap.paint({
+          col,
+          row,
+          brush: editor.brushes.snow,
+          brushSize: 3,
+        });
+
+        structureMap.paint(col, row, Farm);
+      };
+    },
+  });
+
+  toolBox.append(farmTool);
 })();
 
 //dat-gui

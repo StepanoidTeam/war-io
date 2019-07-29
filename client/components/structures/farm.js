@@ -3,8 +3,9 @@ import { farmTileSet } from "../../common/tilesets/tilesets.js";
 import { Structure } from "./structure.js";
 
 export class Farm extends Structure {
+  static size = 2;
   constructor(props) {
-    super(props);
+    super({ ...props, size: Farm.size });
 
     this.tileCode = "human-farm-done";
   }
@@ -16,8 +17,8 @@ export class Farm extends Structure {
       ...tile,
       this.x * editor.cellSizePx + editor.cellSizePx / 2,
       this.y * editor.cellSizePx + editor.cellSizePx / 2,
-      editor.cellSizePx * 2,
-      editor.cellSizePx * 2
+      editor.cellSizePx * this.size,
+      editor.cellSizePx * this.size
     );
   }
 

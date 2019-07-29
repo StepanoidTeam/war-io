@@ -192,92 +192,40 @@ function getColRowFromMouseEvent(event) {
     )
     .forEach(elem => toolBox.append(elem));
 
-  //structures
-  const humanWallTool = EditorTool({
-    tile: wallTileSet["human-0000"][0],
-    groupName: "surface",
-    value: "wall-human",
-    callback: () => {
-      cursor.offset = cellSizePx / 2;
-      cursor.tile = cursorTile;
-      editor.currentTool = (x, y) => {
-        //todo: should not be strictly linked to surface map
+  //STRUCTURES
 
-        if (structureMap.collides({ x, y, size: WallHuman.size })) return;
-        if (unitsMap.collides({ x, y, size: WallHuman.size })) return;
+  const structureCallback = $class => () => {
+    cursor.offset = cellSizePx / 2;
+    editor.brushSize = $class.size;
+    cursor.tile = $class.icon; //todo: create separate field for that
 
-        //todo: can check if not buildable - only then put snow
-        surfaceMap.paint({
-          col: x,
-          row: y,
-          brush: editor.brushes.snow,
-          brushSize: 2,
-        });
+    editor.currentTool = (x, y) => {
+      //todo: should not be strictly linked to surface map
+      if (structureMap.collides({ x, y, size: $class.size })) return;
+      if (unitsMap.collides({ x, y, size: $class.size })) return;
+      //todo: can check if not buildable - only then put snow
+      //buildable check missing ⚠️
+      surfaceMap.paint({
+        col: x,
+        row: y,
+        brush: editor.brushes.snow,
+        brushSize: $class.size + 1,
+      });
 
-        structureMap.paint(x, y, WallHuman);
-      };
-    },
-  });
+      structureMap.paint(x, y, $class);
+    };
+  };
 
-  const orcWallTool = EditorTool({
-    tile: wallTileSet["orc-0000"][0],
-    groupName: "surface",
-    value: "wall-orc",
-    callback: () => {
-      cursor.offset = cellSizePx / 2;
-      cursor.tile = cursorTile;
-      editor.currentTool = (x, y) => {
-        //todo: should not be strictly linked to surface map
-
-        if (structureMap.collides({ x, y, size: WallOrc.size })) return;
-        if (unitsMap.collides({ x, y, size: WallOrc.size })) return;
-
-        //todo: can check if not buildable - only then put snow
-        surfaceMap.paint({
-          col: x,
-          row: y,
-          brush: editor.brushes.snow,
-          brushSize: 2,
-        });
-
-        structureMap.paint(x, y, WallOrc);
-      };
-    },
-  });
-
-  // add farm tool
-  const farmTool = EditorTool({
-    tile: farmTileSet["human-farm-done"][0],
-    groupName: "surface",
-    value: "farm-human",
-    callback() {
-      cursor.offset = cellSizePx / 2;
-      cursor.tile = farmTileSet["human-farm-done"][0];
-      //todo: this should be reset for other tools,
-      //also maybe it should be a part of cursor?
-      editor.brushSize = 2;
-      editor.currentTool = (x, y) => {
-        //todo: should not be strictly linked to surface map
-
-        if (structureMap.collides({ x, y, size: Farm.size })) return;
-        if (unitsMap.collides({ x, y, size: Farm.size })) return;
-
-        //todo: can check if not buildable - only then put snow
-        surfaceMap.paint({
-          col: x,
-          row: y,
-          brush: editor.brushes.snow,
-          brushSize: 3,
-        });
-
-        structureMap.paint(x, y, Farm);
-      };
-    },
-  });
-
-  toolBox.append(humanWallTool);
-  toolBox.append(orcWallTool);
-  toolBox.append(farmTool);
+  [WallOrc, WallHuman, Farm]
+    .map($class =>
+      EditorTool({
+        tile: $class.icon,
+        groupName: "surface",
+        value: $class.name, //redundant
+        callback: structureCallback($class),
+      })
+    )
+    .forEach(t => toolBox.append(t));
 
   // UNIT tools
   //draw peasant

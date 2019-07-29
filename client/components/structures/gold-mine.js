@@ -1,6 +1,6 @@
 import { editor } from "../../config.js";
-import { goldMineTileSet } from "../../common/tilesets/tilesets.js";
 import { Structure } from "./structure.js";
+import { goldMineTileSet } from "../../common/tilesets/structures/gold-mine.js";
 
 export class GoldMine extends Structure {
   static size = 3;

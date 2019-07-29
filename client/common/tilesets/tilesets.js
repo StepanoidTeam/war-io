@@ -111,31 +111,6 @@ const farmTileSet = Object.entries(winterFarm).reduce((acc, [key, ranges]) => {
   return acc;
 }, {});
 
-// GOLD MINE
-
-const goldMine = {
-  ["winter-gold-mine"]: [1],
-  ["winter-gold-mine-active"]: [4],
-};
-
-const goldMineTileSet = Object.entries(goldMine).reduce(
-  (acc, [key, ranges]) => {
-    acc[key] = loadTileSet({
-      imageName: "structures/gold-mine.png",
-      ranges,
-      imgSetConfig: {
-        sourceSize: cellSizePx * 3,
-        sourceOffset: 0,
-        cols: 3,
-        rows: 2,
-      },
-    });
-
-    return acc;
-  },
-  {}
-);
-
 //get unique brush pairs from tileset
 export const brushPairs = new Set(
   Object.keys(surfaceTileSet)
@@ -143,4 +118,4 @@ export const brushPairs = new Set(
     .filter(pair => pair.length > 1)
 );
 
-export { surfaceTileSet, wallTileSet, farmTileSet, goldMineTileSet };
+export { surfaceTileSet, wallTileSet, farmTileSet };

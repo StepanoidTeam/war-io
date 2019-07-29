@@ -1,19 +1,8 @@
+import { Unit } from "../map/units/unit.js";
+
 //abstract
-export class Structure {
-  constructor({ x, y, size = 1 }) {
-    this.x = x;
-    this.y = y;
-    this.size = size;
+export class Structure extends Unit {
+  constructor(props) {
+    super(props);
   }
-
-  //default 1x1 collider?
-  collides({ x, y }) {
-    return this.x === x && this.y === y;
-  }
-
-  //noop
-  delete() {}
-
-  // todo: draw debug pic
-  //draw() {}
 }

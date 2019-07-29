@@ -14,9 +14,6 @@ const brushes = {
   iceDark: "I",
   snowDark: "S",
   waterDark: "W",
-  //todo: should it be there?
-  //or separate brush type? mb for structures?
-  //wall: "x",
 };
 
 //concat with brushes
@@ -45,7 +42,7 @@ export const IMAGESETS = {
   WINTER: "winter.png",
   DESERT: "desert.png",
   SPRING: "spring.png",
-  //todo: SHROOMS? find that sprites
+  //todo: SHROOMS? find that tileset
 };
 
 export const editor = {

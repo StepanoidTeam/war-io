@@ -192,7 +192,7 @@ function getColRowFromMouseEvent(event) {
     )
     .forEach(elem => toolBox.append(elem));
 
-  // human wall tool
+  //structures
   const humanWallTool = EditorTool({
     tile: wallTileSet["human-0000"][0],
     groupName: "surface",
@@ -219,9 +219,6 @@ function getColRowFromMouseEvent(event) {
     },
   });
 
-  toolBox.append(humanWallTool);
-
-  // orc wall tool
   const orcWallTool = EditorTool({
     tile: wallTileSet["orc-0000"][0],
     groupName: "surface",
@@ -247,78 +244,6 @@ function getColRowFromMouseEvent(event) {
       };
     },
   });
-
-  toolBox.append(orcWallTool);
-
-  //draw peasant
-  const peasantTile = peasantTileSet["stand"][0];
-  peasantTile.size = cellSizePx;
-  //72 - unit tile size
-  //todo: ⚠️ this breaks the tile!11
-  peasantTile.x = 72 / 2 - cellSizePx / 2;
-  peasantTile.y = 72 / 2 - cellSizePx / 2;
-
-  // peasant tool
-  const addPeasantTool = EditorTool({
-    tile: peasantTile,
-    groupName: "surface",
-    value: "peasant-human",
-    callback: () => {
-      cursor.offset = cellSizePx / 2;
-      cursor.tile = peasantTile;
-      editor.currentTool = (x, y) => {
-        if (tileMap.tileCells[y][x].isObstacle) return;
-        if (structureMap.collides({ x, y, size: Peasant.size })) return;
-        if (unitsMap.collides({ x, y, size: Peasant.size })) return;
-
-        unitsMap.paint(x, y, Peasant);
-      };
-    },
-  });
-
-  toolBox.append(addPeasantTool);
-
-  //remove wall tool
-  const removeUnitAndWallTool = EditorTool({
-    tile: crossTile,
-    groupName: "surface",
-    value: "wall-delete",
-    callback: () => {
-      cursor.offset = cellSizePx / 2;
-      cursor.tile = debugTile;
-      editor.currentTool = (x, y) => {
-        structureMap.deleteStructure({ x, y });
-        unitsMap.deleteUnit({ x, y });
-      };
-    },
-  });
-
-  toolBox.append(removeUnitAndWallTool);
-
-  //select unit tool
-  const selectionTool = EditorTool({
-    tile: debugTile,
-    groupName: "surface",
-    value: "select",
-    callback: () => {
-      cursor.offset = cellSizePx / 2;
-      cursor.tile = debugTile;
-      editor.currentTool = (x, y) => {
-        const unit = unitsMap.getUnit({ x, y });
-        const wall = structureMap.getStructure({ x, y });
-
-        const entity = wall || unit;
-
-        if (entity) {
-          showEditor(entity);
-          console.log(entity);
-        }
-      };
-    },
-  });
-
-  toolBox.append(selectionTool);
-  //
 
   // add farm tool
   const farmTool = EditorTool({
@@ -350,7 +275,80 @@ function getColRowFromMouseEvent(event) {
     },
   });
 
+  toolBox.append(humanWallTool);
+  toolBox.append(orcWallTool);
   toolBox.append(farmTool);
+
+  // UNIT tools
+  //draw peasant
+  const peasantTile = peasantTileSet["stand"][0];
+  peasantTile.size = cellSizePx;
+  //72 - unit tile size
+  //todo: ⚠️ this breaks the tile!11
+  peasantTile.x = 72 / 2 - cellSizePx / 2;
+  peasantTile.y = 72 / 2 - cellSizePx / 2;
+
+  // peasant tool
+  const addPeasantTool = EditorTool({
+    tile: peasantTile,
+    groupName: "surface",
+    value: "peasant-human",
+    callback: () => {
+      cursor.offset = cellSizePx / 2;
+      cursor.tile = peasantTile;
+      editor.currentTool = (x, y) => {
+        if (tileMap.tileCells[y][x].isObstacle) return;
+        if (structureMap.collides({ x, y, size: Peasant.size })) return;
+        if (unitsMap.collides({ x, y, size: Peasant.size })) return;
+
+        unitsMap.paint(x, y, Peasant);
+      };
+    },
+  });
+
+  toolBox.append(addPeasantTool);
+
+  //remove tool
+  const removeUnitAndWallTool = EditorTool({
+    tile: crossTile,
+    groupName: "surface",
+    value: "delete",
+    callback: () => {
+      cursor.offset = cellSizePx / 2;
+      cursor.tile = debugTile;
+      editor.currentTool = (x, y) => {
+        structureMap.deleteStructure({ x, y });
+        unitsMap.deleteUnit({ x, y });
+      };
+    },
+  });
+
+  toolBox.append(removeUnitAndWallTool);
+
+  //select unit tool
+  const selectionTool = EditorTool({
+    tile: debugTile,
+    groupName: "surface",
+    value: "select",
+    callback: () => {
+      cursor.offset = cellSizePx / 2;
+      cursor.tile = debugTile;
+      editor.currentTool = (x, y) => {
+        const unit = unitsMap.getUnit({ x, y });
+        const structure = structureMap.getStructure({ x, y });
+
+        const entity = structure || unit;
+
+        if (entity) {
+          showEditor(entity);
+          console.log(entity);
+        }
+      };
+    },
+  });
+
+  toolBox.append(selectionTool);
+  //
 })();
 
 //dat-gui

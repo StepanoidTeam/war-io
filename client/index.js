@@ -5,25 +5,17 @@ import { MiniMap } from "./components/mini-map.js";
 import { CanvasCleaner } from "./components/canvas-cleaner.js";
 import { TileMap } from "./components/map/tile-map.js";
 import { StructureMap } from "./components/map/structure-map.js";
-import {
-  wallTileSet,
-  surfaceTileSet,
-  farmTileSet,
-} from "./common/tilesets/tilesets.js";
+import { surfaceTileSet } from "./common/tilesets/tilesets.js";
 import { EditorTool } from "./components/editor-tool.js";
 import { Status } from "./components/status.js";
-import {
-  brushTiles,
-  cursorTile,
-  crossTile,
-  debugTile,
-} from "./components/tile.js";
+import { brushTiles, crossTile, debugTile } from "./components/tile.js";
 import { TileCell } from "./components/map/tile-cell.js";
 import { Peasant, peasantTileSet } from "./common/tilesets/units/peasant.js";
 import { showEditor } from "./unit-editor.js";
 import { unitsMap } from "./components/units-map.js";
 import { WallHuman, WallOrc } from "./components/structures/wall.js";
 import { Farm } from "./components/structures/farm.js";
+import { GoldMine } from "./components/structures/gold-mine.js";
 
 const { cellSizePx, mapSize } = editor;
 
@@ -216,7 +208,7 @@ function getColRowFromMouseEvent(event) {
     };
   };
 
-  [WallOrc, WallHuman, Farm]
+  [WallOrc, WallHuman, Farm, GoldMine]
     .map($class =>
       EditorTool({
         tile: $class.icon,

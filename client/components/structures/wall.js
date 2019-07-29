@@ -119,12 +119,16 @@ export class Wall extends Structure {
 }
 
 export class WallOrc extends Wall {
+  static icon = wallTileSet["orc-0000"][0];
+
   constructor(props) {
     super({ ...props, type: Wall.TYPES.ORC });
   }
 }
 
 export class WallHuman extends Wall {
+  static icon = wallTileSet["human-0000"][0];
+
   constructor(props) {
     super({ ...props, type: Wall.TYPES.HUMAN });
   }

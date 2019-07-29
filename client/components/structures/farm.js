@@ -4,6 +4,7 @@ import { Structure } from "./structure.js";
 
 export class Farm extends Structure {
   static size = 2;
+  static icon = farmTileSet["human-farm-done"][0];
   constructor(props) {
     super({ ...props, size: Farm.size });
 

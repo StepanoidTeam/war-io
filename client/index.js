@@ -53,14 +53,17 @@ function getColRowFromMouseEvent(event) {
   //remove walls if they were painted out by surface
   TileCell.onChange(tileCell => {
     if (tileCell.canBuild === false) {
-      structureMap.erase({ x: tileCell.props.col, y: tileCell.props.row });
+      structureMap.deleteStructure({
+        x: tileCell.props.col,
+        y: tileCell.props.row,
+      });
     }
   });
 
   //remove units if they were painted out by surface
   TileCell.onChange(tileCell => {
     if (tileCell.isObstacle === true) {
-      unitsMap.erase({ x: tileCell.props.col, y: tileCell.props.row });
+      unitsMap.deleteUnit({ x: tileCell.props.col, y: tileCell.props.row });
     }
   });
 
@@ -197,18 +200,21 @@ function getColRowFromMouseEvent(event) {
     callback: () => {
       cursor.offset = cellSizePx / 2;
       cursor.tile = cursorTile;
-      editor.currentTool = (col, row) => {
+      editor.currentTool = (x, y) => {
         //todo: should not be strictly linked to surface map
+
+        if (structureMap.collides({ x, y, size: WallHuman.size })) return;
+        if (unitsMap.collides({ x, y, size: WallHuman.size })) return;
 
         //todo: can check if not buildable - only then put snow
         surfaceMap.paint({
-          col,
-          row,
+          col: x,
+          row: y,
           brush: editor.brushes.snow,
           brushSize: 2,
         });
 
-        structureMap.paint(col, row, WallHuman);
+        structureMap.paint(x, y, WallHuman);
       };
     },
   });
@@ -223,18 +229,21 @@ function getColRowFromMouseEvent(event) {
     callback: () => {
       cursor.offset = cellSizePx / 2;
       cursor.tile = cursorTile;
-      editor.currentTool = (col, row) => {
+      editor.currentTool = (x, y) => {
         //todo: should not be strictly linked to surface map
+
+        if (structureMap.collides({ x, y, size: WallOrc.size })) return;
+        if (unitsMap.collides({ x, y, size: WallOrc.size })) return;
 
         //todo: can check if not buildable - only then put snow
         surfaceMap.paint({
-          col,
-          row,
+          col: x,
+          row: y,
           brush: editor.brushes.snow,
           brushSize: 2,
         });
 
-        structureMap.paint(col, row, WallOrc);
+        structureMap.paint(x, y, WallOrc);
       };
     },
   });
@@ -259,11 +268,10 @@ function getColRowFromMouseEvent(event) {
       cursor.tile = peasantTile;
       editor.currentTool = (x, y) => {
         if (tileMap.tileCells[y][x].isObstacle) return;
-        unitsMap.paint({
-          x,
-          y,
-          unit: Peasant,
-        });
+        if (structureMap.collides({ x, y, size: Peasant.size })) return;
+        if (unitsMap.collides({ x, y, size: Peasant.size })) return;
+
+        unitsMap.paint(x, y, Peasant);
       };
     },
   });
@@ -274,13 +282,13 @@ function getColRowFromMouseEvent(event) {
   const removeUnitAndWallTool = EditorTool({
     tile: crossTile,
     groupName: "surface",
-    value: "wall-erase",
+    value: "wall-delete",
     callback: () => {
       cursor.offset = cellSizePx / 2;
       cursor.tile = debugTile;
       editor.currentTool = (x, y) => {
-        structureMap.erase({ x, y });
-        unitsMap.erase({ x, y });
+        structureMap.deleteStructure({ x, y });
+        unitsMap.deleteUnit({ x, y });
       };
     },
   });
@@ -296,8 +304,8 @@ function getColRowFromMouseEvent(event) {
       cursor.offset = cellSizePx / 2;
       cursor.tile = debugTile;
       editor.currentTool = (x, y) => {
-        const unit = unitsMap.getUnit(x, y);
-        const wall = structureMap.getStructure(x, y);
+        const unit = unitsMap.getUnit({ x, y });
+        const wall = structureMap.getStructure({ x, y });
 
         const entity = wall || unit;
 
@@ -323,18 +331,21 @@ function getColRowFromMouseEvent(event) {
       //todo: this should be reset for other tools,
       //also maybe it should be a part of cursor?
       editor.brushSize = 2;
-      editor.currentTool = (col, row) => {
+      editor.currentTool = (x, y) => {
         //todo: should not be strictly linked to surface map
+
+        if (structureMap.collides({ x, y, size: Farm.size })) return;
+        if (unitsMap.collides({ x, y, size: Farm.size })) return;
 
         //todo: can check if not buildable - only then put snow
         surfaceMap.paint({
-          col,
-          row,
+          col: x,
+          row: y,
           brush: editor.brushes.snow,
           brushSize: 3,
         });
 
-        structureMap.paint(col, row, Farm);
+        structureMap.paint(x, y, Farm);
       };
     },
   });

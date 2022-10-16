@@ -14,7 +14,12 @@ http://classic.battle.net/war2/basic/
 # useful links
 
 https://lilura1.blogspot.com/2022/04/Warcraft-2-RTS.html
+
 https://github.com/DevCrumbs/Warcraft-II
+
 https://devcrumbs.github.io/Warcraft-II/David_Valdivia.html
+
 https://www.spriters-resource.com/pc_computer/warcraft2/
+
 https://pixelation.org/index.php?topic=9865.10
+
